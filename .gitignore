@@ -156,6 +156,7 @@ gradle-app.setting
 *.hprof
 
 *.yml
+!application.yml
 !ci.yml
 !cd.yml
 
