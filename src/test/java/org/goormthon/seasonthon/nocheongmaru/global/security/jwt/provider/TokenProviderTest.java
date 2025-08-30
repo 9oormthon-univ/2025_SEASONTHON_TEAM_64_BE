@@ -50,10 +50,10 @@ class TokenProviderTest extends IntegrationTestSupport {
         TokenResponse tokenResponse = tokenProvider.issueToken(memberId, role);
         
         // When
-        String subject = tokenProvider.getSubject(tokenResponse.accessToken());
+        Long subject = tokenProvider.getSubject(tokenResponse.accessToken());
         
         // Then
-        assertThat(subject).isEqualTo(memberId.toString());
+        assertThat(subject).isEqualTo(memberId);
     }
     
     @DisplayName("Authentication 객체를 반환한다.")

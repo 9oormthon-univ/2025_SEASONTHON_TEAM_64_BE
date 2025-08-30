@@ -71,12 +71,12 @@ public class TokenProvider {
         return false;
     }
     
-    public String getSubject(String token) {
+    public Long getSubject(String token) {
         try {
             Claims claims = getClaims(token);
-            return claims.getSubject();
+            return Long.valueOf(claims.getSubject());
         } catch (ExpiredJwtException e) {
-            return e.getClaims().getSubject();
+            return Long.valueOf(e.getClaims().getSubject());
         }
     }
     
