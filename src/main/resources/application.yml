@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: dev
+#    active: prod
+    include: s3, security, docs
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
