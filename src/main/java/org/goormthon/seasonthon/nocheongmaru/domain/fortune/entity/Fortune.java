@@ -27,7 +27,7 @@ public class Fortune extends BaseTimeEntity {
     @JoinColumn(name = "sender_id", nullable = false)
     private Member sender;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private Member receiver;
     
