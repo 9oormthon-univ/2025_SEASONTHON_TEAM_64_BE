@@ -8,7 +8,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.comment.repository.CommentJp
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response.CursorPageResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response.FeedResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedJpaRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.FeedNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedService {
 
-	private final FeedJpaRepository feedJpaRepository;
+	private final FeedRepository feedRepository;
 	private final CommentJpaRepository commentJpaRepository;
 
 	/**
@@ -32,7 +32,7 @@ public class FeedService {
 	@Transactional(readOnly = true)
 	public CursorPageResponse<FeedResponse> getFeeds(Long cursorId, int size) {
 		Pageable pageable = PageRequest.of(0, size);
-		List<Feed> feeds = feedJpaRepository.findFeedsByCursorWithMember(cursorId, pageable);
+		List<Feed> feeds = feedRepository.findFeedsByCursorWithMember(cursorId, pageable);
 
 		if (feeds.isEmpty()) {
 			// 빈 페이지는 정상 상황으로 처리
@@ -43,7 +43,7 @@ public class FeedService {
 		List<Long> feedIds = feeds.stream().map(Feed::getId).toList();
 
 		// 2) 벌크 집계 → Map 변환 (누락 id는 0L로 기본값)
-		Map<Long, Long> likeMap = feedJpaRepository.countDistinctMemberByFeedIds(feedIds).stream()
+		Map<Long, Long> likeMap = feedRepository.countDistinctMemberByFeedIds(feedIds).stream()
 			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
 		Map<Long, Long> commentMap = commentJpaRepository.countByFeedIds(feedIds).stream()
 			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
@@ -70,10 +70,10 @@ public class FeedService {
 	 */
 	@Transactional(readOnly = true)
 	public FeedResponse getFeedById(Long feedId) {
-		Feed feed = feedJpaRepository.findByIdWithMember(feedId)
+		Feed feed = feedRepository.findByIdWithMember(feedId)
 			.orElseThrow(FeedNotFoundException::new);
 
-		long likeCount = feedJpaRepository.countDistinctMemberByFeedId(feedId);
+		long likeCount = feedRepository.countDistinctMemberByFeedId(feedId);
 		long commentCount = commentJpaRepository.countByFeedId(feedId);
 
 		return FeedResponse.of(feed, likeCount, commentCount);
