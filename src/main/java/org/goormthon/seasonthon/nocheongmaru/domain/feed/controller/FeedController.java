@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/feeds")
+@RequestMapping("/api/v1/feeds")
 @Tag(name = "게시물 관련 API", description = "게시물 조회")
 public class FeedController {
 
@@ -38,7 +38,7 @@ public class FeedController {
 	}
 
 	/**
-	 * 게시불 ID로 조회
+	 * 게시물 ID로 조회
 	 * @param feedId : 피드 ID로 조회
 	 * @return : FeedResponse
 	 */
