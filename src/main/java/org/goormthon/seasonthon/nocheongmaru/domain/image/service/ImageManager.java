@@ -37,6 +37,16 @@ public class ImageManager {
         }
         saveImages(information, images);
     }
+    
+    @Transactional
+    public void deleteAllByInformationId(Long informationId) {
+        List<Image> existingImages = imageRepository.findAllByInformationId(informationId);
+        if (existingImages.isEmpty()) {
+            return;
+        }
+        existingImages.forEach(image -> s3StorageUtil.deleteFileFromS3(image.getImageUrl()));
+        imageRepository.deleteAllByInformationId(informationId);
+    }
 
     public List<Image> buildImages(Information information, List<MultipartFile> images) {
         return Optional.ofNullable(images)
@@ -56,4 +66,3 @@ public class ImageManager {
     }
     
 }
-

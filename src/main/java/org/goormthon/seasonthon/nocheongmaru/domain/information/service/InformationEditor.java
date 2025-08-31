@@ -36,6 +36,7 @@ public class InformationEditor {
     @Transactional
     public void delete(Long memberId, Long informationId) {
         validateInformationOwnership(memberId, informationId);
+        imageManager.deleteAllByInformationId(informationId);
         informationRepository.deleteById(informationId);
     }
     

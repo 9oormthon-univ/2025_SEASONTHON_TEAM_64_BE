@@ -113,6 +113,37 @@ class ImageManagerTest extends IntegrationTestSupport {
         assertThat(saved.stream().map(Image::getImageUrl)).containsExactlyInAnyOrder("s3://bucket/new1.png", "s3://bucket/new2.png");
     }
 
+    @DisplayName("정보 삭제 시 연관 이미지들을 S3와 DB에서 모두 삭제한다.")
+    @Test
+    void deleteAllByInformationId() {
+        // given
+        Information information = persistInformation();
+        imageRepository.save(Image.builder().imageUrl("s3://bucket/old1.png").information(information).build());
+        imageRepository.save(Image.builder().imageUrl("s3://bucket/old2.png").information(information).build());
+
+        // when
+        imageManager.deleteAllByInformationId(information.getId());
+
+        // then
+        verify(s3StorageUtil, times(1)).deleteFileFromS3("s3://bucket/old1.png");
+        verify(s3StorageUtil, times(1)).deleteFileFromS3("s3://bucket/old2.png");
+        assertThat(imageRepository.findAllByInformationId(information.getId())).isEmpty();
+    }
+
+    @DisplayName("연관 이미지가 없으면 삭제를 시도하지 않는다.")
+    @Test
+    void deleteAllByInformationId_NoImages() {
+        // given
+        Information information = persistInformation();
+
+        // when
+        imageManager.deleteAllByInformationId(information.getId());
+
+        // then
+        verify(s3StorageUtil, never()).deleteFileFromS3(any());
+        assertThat(imageRepository.findAllByInformationId(information.getId())).isEmpty();
+    }
+
     private Information persistInformation() {
         Member member = Member.builder()
             .nickname("nickname")

@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -160,6 +159,7 @@ class InformationEditorTest extends IntegrationTestSupport {
         
         // then
         assertThat(informationRepository.existsById(information.getId())).isFalse();
+        verify(imageManager).deleteAllByInformationId(information.getId());
     }
     
     @DisplayName("정보나눔 피드 삭제 시, 작성자가 아니면 예외가 발생한다.")
