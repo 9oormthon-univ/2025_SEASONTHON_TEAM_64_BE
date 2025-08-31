@@ -1,6 +1,8 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.information.InformationNotFoundException;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -9,4 +11,16 @@ public class InformationRepository {
     
     private final InformationJpaRepository informationJpaRepository;
     
+    public void save(Information information) {
+        informationJpaRepository.save(information);
+    }
+    
+    public void deleteAllInBatch() {
+        informationJpaRepository.deleteAllInBatch();
+    }
+    
+    public Information findById(Long informationId) {
+        return informationJpaRepository.findById(informationId)
+            .orElseThrow(InformationNotFoundException::new);
+    }
 }

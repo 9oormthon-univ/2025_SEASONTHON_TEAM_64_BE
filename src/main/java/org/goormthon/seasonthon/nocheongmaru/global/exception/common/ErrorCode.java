@@ -23,8 +23,7 @@ public enum ErrorCode {
     // Information
     ADDRESS_NOT_FOUND(404, "주소를 찾을 수 없습니다."),
     KAKAO_HTTP_CLIENT_ERROR(500, "카카오 API 요청에 실패했습니다."),
-    
-    ;
+    INFORMATION_NOT_FOUND(404, "정보나눔 피드를 찾을 수 없습니다."),;
     
     private final int status;
     private final String message;
