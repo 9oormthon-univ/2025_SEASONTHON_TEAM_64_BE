@@ -20,6 +20,10 @@ public enum ErrorCode {
     // Member
     MEMBER_NOT_FOUND(404, "회원을 찾을 수 없습니다."),
     
+    // Information
+    ADDRESS_NOT_FOUND(404, "주소를 찾을 수 없습니다."),
+    KAKAO_HTTP_CLIENT_ERROR(500, "카카오 API 요청에 실패했습니다."),
+    
     ;
     
     private final int status;
