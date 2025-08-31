@@ -4,4 +4,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Informati
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InformationJpaRepository extends JpaRepository<Information, Long> {
+    
+    boolean existsByIdAndMemberId(Long id, Long memberId);
+    
 }

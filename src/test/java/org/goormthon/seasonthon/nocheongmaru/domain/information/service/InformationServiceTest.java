@@ -2,8 +2,10 @@ package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.repository.InformationRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationCreateServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationModifyServiceRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
@@ -32,6 +34,9 @@ class InformationServiceTest extends IntegrationTestSupport {
     
     @MockitoBean
     private InformationGenerator informationGenerator;
+    
+    @MockitoBean
+    private InformationEditor informationEditor;
     
     @AfterEach
     void tearDown() {
@@ -66,12 +71,53 @@ class InformationServiceTest extends IntegrationTestSupport {
         assertThat(createdInformationId).isEqualTo(informationId);
     }
     
+    @DisplayName("정보나눔 피드를 수정한다.")
+    @Test
+    void modifyInformation() {
+        // given
+        Member member = createMember();
+        memberRepository.save(member);
+        
+        Information information = createInformation(member);
+        informationRepository.save(information);
+        
+        var request = InformationModifyServiceRequest.builder()
+            .informationId(information.getId())
+            .memberId(member.getId())
+            .title("modified title")
+            .description("modified description")
+            .address("modified address")
+            .category(Category.HOSPITAL_FACILITIES)
+            .build();
+        
+        given(informationEditor.modify(any(), any(), anyString(), anyString(), anyString()))
+            .willReturn(information.getId());
+        
+        // when
+        Long modifiedInformationId = informationService.modifyInformation(request);
+        
+        // then
+        assertThat(modifiedInformationId).isEqualTo(information.getId());
+    }
+    
     private Member createMember() {
         return Member.builder()
             .nickname("nickname")
             .email("test@test.com")
             .profileImageURL("profileImageURL")
             .role(Role.ROLE_USER)
+            .build();
+    }
+    
+    private Information createInformation(Member member) {
+        return Information.builder()
+            .member(member)
+            .title("title")
+            .description("description")
+            .address("address")
+            .latitude(136.123456)
+            .longitude(356.123456)
+            .category(Category.HOSPITAL_FACILITIES)
             .build();
     }
     

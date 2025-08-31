@@ -5,6 +5,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
 public class MemberRepository {
@@ -31,6 +33,10 @@ public class MemberRepository {
     
     public void deleteAllInBatch() {
         memberJpaRepository.deleteAllInBatch();
+    }
+    
+    public void saveAll(List<Member> members) {
+        memberJpaRepository.saveAll(members);
     }
     
 }

@@ -54,4 +54,12 @@ public class Information extends BaseTimeEntity {
         this.member = member;
     }
     
+    public void modifyInformation(String title, String description, String address, Double latitude, Double longitude) {
+        this.title = title;
+        this.description = description;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+    
 }

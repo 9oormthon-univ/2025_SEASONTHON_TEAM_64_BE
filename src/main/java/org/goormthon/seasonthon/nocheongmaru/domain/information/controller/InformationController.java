@@ -4,13 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.docs.InformationControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.request.InformationCreateRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.request.InformationModifyRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.InformationService;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/informations")
 @RequiredArgsConstructor
@@ -26,6 +24,16 @@ public class InformationController implements InformationControllerDocs {
     ) {
         Long informationId = informationService.generateInformation(request.toServiceRequest(memberId));
         return ResponseEntity.ok(informationId);
+    }
+    
+    @PutMapping("/{informationId}")
+    public ResponseEntity<Long> modifyInformation(
+        @AuthMemberId Long memberId,
+        @PathVariable Long informationId,
+        @RequestBody @Valid InformationModifyRequest request
+    ) {
+        Long modifyInformationId = informationService.modifyInformation(request.toServiceRequest(memberId, informationId));
+        return ResponseEntity.ok(modifyInformationId);
     }
     
 }

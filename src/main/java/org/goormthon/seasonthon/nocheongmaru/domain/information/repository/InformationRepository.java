@@ -23,4 +23,9 @@ public class InformationRepository {
         return informationJpaRepository.findById(informationId)
             .orElseThrow(InformationNotFoundException::new);
     }
+    
+    public boolean existsByIdAndMemberId(Long id, Long memberId) {
+        return informationJpaRepository.existsByIdAndMemberId(id, memberId);
+    }
+    
 }
