@@ -13,6 +13,9 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.r
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.ApiExceptions;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.common.ErrorCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Tag(name = "Information", description = "정보 관리 API - 병원, 카페, 레스토랑 등의 정보를 등록하고 관리하는 기능을 제공합니다.")
 public interface InformationControllerDocs {
@@ -43,9 +46,7 @@ public interface InformationControllerDocs {
         ),
     })
     ResponseEntity<Long> createInformation(
-        @Parameter(
-            hidden = true
-        ) Long memberId,
+        @Parameter(hidden = true) Long memberId,
         
         @RequestBody(
             description = "정보 등록 요청 데이터",
@@ -88,6 +89,7 @@ public interface InformationControllerDocs {
                     )
                 }
             )
-        ) InformationCreateRequest request
+        ) InformationCreateRequest request,
+        @Parameter(description = "첨부할 이미지 파일들") List<MultipartFile> images
     );
 }

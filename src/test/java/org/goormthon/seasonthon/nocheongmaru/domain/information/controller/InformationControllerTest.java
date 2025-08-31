@@ -7,6 +7,10 @@ import org.goormthon.seasonthon.nocheongmaru.global.annotation.TestMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -24,6 +28,9 @@ class InformationControllerTest extends ControllerTestSupport {
     void createInformation() throws Exception {
         // given
         Long memberId = 1L;
+        MockMultipartFile imageFile = createMockMultipartFile();
+        List<MultipartFile> imagesRequest = List.of(imageFile);
+        
         var request = InformationCreateRequest.builder()
             .title("title")
             .description("description")
@@ -31,14 +38,15 @@ class InformationControllerTest extends ControllerTestSupport {
             .category("HOSPITAL_FACILITIES")
             .build();
         
-        given(informationService.generateInformation(request.toServiceRequest(memberId)))
+        given(informationService.generateInformation(request.toServiceRequest(memberId, imagesRequest)))
             .willReturn(1L);
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(imageFile)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isOk())
@@ -58,9 +66,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -81,9 +89,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -105,9 +113,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -128,9 +136,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -151,9 +159,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -175,9 +183,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                post(BASE_URL)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -373,6 +381,15 @@ class InformationControllerTest extends ControllerTestSupport {
             )
             .andDo(print())
             .andExpect(status().isNoContent());
+    }
+    
+    private MockMultipartFile createMockMultipartFile() {
+        return new MockMultipartFile(
+            "images",
+            "test-image.jpg",
+            MediaType.IMAGE_JPEG_VALUE,
+            "test image content".getBytes()
+        );
     }
     
 }

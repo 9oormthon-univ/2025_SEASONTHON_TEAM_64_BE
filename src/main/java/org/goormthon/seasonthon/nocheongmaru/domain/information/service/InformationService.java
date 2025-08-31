@@ -23,7 +23,8 @@ public class InformationService {
             request.title(),
             request.description(),
             request.address(),
-            request.category()
+            request.category(),
+            request.images()
         );
     }
     

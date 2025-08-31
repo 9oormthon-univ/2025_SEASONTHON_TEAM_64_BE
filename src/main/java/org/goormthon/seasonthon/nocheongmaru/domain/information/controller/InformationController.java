@@ -9,6 +9,9 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.service.Informat
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequestMapping("/api/v1/informations")
 @RequiredArgsConstructor
@@ -20,9 +23,10 @@ public class InformationController implements InformationControllerDocs {
     @PostMapping
     public ResponseEntity<Long> createInformation(
         @AuthMemberId Long memberId,
-        @RequestBody @Valid InformationCreateRequest request
+        @RequestPart @Valid InformationCreateRequest request,
+        @RequestPart(required = false) List<MultipartFile> images
     ) {
-        Long informationId = informationService.generateInformation(request.toServiceRequest(memberId));
+        Long informationId = informationService.generateInformation(request.toServiceRequest(memberId, images));
         return ResponseEntity.ok(informationId);
     }
     

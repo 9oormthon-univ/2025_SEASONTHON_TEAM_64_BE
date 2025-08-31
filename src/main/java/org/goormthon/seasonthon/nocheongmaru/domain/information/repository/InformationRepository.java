@@ -36,4 +36,8 @@ public class InformationRepository {
         return informationJpaRepository.existsById(id);
     }
     
+    public Information getReferenceById(Long informationId) {
+        return informationJpaRepository.getReferenceById(informationId);
+    }
+    
 }

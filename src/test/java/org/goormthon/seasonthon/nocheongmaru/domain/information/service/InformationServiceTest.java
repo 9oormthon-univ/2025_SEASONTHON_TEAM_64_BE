@@ -62,7 +62,7 @@ class InformationServiceTest extends IntegrationTestSupport {
             .category(Category.HOSPITAL_FACILITIES)
             .build();
         
-        given(informationGenerator.generate(any(), anyString(), anyString(), anyString(), any()))
+        given(informationGenerator.generate(any(), anyString(), anyString(), anyString(), any(), any()))
             .willReturn(informationId);
         
         // when
