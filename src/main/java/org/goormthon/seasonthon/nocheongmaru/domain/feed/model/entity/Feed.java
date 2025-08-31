@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.feed.entity;
+package org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
