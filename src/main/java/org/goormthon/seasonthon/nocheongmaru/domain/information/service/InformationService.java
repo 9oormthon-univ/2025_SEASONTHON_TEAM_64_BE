@@ -39,4 +39,12 @@ public class InformationService {
         );
     }
     
+    public void deleteInformation(Long memberId, Long informationId) {
+        Member member = memberRepository.findById(memberId);
+        
+        informationEditor.delete(
+            member.getId(),
+            informationId
+        );
+    }
 }

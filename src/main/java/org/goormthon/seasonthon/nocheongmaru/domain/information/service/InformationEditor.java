@@ -27,6 +27,12 @@ public class InformationEditor {
         return information.getId();
     }
     
+    @Transactional
+    public void delete(Long memberId, Long informationId) {
+        validateInformationOwnership(memberId, informationId);
+        informationRepository.deleteById(informationId);
+    }
+    
     private void validateInformationOwnership(Long memberId, Long informationId) {
         if (!informationRepository.existsByIdAndMemberId(informationId, memberId)) {
             throw new IsNotInformationOwnerException();

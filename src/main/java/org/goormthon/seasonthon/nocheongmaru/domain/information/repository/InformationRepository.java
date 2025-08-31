@@ -28,4 +28,12 @@ public class InformationRepository {
         return informationJpaRepository.existsByIdAndMemberId(id, memberId);
     }
     
+    public void deleteById(Long informationId) {
+        informationJpaRepository.deleteById(informationId);
+    }
+    
+    public boolean existsById(Long id) {
+        return informationJpaRepository.existsById(id);
+    }
+    
 }

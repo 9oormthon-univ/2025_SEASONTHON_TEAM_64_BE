@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -358,6 +357,22 @@ class InformationControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
             .andExpect(jsonPath("$.validationErrors.category").value("정확한 카테고리를 입력해주세요."));
+    }
+    
+    @TestMember
+    @DisplayName("정보나눔 피드를 삭제한다.")
+    @Test
+    void deleteInformation() throws Exception {
+        // given
+        long informationId = 1L;
+        
+        // expected
+        mockMvc.perform(
+                delete(BASE_URL + "/" + informationId)
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isNoContent());
     }
     
 }

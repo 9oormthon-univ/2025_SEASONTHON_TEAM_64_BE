@@ -93,6 +93,40 @@ class InformationEditorTest extends IntegrationTestSupport {
             .hasMessage("정보나눔 피드의 작성자가 아닙니다.");
     }
     
+    @DisplayName("정보나눔 피드를 삭제한다.")
+    @Test
+    void delete() {
+        // given
+        Member member = createMember("nickname", "test@test.com");
+        memberRepository.save(member);
+        
+        Information information = createInformation(member);
+        informationRepository.save(information);
+        
+        // when
+        informationEditor.delete(member.getId(), information.getId());
+        
+        // then
+        assertThat(informationRepository.existsById(information.getId())).isFalse();
+    }
+    
+    @DisplayName("정보나눔 피드 삭제 시, 작성자가 아니면 예외가 발생한다.")
+    @Test
+    void delete_WithIsNotOwner() {
+        // given
+        Member member = createMember("nickname", "test1@test.com");
+        Member otherMember = createMember("other-nickname", "test2@test.com");
+        memberRepository.saveAll(List.of(member, otherMember));
+        
+        Information information = createInformation(member);
+        informationRepository.save(information);
+        
+        // when & then
+        assertThatThrownBy(() -> informationEditor.delete(otherMember.getId(), information.getId()))
+            .isInstanceOf(IsNotInformationOwnerException.class)
+            .hasMessage("정보나눔 피드의 작성자가 아닙니다.");
+    }
+    
     private Member createMember(String nickname, String email) {
         return Member.builder()
             .nickname(nickname)

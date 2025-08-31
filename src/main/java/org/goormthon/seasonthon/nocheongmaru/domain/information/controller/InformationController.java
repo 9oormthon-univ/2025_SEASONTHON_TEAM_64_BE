@@ -36,4 +36,13 @@ public class InformationController implements InformationControllerDocs {
         return ResponseEntity.ok(modifyInformationId);
     }
     
+    @DeleteMapping("/{informationId}")
+    public ResponseEntity<Void> deleteInformation(
+        @AuthMemberId Long memberId,
+        @PathVariable Long informationId
+    ) {
+        informationService.deleteInformation(memberId, informationId);
+        return ResponseEntity.noContent().build();
+    }
+    
 }

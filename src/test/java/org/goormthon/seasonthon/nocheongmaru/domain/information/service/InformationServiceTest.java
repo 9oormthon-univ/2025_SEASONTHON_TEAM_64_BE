@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 class InformationServiceTest extends IntegrationTestSupport {
     
@@ -98,6 +99,23 @@ class InformationServiceTest extends IntegrationTestSupport {
         
         // then
         assertThat(modifiedInformationId).isEqualTo(information.getId());
+    }
+    
+    @DisplayName("정보나눔 피드를 삭제한다.")
+    @Test
+    void deleteInformation() {
+        // given
+        Member member = createMember();
+        memberRepository.save(member);
+        
+        Information information = createInformation(member);
+        informationRepository.save(information);
+        
+        // when
+        informationService.deleteInformation(member.getId(), information.getId());
+        
+        // then
+        verify(informationEditor).delete(any(), any());
     }
     
     private Member createMember() {
