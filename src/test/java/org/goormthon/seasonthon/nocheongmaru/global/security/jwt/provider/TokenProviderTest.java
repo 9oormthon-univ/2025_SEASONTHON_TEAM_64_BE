@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.global.security.jwt.provider;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.global.security.jwt.dto.TokenResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class TokenProviderTest extends IntegrationTestSupport {
     

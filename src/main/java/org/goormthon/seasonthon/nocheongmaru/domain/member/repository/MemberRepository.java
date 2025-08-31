@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.member.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;
 import org.springframework.stereotype.Repository;
 

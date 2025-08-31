@@ -2,7 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.service.dto.request.ReissueTokenServiceRequest;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.InvalidRefreshTokenException;
 import org.goormthon.seasonthon.nocheongmaru.global.security.jwt.provider.TokenProvider;
