@@ -19,7 +19,9 @@ public enum ErrorCode {
     
     // Member
     MEMBER_NOT_FOUND(404, "회원을 찾을 수 없습니다."),
-    
+
+    // Feed
+    FEED_NOT_FOUND(404, "게시물을 찾을 수 없습니다.")
     ;
     
     private final int status;
