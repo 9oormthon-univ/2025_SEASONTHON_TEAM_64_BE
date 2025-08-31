@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -36,11 +37,12 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private void sendErrorResponse(HttpServletResponse response) throws IOException {
         ErrorResponse errorResponse = ErrorResponse.builder()
             .status(SC_UNAUTHORIZED)
-            .message(ErrorCode.FORBIDDEN.getMessage())
+            .message(ErrorCode.UNAUTHORIZED.getMessage())
             .build();
         
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         
+        response.setCharacterEncoding(UTF_8.name());
         response.setStatus(SC_UNAUTHORIZED);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.getWriter().write(jsonResponse);
