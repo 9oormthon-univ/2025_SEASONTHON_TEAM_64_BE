@@ -27,10 +27,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.BDDMockito.given;
 
-class ImageManagerTest extends IntegrationTestSupport {
+class InformationImageManagerTest extends IntegrationTestSupport {
 
     @Autowired
-    private ImageManager imageManager;
+    private InformationImageManager informationImageManager;
 
     @Autowired
     private ImageRepository imageRepository;
@@ -62,7 +62,7 @@ class ImageManagerTest extends IntegrationTestSupport {
         given(s3StorageUtil.uploadFileToS3(image2)).willReturn("s3://bucket/image2.png");
 
         // when
-        imageManager.saveImages(information, List.of(image1, image2));
+        informationImageManager.saveImages(information, List.of(image1, image2));
 
         // then
         List<Image> saved = imageRepository.findAllByInformationId(information.getId());
@@ -78,9 +78,9 @@ class ImageManagerTest extends IntegrationTestSupport {
         MockMultipartFile emptyFile = new MockMultipartFile("empty", "empty.png", MediaType.IMAGE_PNG_VALUE, new byte[0]);
 
         // when
-        imageManager.saveImages(information, null);
-        imageManager.saveImages(information, List.of());
-        imageManager.saveImages(information, List.of(emptyFile));
+        informationImageManager.saveImages(information, null);
+        informationImageManager.saveImages(information, List.of());
+        informationImageManager.saveImages(information, List.of(emptyFile));
 
         // then
         List<Image> saved = imageRepository.findAllByInformationId(information.getId());
@@ -102,7 +102,7 @@ class ImageManagerTest extends IntegrationTestSupport {
         given(s3StorageUtil.uploadFileToS3(image2)).willReturn("s3://bucket/new2.png");
 
         // when
-        imageManager.replaceImages(information.getId(), information, List.of(image1, image2));
+        informationImageManager.replaceImages(information.getId(), information, List.of(image1, image2));
 
         // then
         verify(s3StorageUtil, times(1)).deleteFileFromS3("s3://bucket/old1.png");
@@ -122,7 +122,7 @@ class ImageManagerTest extends IntegrationTestSupport {
         imageRepository.save(Image.builder().imageUrl("s3://bucket/old2.png").information(information).build());
 
         // when
-        imageManager.deleteAllByInformationId(information.getId());
+        informationImageManager.deleteAllByInformationId(information.getId());
 
         // then
         verify(s3StorageUtil, times(1)).deleteFileFromS3("s3://bucket/old1.png");
@@ -137,7 +137,7 @@ class ImageManagerTest extends IntegrationTestSupport {
         Information information = persistInformation();
 
         // when
-        imageManager.deleteAllByInformationId(information.getId());
+        informationImageManager.deleteAllByInformationId(information.getId());
 
         // then
         verify(s3StorageUtil, never()).deleteFileFromS3(any());

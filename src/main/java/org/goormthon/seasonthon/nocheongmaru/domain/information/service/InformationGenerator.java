@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import lombok.RequiredArgsConstructor;
-import org.goormthon.seasonthon.nocheongmaru.domain.image.service.ImageManager;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.InformationImageManager;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGeocodingProvider;
@@ -19,7 +19,7 @@ import java.util.List;
 public class InformationGenerator {
     
     private final InformationRepository informationRepository;
-    private final ImageManager imageManager;
+    private final InformationImageManager informationImageManager;
     private final KakaoGeocodingProvider kakaoGeocodingProvider;
     
     @Transactional
@@ -29,7 +29,7 @@ public class InformationGenerator {
         Information information = createInformation(member, title, description, address, category, geo);
         informationRepository.save(information);
         
-        imageManager.saveImages(information, images);
+        informationImageManager.saveImages(information, images);
         
         return information.getId();
     }

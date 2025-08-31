@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import lombok.RequiredArgsConstructor;
-import org.goormthon.seasonthon.nocheongmaru.domain.image.service.ImageManager;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.InformationImageManager;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGeocodingProvider;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.dto.GeocodingResponse;
@@ -19,7 +19,7 @@ public class InformationEditor {
     
     private final KakaoGeocodingProvider kakaoGeocodingProvider;
     private final InformationRepository informationRepository;
-    private final ImageManager imageManager;
+    private final InformationImageManager informationImageManager;
     
     @Transactional
     public Long modify(Long memberId, Long informationId, String title, String description, String address, List<MultipartFile> images) {
@@ -28,7 +28,7 @@ public class InformationEditor {
         
         GeocodingResponse geocodingResponse = kakaoGeocodingProvider.getGeocodingByAddress(address);
         information.modifyInformation(title, description, address, geocodingResponse.latitude(), geocodingResponse.longitude());
-        imageManager.replaceImages(informationId, information, images);
+        informationImageManager.replaceImages(informationId, information, images);
         
         return information.getId();
     }
@@ -36,7 +36,7 @@ public class InformationEditor {
     @Transactional
     public void delete(Long memberId, Long informationId) {
         validateInformationOwnership(memberId, informationId);
-        imageManager.deleteAllByInformationId(informationId);
+        informationImageManager.deleteAllByInformationId(informationId);
         informationRepository.deleteById(informationId);
     }
     

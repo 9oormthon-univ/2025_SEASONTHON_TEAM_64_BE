@@ -1,8 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
-import org.goormthon.seasonthon.nocheongmaru.domain.image.entity.Image;
-import org.goormthon.seasonthon.nocheongmaru.domain.image.service.ImageManager;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.InformationImageManager;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGeocodingProvider;
@@ -43,7 +42,7 @@ class InformationGeneratorTest extends IntegrationTestSupport {
     private KakaoGeocodingProvider kakaoGeocodingProvider;
     
     @MockitoBean
-    private ImageManager imageManager;
+    private InformationImageManager informationImageManager;
     
     @AfterEach
     void tearDown() {
@@ -84,7 +83,7 @@ class InformationGeneratorTest extends IntegrationTestSupport {
         assertThat(information)
             .extracting("id", "title", "description", "address", "latitude", "longitude", "category")
             .containsExactly(information.getId(), "title", "description", "address", 37.123456, 127.123456, Category.HOSPITAL_FACILITIES);
-        verify(imageManager).saveImages(any(Information.class), eq(List.of(image1, image2)));
+        verify(informationImageManager).saveImages(any(Information.class), eq(List.of(image1, image2)));
     }
     
     @DisplayName("정보나눔 피드 생성 시 이미지는 없어도 된다.")
@@ -116,7 +115,7 @@ class InformationGeneratorTest extends IntegrationTestSupport {
         assertThat(information)
             .extracting("id", "title", "description", "address", "latitude", "longitude", "category")
             .containsExactly(information.getId(), "title", "description", "address", 37.123456, 127.123456, Category.HOSPITAL_FACILITIES);
-        verify(imageManager).saveImages(any(Information.class), isNull());
+        verify(informationImageManager).saveImages(any(Information.class), isNull());
     }
     
     private Member createMember() {

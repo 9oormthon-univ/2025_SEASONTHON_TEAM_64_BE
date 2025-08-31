@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
-import org.goormthon.seasonthon.nocheongmaru.domain.image.service.ImageManager;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.InformationImageManager;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGeocodingProvider;
@@ -44,7 +44,7 @@ class InformationEditorTest extends IntegrationTestSupport {
     private KakaoGeocodingProvider kakaoGeocodingProvider;
     
     @MockitoBean
-    private ImageManager imageManager;
+    private InformationImageManager informationImageManager;
     
     @AfterEach
     void tearDown() {
@@ -89,7 +89,7 @@ class InformationEditorTest extends IntegrationTestSupport {
         assertThat(modifiedInformation)
             .extracting("title", "description", "address")
             .containsExactly("modified title", "modified description", "modify-address");
-        verify(imageManager).replaceImages(any(Long.class), any(Information.class), eq(images));
+        verify(informationImageManager).replaceImages(any(Long.class), any(Information.class), eq(images));
     }
     
     @DisplayName("정보나눔 피드 수정 시, 이미지는 없어도 된다.")
@@ -124,7 +124,7 @@ class InformationEditorTest extends IntegrationTestSupport {
         assertThat(modifiedInformation)
             .extracting("title", "description", "address")
             .containsExactly("modified title", "modified description", "modify-address");
-        verify(imageManager).replaceImages(any(Long.class), any(Information.class), eq(null));
+        verify(informationImageManager).replaceImages(any(Long.class), any(Information.class), eq(null));
     }
     
     @DisplayName("정보나눔 피드 수정 시, 작성자가 아니면 예외가 발생한다.")
@@ -159,7 +159,7 @@ class InformationEditorTest extends IntegrationTestSupport {
         
         // then
         assertThat(informationRepository.existsById(information.getId())).isFalse();
-        verify(imageManager).deleteAllByInformationId(information.getId());
+        verify(informationImageManager).deleteAllByInformationId(information.getId());
     }
     
     @DisplayName("정보나눔 피드 삭제 시, 작성자가 아니면 예외가 발생한다.")

@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
-public class ImageManager {
+public class InformationImageManager {
 
     private final ImageRepository imageRepository;
     private final S3StorageUtil s3StorageUtil;
