@@ -91,7 +91,7 @@ class InformationServiceTest extends IntegrationTestSupport {
             .category(Category.HOSPITAL_FACILITIES)
             .build();
         
-        given(informationEditor.modify(any(), any(), anyString(), anyString(), anyString()))
+        given(informationEditor.modify(any(), any(), anyString(), anyString(), anyString(), any()))
             .willReturn(information.getId());
         
         // when

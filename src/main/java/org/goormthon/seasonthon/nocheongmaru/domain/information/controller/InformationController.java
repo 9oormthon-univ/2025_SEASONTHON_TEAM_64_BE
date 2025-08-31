@@ -34,9 +34,10 @@ public class InformationController implements InformationControllerDocs {
     public ResponseEntity<Long> modifyInformation(
         @AuthMemberId Long memberId,
         @PathVariable Long informationId,
-        @RequestBody @Valid InformationModifyRequest request
+        @RequestPart @Valid InformationModifyRequest request,
+        @RequestPart(required = false) List<MultipartFile> images
     ) {
-        Long modifyInformationId = informationService.modifyInformation(request.toServiceRequest(memberId, informationId));
+        Long modifyInformationId = informationService.modifyInformation(request.toServiceRequest(memberId, informationId, images));
         return ResponseEntity.ok(modifyInformationId);
     }
     

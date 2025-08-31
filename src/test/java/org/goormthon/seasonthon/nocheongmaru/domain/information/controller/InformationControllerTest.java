@@ -6,6 +6,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.r
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.TestMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -200,6 +201,9 @@ class InformationControllerTest extends ControllerTestSupport {
         // given
         Long memberId = 1L;
         Long informationId = 1L;
+        MockMultipartFile imageFile = createMockMultipartFile();
+        List<MultipartFile> imagesRequest = List.of(imageFile);
+        
         var request = InformationModifyRequest.builder()
             .title("title")
             .description("description")
@@ -207,14 +211,15 @@ class InformationControllerTest extends ControllerTestSupport {
             .category("HOSPITAL_FACILITIES")
             .build();
         
-        given(informationService.modifyInformation(request.toServiceRequest(memberId, informationId)))
+        given(informationService.modifyInformation(request.toServiceRequest(memberId, informationId, imagesRequest)))
             .willReturn(informationId);
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(imageFile)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isOk())
@@ -235,9 +240,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -259,9 +264,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -284,9 +289,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -308,9 +313,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -332,9 +337,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -357,9 +362,9 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                put(BASE_URL + "/" + informationId)
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
+                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())

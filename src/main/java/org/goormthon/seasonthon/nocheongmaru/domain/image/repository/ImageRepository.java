@@ -27,4 +27,9 @@ public class ImageRepository {
     public List<Image> findAllByInformationId(Long informationId) {
         return imageJpaRepository.findAllByInformationId(informationId);
     }
+    
+    public void deleteAllByInformationId(Long informationId) {
+        imageJpaRepository.deleteAllByInformationId(informationId);
+    }
+    
 }

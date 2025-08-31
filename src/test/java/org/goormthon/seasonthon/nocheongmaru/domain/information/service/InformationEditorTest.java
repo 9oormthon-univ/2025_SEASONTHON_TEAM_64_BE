@@ -1,6 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.ImageManager;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGeocodingProvider;
@@ -14,14 +15,20 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 class InformationEditorTest extends IntegrationTestSupport {
     
@@ -36,6 +43,9 @@ class InformationEditorTest extends IntegrationTestSupport {
     
     @MockitoBean
     private KakaoGeocodingProvider kakaoGeocodingProvider;
+    
+    @MockitoBean
+    private ImageManager imageManager;
     
     @AfterEach
     void tearDown() {
@@ -60,13 +70,19 @@ class InformationEditorTest extends IntegrationTestSupport {
         given(kakaoGeocodingProvider.getGeocodingByAddress("modify-address"))
             .willReturn(geocodingResponse);
         
+        List<MultipartFile> images = List.of(
+            createMockFile("image1", "image1"),
+            createMockFile("image2", "image2")
+        );
+        
         // when
         Long informationId = informationEditor.modify(
             member.getId(),
             information.getId(),
             "modified title",
             "modified description",
-            "modify-address"
+            "modify-address",
+            images
         );
         
         // then
@@ -74,6 +90,42 @@ class InformationEditorTest extends IntegrationTestSupport {
         assertThat(modifiedInformation)
             .extracting("title", "description", "address")
             .containsExactly("modified title", "modified description", "modify-address");
+        verify(imageManager).replaceImages(any(Long.class), any(Information.class), eq(images));
+    }
+    
+    @DisplayName("정보나눔 피드 수정 시, 이미지는 없어도 된다.")
+    @Test
+    void modify_WithoutImage() {
+        // given
+        Member member = createMember("nickname", "test@test.com");
+        memberRepository.save(member);
+        
+        Information information = createInformation(member);
+        informationRepository.save(information);
+        
+        GeocodingResponse geocodingResponse = GeocodingResponse.builder()
+            .latitude(36.123456)
+            .longitude(126.123456)
+            .build();
+        given(kakaoGeocodingProvider.getGeocodingByAddress("modify-address"))
+            .willReturn(geocodingResponse);
+        
+        // when
+        Long informationId = informationEditor.modify(
+            member.getId(),
+            information.getId(),
+            "modified title",
+            "modified description",
+            "modify-address",
+            null
+        );
+        
+        // then
+        Information modifiedInformation = informationRepository.findById(informationId);
+        assertThat(modifiedInformation)
+            .extracting("title", "description", "address")
+            .containsExactly("modified title", "modified description", "modify-address");
+        verify(imageManager).replaceImages(any(Long.class), any(Information.class), eq(null));
     }
     
     @DisplayName("정보나눔 피드 수정 시, 작성자가 아니면 예외가 발생한다.")
@@ -88,7 +140,7 @@ class InformationEditorTest extends IntegrationTestSupport {
         informationRepository.save(information);
         
         // when & then
-        assertThatThrownBy(() -> informationEditor.modify(otherMember.getId(), information.getId(), "modified title", "modified description", "modify-address"))
+        assertThatThrownBy(() -> informationEditor.modify(otherMember.getId(), information.getId(), "modified title", "modified description", "modify-address", null))
             .isInstanceOf(IsNotInformationOwnerException.class)
             .hasMessage("정보나눔 피드의 작성자가 아닙니다.");
     }
@@ -146,6 +198,10 @@ class InformationEditorTest extends IntegrationTestSupport {
             .latitude(37.123456)
             .longitude(127.123456)
             .build();
+    }
+    
+    private MockMultipartFile createMockFile(String name, String originalFilename) {
+        return new MockMultipartFile(name, originalFilename + ".png", MediaType.IMAGE_PNG_VALUE, name.getBytes());
     }
     
 }

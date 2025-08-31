@@ -36,7 +36,8 @@ public class InformationService {
             request.informationId(),
             request.title(),
             request.description(),
-            request.address()
+            request.address(),
+            request.images()
         );
     }
     

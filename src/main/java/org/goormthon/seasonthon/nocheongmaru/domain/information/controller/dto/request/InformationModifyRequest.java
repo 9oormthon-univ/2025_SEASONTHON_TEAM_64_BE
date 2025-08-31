@@ -7,6 +7,9 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationModifyServiceRequest;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.ValidEnum;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -51,7 +54,7 @@ public record InformationModifyRequest(
     
 ) {
     
-    public InformationModifyServiceRequest toServiceRequest(Long memberId, Long informationId) {
+    public InformationModifyServiceRequest toServiceRequest(Long memberId, Long informationId, List<MultipartFile> images) {
         return InformationModifyServiceRequest.builder()
             .memberId(memberId)
             .informationId(informationId)
@@ -59,6 +62,7 @@ public record InformationModifyRequest(
             .description(description)
             .address(address)
             .category(Category.toCategory(category))
+            .images(images)
             .build();
     }
     
