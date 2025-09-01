@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.goormthon.seasonthon.nocheongmaru.domain.comment.repository.CommentJpaRepository;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity.Feed;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response.CursorPageResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response.FeedResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.repository.CommentRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.CursorPageResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.FeedNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.dto.FeedIdCount;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.FeedIdCount;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class FeedService {
 
 	private final FeedRepository feedRepository;
-	private final CommentJpaRepository commentJpaRepository;
+	private final CommentRepository commentRepository;
 
 	/**
 	 * 커서 기반 페이지네이션
@@ -45,7 +45,7 @@ public class FeedService {
 		// 2) 벌크 집계 → Map 변환 (누락 id는 0L로 기본값)
 		Map<Long, Long> likeMap = feedRepository.countDistinctMemberByFeedIds(feedIds).stream()
 			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
-		Map<Long, Long> commentMap = commentJpaRepository.countByFeedIds(feedIds).stream()
+		Map<Long, Long> commentMap = commentRepository.countByFeedIds(feedIds).stream()
 			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
 
 		// 3) DTO 매핑
@@ -74,7 +74,7 @@ public class FeedService {
 			.orElseThrow(FeedNotFoundException::new);
 
 		long likeCount = feedRepository.countDistinctMemberByFeedId(feedId);
-		long commentCount = commentJpaRepository.countByFeedId(feedId);
+		long commentCount = commentRepository.countByFeedId(feedId);
 
 		return FeedResponse.of(feed, likeCount, commentCount);
 	}

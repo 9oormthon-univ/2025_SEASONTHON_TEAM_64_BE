@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.controller;
 
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response.CursorPageResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response.FeedResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.CursorPageResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/feeds")
-@Tag(name = "게시물 관련 API", description = "게시물 조회")
 public class FeedController {
 
 	private final FeedService feedService;

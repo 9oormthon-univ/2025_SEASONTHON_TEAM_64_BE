@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.feed.model.dto;
+package org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto;
 
 public class FeedIdCount {
 

@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed;
 
-import static org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity.QFeed.*;
-import static org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity.QFeedLike.*;
+import static org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.QFeed.*;
+import static org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.QFeedLike.*;
 import static org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.QMember.*;
 
 import java.util.List;
@@ -9,11 +9,10 @@ import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.dto.FeedIdCount;
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.FeedIdCount;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,27 +25,13 @@ public class FeedRepository {
     private final JPAQueryFactory query;
 
     /* ========= 기본 CRUD 위임 ========= */
-    @Transactional
     public Feed save(Feed entity) { return feedJpaRepository.save(entity); }
 
-    @Transactional(readOnly = true)
     public Optional<Feed> findById(Long id) { return feedJpaRepository.findById(id); }
 
-    @Transactional
     public void deleteById(Long id) { feedJpaRepository.deleteById(id); }
 
-    /* ========= 커서 기반 목록 ========= */
-    @Transactional(readOnly = true)
-    public List<Feed> findFeedsByCursor(Long cursorId, Pageable pageable) {
-        return query.selectFrom(feed)
-            .where(cursorId == null ? null : feed.id.lt(cursorId))
-            .orderBy(feed.id.desc())
-            .limit(pageable.getPageSize())
-            .fetch();
-    }
-
     /* ========= 커서 + Member fetch join (N+1 방지) ========= */
-    @Transactional(readOnly = true)
     public List<Feed> findFeedsByCursorWithMember(Long cursorId, Pageable pageable) {
         return query.selectFrom(feed)
             .join(feed.member, member).fetchJoin()
@@ -57,7 +42,6 @@ public class FeedRepository {
     }
 
     /* ========= 상세 + Member fetch join ========= */
-    @Transactional(readOnly = true)
     public Optional<Feed> findByIdWithMember(Long feedId) {
         Feed result = query.selectFrom(feed)
             .join(feed.member, member).fetchJoin()
@@ -67,7 +51,6 @@ public class FeedRepository {
     }
 
     /* ========= 좋아요 배치 집계 (distinct member) ========= */
-    @Transactional(readOnly = true)
     public List<FeedIdCount> countDistinctMemberByFeedIds(List<Long> feedIds) {
         if (feedIds == null || feedIds.isEmpty()) return List.of();
 
@@ -84,7 +67,6 @@ public class FeedRepository {
     }
 
     /* ========= 좋아요 단건 집계 ========= */
-    @Transactional(readOnly = true)
     public long countDistinctMemberByFeedId(Long feedId) {
         Long cnt = query
             .select(feedLike.member.id.countDistinct())
@@ -95,7 +77,6 @@ public class FeedRepository {
     }
 
     /* ========= 존재 여부 =========> 추후 개발을 위해 구현 */
-    @Transactional(readOnly = true)
     public boolean existsByIdAndMemberId(Long feedId, Long memberId) {
         Integer one = query.selectOne()
             .from(feed)

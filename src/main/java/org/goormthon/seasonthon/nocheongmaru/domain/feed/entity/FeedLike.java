@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity;
+package org.goormthon.seasonthon.nocheongmaru.domain.feed.entity;
 
 
 import jakarta.persistence.*;
