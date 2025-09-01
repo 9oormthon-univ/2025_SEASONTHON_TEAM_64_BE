@@ -1,8 +1,11 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.feed.model.response;
+package org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response;
 
-import org.goormthon.seasonthon.nocheongmaru.domain.feed.model.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.model.response.MemberResponse;
 
+import lombok.Builder;
+
+@Builder
 public record FeedResponse (
 
 	Long feedId,          // 피드 PK
