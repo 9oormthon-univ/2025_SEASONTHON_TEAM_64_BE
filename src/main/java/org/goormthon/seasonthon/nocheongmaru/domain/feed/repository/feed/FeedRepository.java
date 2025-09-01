@@ -24,14 +24,12 @@ public class FeedRepository {
     private final FeedJpaRepository feedJpaRepository;
     private final JPAQueryFactory query;
 
-    /* ========= 기본 CRUD 위임 ========= */
     public Feed save(Feed entity) { return feedJpaRepository.save(entity); }
 
     public Optional<Feed> findById(Long id) { return feedJpaRepository.findById(id); }
 
     public void deleteById(Long id) { feedJpaRepository.deleteById(id); }
 
-    /* ========= 커서 + Member fetch join (N+1 방지) ========= */
     public List<Feed> findFeedsByCursorWithMember(Long cursorId, Pageable pageable) {
         return query.selectFrom(feed)
             .join(feed.member, member).fetchJoin()
@@ -41,7 +39,6 @@ public class FeedRepository {
             .fetch();
     }
 
-    /* ========= 상세 + Member fetch join ========= */
     public Optional<Feed> findByIdWithMember(Long feedId) {
         Feed result = query.selectFrom(feed)
             .join(feed.member, member).fetchJoin()
@@ -50,7 +47,6 @@ public class FeedRepository {
         return Optional.ofNullable(result);
     }
 
-    /* ========= 좋아요 배치 집계 (distinct member) ========= */
     public List<FeedIdCount> countDistinctMemberByFeedIds(List<Long> feedIds) {
         if (feedIds == null || feedIds.isEmpty()) return List.of();
 
@@ -66,7 +62,6 @@ public class FeedRepository {
             .fetch();
     }
 
-    /* ========= 좋아요 단건 집계 ========= */
     public long countDistinctMemberByFeedId(Long feedId) {
         Long cnt = query
             .select(feedLike.member.id.countDistinct())
@@ -76,7 +71,6 @@ public class FeedRepository {
         return cnt == null ? 0L : cnt;
     }
 
-    /* ========= 존재 여부 =========> 추후 개발을 위해 구현 */
     public boolean existsByIdAndMemberId(Long feedId, Long memberId) {
         Integer one = query.selectOne()
             .from(feed)

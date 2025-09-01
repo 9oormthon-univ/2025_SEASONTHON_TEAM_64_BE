@@ -40,15 +40,12 @@ public class FeedLikeService {
 			throw new MemberNotFoundException();
 		}
 
-		// 1) 먼저 '취소' 시도 (이미 눌러져 있었다면 여기서 1건 삭제됨)
 		long deleted = feedLikeRepository.deleteByFeed_IdAndMember_Id(feedId, memberId);
 		boolean liked;
 
 		if (deleted > 0) {
-			// 이미 좋아요였고, 이번 호출로 취소됨
 			liked = false;
 		} else {
-			// 2) 이전에 좋아요가 아니었으므로 '등록' 시도
 			try {
 				var memberRef = em.getReference(Member.class, memberId);
 				feedLikeRepository.save(
@@ -59,7 +56,6 @@ public class FeedLikeService {
 				);
 				liked = true;
 			} catch (DataIntegrityViolationException dup) {
-				// 동시 삽입 경합으로 인한 유니크 충돌 → 이미 좋아요라고 간주
 				liked = true;
 			}
 		}

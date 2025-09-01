@@ -19,12 +19,6 @@ public class FeedController {
 
 	private final FeedService feedService;
 
-	/**
-	 * 커서 기반 페이지네이션을 위한 피드 조회 API
-	 * @param cursorId  : 현재 페이지의 마지막 피드 ID (null이면 첫 페이지)
-	 * @param size      : 페이지 크기 (몇 개의 피드를 반환할지)
-	 * @return          : FeedResponse 리스트와 다음 커서 ID
-	 */
 	@GetMapping("/cursor")
 	public ResponseEntity<CursorPageResponse<FeedResponse>> getFeeds(
 		@RequestParam(required = false) Long cursorId,
@@ -35,11 +29,6 @@ public class FeedController {
 		return ResponseEntity.ok(response);
 	}
 
-	/**
-	 * 게시물 ID로 조회
-	 * @param feedId : 피드 ID로 조회
-	 * @return : FeedResponse
-	 */
 	@GetMapping("/{feedId}")
 	public ResponseEntity<FeedResponse> getFeedsById(@PathVariable Long feedId) {
 		FeedResponse feedResponse = feedService.getFeedById(feedId);

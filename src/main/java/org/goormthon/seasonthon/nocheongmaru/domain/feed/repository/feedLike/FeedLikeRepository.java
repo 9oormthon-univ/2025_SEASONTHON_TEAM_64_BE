@@ -13,7 +13,6 @@ public class FeedLikeRepository {
     
     private final FeedLikeJpaRepository feedLikeJpaRepository;
 
-    /* ========= 기본 CRUD 위임 ========= */
     public FeedLike save(FeedLike entity) { return feedLikeJpaRepository.save(entity); }
 
     public Optional<FeedLike> findById(Long id) { return feedLikeJpaRepository.findById(id); }

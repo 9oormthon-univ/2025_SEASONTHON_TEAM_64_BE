@@ -5,7 +5,6 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.UnauthorizedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,6 @@ public class FeedLikeController {
 
 	private final FeedLikeService feedLikeService;
 
-	/**
-	 * 게시물 좋아요 토글 API
-	 */
 	@PostMapping("/{feedId}/toggle")
 	public ResponseEntity<FeedLikeResponse> toggle(
 		@PathVariable Long feedId,
