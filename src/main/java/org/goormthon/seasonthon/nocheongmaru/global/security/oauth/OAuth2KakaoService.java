@@ -11,6 +11,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.security.oauth.dto.KakaoMemberInfo;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
@@ -19,7 +20,8 @@ import java.util.Collections;
 public class OAuth2KakaoService extends DefaultOAuth2UserService {
     
     private final MemberRepository memberRepository;
-    
+
+    @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2User oAuth2User = super.loadUser(userRequest);
