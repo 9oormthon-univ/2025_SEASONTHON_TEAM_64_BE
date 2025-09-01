@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.controller;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedLikeResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
+import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.UnauthorizedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,10 +26,11 @@ public class FeedLikeController {
 	@PostMapping("/{feedId}/toggle")
 	public ResponseEntity<FeedLikeResponse> toggle(
 		@PathVariable Long feedId,
-		@AuthenticationPrincipal String subject
+		@AuthMemberId Long memberId
 	) {
-		if (subject == null) throw new UnauthorizedException();
-		Long memberId = Long.valueOf(subject);
+		if (memberId == null) {
+			throw new UnauthorizedException();
+		}
 
 		FeedLikeResponse r = feedLikeService.toggle(feedId, memberId);
 		return ResponseEntity.ok(r);
