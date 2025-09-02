@@ -21,7 +21,15 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(404, "회원을 찾을 수 없습니다."),
 
     // Feed
-    FEED_NOT_FOUND(404, "게시물을 찾을 수 없습니다.")
+    FEED_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
+    FORBIDDEN_FEED_ACCESS(403, "해당 개시물 권한 금지입니다."),
+
+    // Mission
+    MISSION_NOT_FOUND(404, "미션을 찾을 수 없습니다."),
+
+    // Comment
+    COMMENT_NOT_FOURN(404, "댓글을 찾을 수 없습니다."),
+    FORBIDDEN_COMMENT_ACCESS(403, "해당 댓글 권한 금지입니다.")
     ;
     
     private final int status;
