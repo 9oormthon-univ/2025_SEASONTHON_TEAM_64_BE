@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/feedLikes")
+@RequestMapping("/api/v1/feed-likes")
 public class FeedLikeController {
 
 	private final FeedLikeService feedLikeService;

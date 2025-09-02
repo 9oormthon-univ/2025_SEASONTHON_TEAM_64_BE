@@ -13,7 +13,8 @@ public record FeedResponse (
 	String imageUrl,
 	MemberResponse member,
 	Long likeCount,
-	Long commentCount
+	Long commentCount,
+	Long missionId
 ) {
 		public static FeedResponse of(Feed feed, long likeCount, long commentCount) {
 			return new FeedResponse(
@@ -22,7 +23,8 @@ public record FeedResponse (
 				feed.getImageUrl(),
 				MemberResponse.of(feed.getMember()),
 				likeCount,
-				commentCount
+				commentCount,
+				feed.getMission().getId()
 			);
 		}
 }
