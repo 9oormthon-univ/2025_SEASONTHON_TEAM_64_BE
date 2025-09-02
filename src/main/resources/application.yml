@@ -1,7 +1,7 @@
 spring:
   profiles:
-    active: dev
-#    active: prod
+#    active: dev
+    active: prod
     include: s3, security, docs
 
   servlet:
