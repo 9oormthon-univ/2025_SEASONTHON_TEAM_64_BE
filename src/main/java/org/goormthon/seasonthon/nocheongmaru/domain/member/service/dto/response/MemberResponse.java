@@ -1,6 +1,6 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.member.model.response;
+package org.goormthon.seasonthon.nocheongmaru.domain.member.service.dto.response;
 
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 
 public record MemberResponse(
 	Long id,

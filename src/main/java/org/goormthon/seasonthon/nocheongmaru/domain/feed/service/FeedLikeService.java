@@ -5,7 +5,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedLikeResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike.FeedLikeRepository;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.UnauthorizedException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;

@@ -10,7 +10,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.dto.response
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.CursorPageResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.CommentNotFoundException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.ForbiddenCommentAccessException;

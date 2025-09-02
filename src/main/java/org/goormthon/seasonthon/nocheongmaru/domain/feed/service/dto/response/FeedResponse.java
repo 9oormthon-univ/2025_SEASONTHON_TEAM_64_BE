@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.response.MemberResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.service.dto.response.MemberResponse;
 
 import lombok.Builder;
 

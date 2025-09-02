@@ -7,8 +7,8 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Role;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.security.oauth.dto.KakaoMemberInfo;
 import org.springframework.transaction.annotation.Transactional;

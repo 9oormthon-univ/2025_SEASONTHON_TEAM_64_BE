@@ -2,7 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.auth.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.service.dto.request.ReissueTokenServiceRequest;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.InvalidRefreshTokenException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.common.ErrorCode;
@@ -16,7 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Role.ROLE_USER;
+import static org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role.ROLE_USER;
 import static org.mockito.BDDMockito.given;
 
 class AuthServiceTest extends IntegrationTestSupport {
