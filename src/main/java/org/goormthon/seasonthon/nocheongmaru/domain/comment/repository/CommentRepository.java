@@ -1,7 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.comment.repository;
 
 import static org.goormthon.seasonthon.nocheongmaru.domain.comment.entity.QComment.*;
-import static org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.QMember.*;
+import static org.goormthon.seasonthon.nocheongmaru.domain.member.entity.QMember.*;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class CommentRepository {
             .join(comment.member, member).fetchJoin()
             .where(
                 comment.feed.id.eq(feedId),
-                cursorId == null ? null : comment.id.lt(cursorId) // 커서 조건
+                cursorId == null ? null : comment.id.lt(cursorId)
             )
             .orderBy(comment.id.desc())
             .limit(pageable.getPageSize())

@@ -26,6 +26,9 @@ public enum ErrorCode {
 
     // Mission
     MISSION_NOT_FOUND(404, "미션을 찾을 수 없습니다."),
+    TODAY_MISSION_NOT_FOUND(404, "오늘의 미션이 없습니다. 08:00 이후 확인해주세요."),
+    TODAY_MISSION_NOT_EQUAL(403, "오늘 할당된 미션과 일치하지 않습니다."),
+    ALREADY_UPLOADED_TODAY(409, "오늘 미션으로 이미 게시물을 업로드했습니다."),
 
     // Comment
     COMMENT_NOT_FOURN(404, "댓글을 찾을 수 없습니다."),

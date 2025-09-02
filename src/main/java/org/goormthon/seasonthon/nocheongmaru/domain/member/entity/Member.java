@@ -33,6 +33,9 @@ public class Member extends BaseTimeEntity {
     
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    @Column(name = "fcm_token")
+    private String fcmToken;
     
     @Builder
     private Member(String email, String nickname, String profileImageURL, Role role) {
@@ -45,5 +48,7 @@ public class Member extends BaseTimeEntity {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+    public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
     
 }

@@ -1,5 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,11 +16,16 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.Fe
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.member.AlreadyUploadedTodayException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.FeedNotFoundException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.ForbiddenFeedAccessException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MissionNotFoundException;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.member.TodayMissionAccessDeniedException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,6 +43,7 @@ public class FeedService {
 	private final CommentRepository commentRepository;
 	private final MemberRepository memberRepository;
 	private final MissionRepository missionRepository;
+	private final MemberMissionRepository memberMissionRepo;
 
 	@Transactional(readOnly = true)
 	public CursorPageResponse<FeedResponse> getFeeds(Long cursorId, int size) {
@@ -80,12 +88,27 @@ public class FeedService {
 
 	@Transactional
 	public FeedResponse createFeed(Long memberId, FeedRequest req) {
-
+		// 0) 인증자 선검증
 		if (memberId == null) throw new MemberNotFoundException();
 
-		Member member = memberRepository.findById(memberId);
-		Mission mission = missionRepository.findById(req.missionId());
+		// 1) 오늘 미션 조회 (KST)
+		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+		MemberMission mm = memberMissionRepo.findByMemberIdAndForDate(memberId, today);
 
+		// 2) (선택) 프론트가 missionId를 보냈다면 '일치 여부'만 검사
+		if (req.missionId() != null && !req.missionId().equals(mm.getMission().getId())) {
+			throw new TodayMissionAccessDeniedException();
+		}
+
+		// 3) 주체 엔티티 조회
+		Member member = memberRepository.findById(memberId);
+		Mission mission = mm.getMission();
+
+		if (feedRepository.existsByMember_IdAndMission_Id(memberId, mission.getId())) {
+			throw new AlreadyUploadedTodayException();
+		}
+
+		// 5) 저장
 		Feed saved = feedRepository.save(
 			Feed.builder()
 				.description(req.description())
@@ -95,8 +118,11 @@ public class FeedService {
 				.build()
 		);
 
+		mm.markCompleted();
+
 		return FeedResponse.of(saved, 0L, 0L);
 	}
+
 
 	@Transactional
 	public void deleteFeed(Long memberId, Long feedId) {

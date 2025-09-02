@@ -2,11 +2,12 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed;
 
 import static org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.QFeed.*;
 import static org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.QFeedLike.*;
-import static org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.QMember.*;
+import static org.goormthon.seasonthon.nocheongmaru.domain.member.entity.QMember.*;
 
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.FeedIdCount;
@@ -83,4 +84,19 @@ public class FeedRepository {
     }
 
     public void delete(Feed feed) { feedJpaRepository.delete(feed); }
+
+    public boolean existsByMemberAndMission(Long memberId, Long missionId) {
+        return feedJpaRepository.existsByMember_IdAndMission_Id(memberId, missionId);
+    }
+
+    public void deleteByIdAndMember(Long feedId, Long memberId) {
+        if (!feedJpaRepository.existsById(feedId)) {
+            throw new EntityNotFoundException();
+        }
+        feedJpaRepository.deleteByIdAndMember_Id(feedId, memberId);
+    }
+
+    public boolean existsByMember_IdAndMission_Id(Long memberId, Long missionId) {
+        return feedJpaRepository.existsByMember_IdAndMission_Id(memberId, missionId);
+    }
 }
