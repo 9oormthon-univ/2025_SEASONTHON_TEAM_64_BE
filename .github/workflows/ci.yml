@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Make profile config files
+        run: |
+          echo "$PROPERTIES_PROD" > src/main/resources/application-prod.yml
+          echo "$PROPERTIES_S3" > src/main/resources/application-s3.yml
+          echo "$PROPERTIES_SECURITY" > src/main/resources/application-security.yml
+          echo "$PROPERTIES_DOCS" > src/main/resources/application-docs.yml
+        shell: bash
+        env:
+          PROPERTIES_PROD: ${{ secrets.PROPERTIES_PROD }}
+          PROPERTIES_S3: ${{ secrets.PROPERTIES_S3 }}
+          PROPERTIES_SECURITY: ${{ secrets.PROPERTIES_SECURITY }}
+          PROPERTIES_DOCS: ${{ secrets.PROPERTIES_DOCS }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build -x test
+
+      - name: docker image build
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nocheongmaru .
+
+      - name: docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PW }}
+
+      - name: Docker Hub push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/nocheongmaru
