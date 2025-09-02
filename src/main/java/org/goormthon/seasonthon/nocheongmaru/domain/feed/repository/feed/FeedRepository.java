@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.FeedIdCount;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.member.FeedNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -26,8 +27,10 @@ public class FeedRepository {
 
     public Feed save(Feed entity) { return feedJpaRepository.save(entity); }
 
-    public Optional<Feed> findById(Long id) { return feedJpaRepository.findById(id); }
-
+    public Feed findById(Long id) {
+        return feedJpaRepository.findById(id)
+            .orElseThrow(FeedNotFoundException::new);
+    }
     public void deleteById(Long id) { feedJpaRepository.deleteById(id); }
 
     public List<Feed> findFeedsByCursorWithMember(Long cursorId, Pageable pageable) {
@@ -78,4 +81,6 @@ public class FeedRepository {
             .fetchFirst();
         return one != null;
     }
+
+    public void delete(Feed feed) { feedJpaRepository.delete(feed); }
 }

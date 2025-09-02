@@ -10,7 +10,6 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepo
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.UnauthorizedException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.goormthon.seasonthon.nocheongmaru.global.exception.member.FeedNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;
@@ -33,8 +32,7 @@ public class FeedLikeService {
 	public FeedLikeResponse toggle(Long feedId, Long memberId) {
 		if (memberId == null) throw new UnauthorizedException();
 
-		Feed feed = feedRepository.findById(feedId)
-			.orElseThrow(FeedNotFoundException::new);
+		Feed feed = feedRepository.findById(feedId);
 
 		if (!memberRepository.existsById(memberId)) {
 			throw new MemberNotFoundException();
