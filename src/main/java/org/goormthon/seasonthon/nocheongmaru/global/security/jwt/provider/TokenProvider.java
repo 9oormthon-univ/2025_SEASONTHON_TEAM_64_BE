@@ -6,7 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.goormthon.seasonthon.nocheongmaru.global.security.jwt.dto.TokenResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

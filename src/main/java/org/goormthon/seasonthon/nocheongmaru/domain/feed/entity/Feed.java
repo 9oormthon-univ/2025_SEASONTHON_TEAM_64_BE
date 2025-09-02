@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.global.common.BaseTimeEntity;
 
@@ -41,6 +41,12 @@ public class Feed extends BaseTimeEntity {
         this.description = description;
         this.imageUrl = imageUrl;
         this.member = member;
+        this.mission = mission;
+    }
+
+    public void replace(String description, String imageUrl, Mission mission) {
+        this.description = description;
+        this.imageUrl = imageUrl;
         this.mission = mission;
     }
     

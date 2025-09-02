@@ -4,7 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.security.jwt.dto.TokenResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.security.jwt.provider.TokenProvider;

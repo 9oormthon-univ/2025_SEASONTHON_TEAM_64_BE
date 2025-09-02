@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.common.BaseTimeEntity;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,5 +38,8 @@ public class Comment extends BaseTimeEntity {
         this.feed = feed;
         this.member = member;
     }
-    
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
 }

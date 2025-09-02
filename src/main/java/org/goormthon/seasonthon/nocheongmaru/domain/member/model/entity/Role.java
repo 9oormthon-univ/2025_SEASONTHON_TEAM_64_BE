@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.member.entity;
+package org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

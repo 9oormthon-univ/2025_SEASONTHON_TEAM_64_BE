@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.member.entity;
+package org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,7 +28,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
     
-    @Column(name = "profile_image_url", nullable = false)
+    @Column(name = "profile_image_url")
     private String profileImageURL;
     
     @Column(name = "refresh_token")
