@@ -1,8 +1,12 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.controller;
 
 import org.goormthon.seasonthon.nocheongmaru.ControllerTestSupport;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.dto.ImageResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.request.InformationCreateRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.request.InformationModifyRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationDetailResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.service.dto.response.MemberDetailResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.TestMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -216,7 +221,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(imageFile)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -240,7 +245,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -264,7 +269,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -289,7 +294,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -313,7 +318,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -337,7 +342,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -362,7 +367,7 @@ class InformationControllerTest extends ControllerTestSupport {
         
         // expected
         mockMvc.perform(
-                multipart(HttpMethod.PUT,BASE_URL + "/" + informationId)
+                multipart(HttpMethod.PUT, BASE_URL + "/" + informationId)
                     .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
                     .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -388,6 +393,84 @@ class InformationControllerTest extends ControllerTestSupport {
             .andExpect(status().isNoContent());
     }
     
+    @TestMember
+    @DisplayName("정보나눔 피드 상세 조회를 한다.")
+    @Test
+    void getInformationDetail() throws Exception {
+        // given
+        long informationId = 1L;
+        
+        InformationDetailResponse informationDetailResponse = createInformationDetailResponse();
+        given(informationService.getInformationDetail(informationId))
+            .willReturn(informationDetailResponse);
+        
+        // expected
+        mockMvc.perform(
+                get(BASE_URL + "/" + informationId)
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.informationId").value(informationDetailResponse.informationId()))
+            .andExpect(jsonPath("$.title").value(informationDetailResponse.title()))
+            .andExpect(jsonPath("$.description").value(informationDetailResponse.description()));
+    }
+    
+    @TestMember
+    @DisplayName("정보나눔 피드 목록을 기본 조회한다.")
+    @Test
+    void getInformationList_Default() throws Exception {
+        // given
+        var responses = List.of(
+            createInformationListItem(1L, "title1", "HOSPITAL_FACILITIES", "addr1", "img1"),
+            createInformationListItem(2L, "title2", "RESTAURANT_CAFE", "addr2", "img2"),
+            createInformationListItem(3L, "title3", "ETC", "addr3", "img3")
+        );
+        given(informationService.getInformationList(null, null, null)).willReturn(responses);
+        
+        // expected
+        mockMvc.perform(
+                get(BASE_URL)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(responses.size()))
+            .andExpect(jsonPath("$[0].informationId").value(1))
+            .andExpect(jsonPath("$[0].title").value("title1"))
+            .andExpect(jsonPath("$[0].category").value("HOSPITAL_FACILITIES"))
+            .andExpect(jsonPath("$[0].address").value("addr1"))
+            .andExpect(jsonPath("$[0].imageUrl").value("img1"));
+    }
+    
+    @TestMember
+    @DisplayName("정보나눔 피드 목록을 파라미터와 함께 조회한다.")
+    @Test
+    void getInformationList_WithParams() throws Exception {
+        // given
+        Long lastId = 10L;
+        String category = "RESTAURANT_CAFE";
+        Boolean sortByRecent = false;
+        
+        var responses = List.of(
+            createInformationListItem(4L, "title4", category, "addr4", "img4"),
+            createInformationListItem(5L, "title5", category, "addr5", "img5")
+        );
+        given(informationService.getInformationList(lastId, category, sortByRecent)).willReturn(responses);
+        
+        // expected
+        mockMvc.perform(
+                get(BASE_URL)
+                    .param("lastId", String.valueOf(lastId))
+                    .param("category", category)
+                    .param("sortByRecent", String.valueOf(sortByRecent))
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(responses.size()))
+            .andExpect(jsonPath("$[0].category").value(category))
+            .andExpect(jsonPath("$[0].informationId").value(4));
+    }
+    
     private MockMultipartFile createMockMultipartFile() {
         return new MockMultipartFile(
             "images",
@@ -395,6 +478,47 @@ class InformationControllerTest extends ControllerTestSupport {
             MediaType.IMAGE_JPEG_VALUE,
             "test image content".getBytes()
         );
+    }
+    
+    private InformationDetailResponse createInformationDetailResponse() {
+        return InformationDetailResponse.builder()
+            .informationId(1L)
+            .title("title")
+            .description("description")
+            .category("HOSPITAL_FACILITIES")
+            .address("address")
+            .latitude(37.123456)
+            .longitude(127.123456)
+            .createdAt(LocalDate.now())
+            .writer(createMemberDetailResponse())
+            .images(List.of(createImageResponse(), createImageResponse()))
+            .build();
+    }
+    
+    private MemberDetailResponse createMemberDetailResponse() {
+        return MemberDetailResponse.builder()
+            .memberId(1L)
+            .nickname("nickname")
+            .profileImageUrl("profileImageURL")
+            .role("ROLE_USER")
+            .build();
+    }
+    
+    private ImageResponse createImageResponse() {
+        return ImageResponse.builder()
+            .imageId(1L)
+            .imageUrl("imageUrl")
+            .build();
+    }
+    
+    private InformationResponse createInformationListItem(Long id, String title, String category, String address, String imageUrl) {
+        return InformationResponse.builder()
+            .informationId(id)
+            .title(title)
+            .category(category)
+            .address(address)
+            .imageUrl(imageUrl)
+            .build();
     }
     
 }

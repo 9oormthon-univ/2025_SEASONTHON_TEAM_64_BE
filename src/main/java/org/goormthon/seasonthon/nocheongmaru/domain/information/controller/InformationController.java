@@ -6,6 +6,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.docs.
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.request.InformationCreateRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.dto.request.InformationModifyRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.InformationService;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationDetailResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,15 @@ public class InformationController implements InformationControllerDocs {
     
     private final InformationService informationService;
     
+    @GetMapping
+    public ResponseEntity<List<InformationResponse>> getInformationList(
+        @RequestParam(required = false) Long lastId,
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false) Boolean sortByRecent
+    ) {
+        return ResponseEntity.ok(informationService.getInformationList(lastId, category, sortByRecent));
+    }
+    
     @PostMapping
     public ResponseEntity<Long> createInformation(
         @AuthMemberId Long memberId,
@@ -28,6 +39,14 @@ public class InformationController implements InformationControllerDocs {
     ) {
         Long informationId = informationService.generateInformation(request.toServiceRequest(memberId, images));
         return ResponseEntity.ok(informationId);
+    }
+    
+    @GetMapping("/{informationId}")
+    public ResponseEntity<InformationDetailResponse> getInformationDetail(
+        @PathVariable Long informationId
+    ) {
+        InformationDetailResponse response = informationService.getInformationDetail(informationId);
+        return ResponseEntity.ok(response);
     }
     
     @PutMapping("/{informationId}")

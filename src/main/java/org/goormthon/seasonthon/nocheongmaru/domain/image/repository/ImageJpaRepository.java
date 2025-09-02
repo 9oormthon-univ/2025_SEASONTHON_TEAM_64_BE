@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ImageJpaRepository extends JpaRepository<Image, Long> {
+public interface ImageJpaRepository extends
+    JpaRepository<Image, Long>,
+    ImageCustomRepository {
     
     List<Image> findAllByInformationId(Long informationId);
     

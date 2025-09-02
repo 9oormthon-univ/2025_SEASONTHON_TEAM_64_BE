@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.image.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.image.entity.Image;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.dto.ImageResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class ImageRepository {
     
     public void deleteAllByInformationId(Long informationId) {
         imageJpaRepository.deleteAllByInformationId(informationId);
+    }
+    
+    public List<ImageResponse> getImages(Long informationId) {
+        return imageJpaRepository.getImages(informationId);
     }
     
 }

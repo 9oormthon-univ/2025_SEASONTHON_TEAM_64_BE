@@ -2,8 +2,11 @@ package org.goormthon.seasonthon.nocheongmaru.domain.information.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.information.InformationNotFoundException;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -36,8 +39,8 @@ public class InformationRepository {
         return informationJpaRepository.existsById(id);
     }
     
-    public Information getReferenceById(Long informationId) {
-        return informationJpaRepository.getReferenceById(informationId);
+    public List<InformationResponse> getInformationList(Long lastId, String category, Boolean sortByRecent) {
+        return informationJpaRepository.getInformationList(lastId, category, sortByRecent);
     }
     
 }

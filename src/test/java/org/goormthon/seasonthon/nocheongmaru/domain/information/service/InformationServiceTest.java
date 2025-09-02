@@ -1,19 +1,26 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
+import org.goormthon.seasonthon.nocheongmaru.domain.image.service.dto.ImageResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Category;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.entity.Information;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.repository.InformationRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationCreateServiceRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationModifyServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationDetailResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.service.dto.response.MemberDetailResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,6 +45,9 @@ class InformationServiceTest extends IntegrationTestSupport {
     
     @MockitoBean
     private InformationEditor informationEditor;
+    
+    @MockitoBean
+    private InformationReader informationReader;
     
     @AfterEach
     void tearDown() {
@@ -118,6 +128,52 @@ class InformationServiceTest extends IntegrationTestSupport {
         verify(informationEditor).delete(any(), any());
     }
     
+    @DisplayName("정보나눔 피드 상세 조회를 한다.")
+    @Test
+    void getInformationDetail() {
+        // given
+        Long informationId = 1L;
+        
+        Member member = createMember();
+        memberRepository.save(member);
+        
+        Information information = createInformation(member);
+        informationRepository.save(information);
+        
+        InformationDetailResponse expectedResponse = createInformationDetailResponse(information);
+        given(informationReader.getInformationDetail(any()))
+            .willReturn(expectedResponse);
+        
+        // when
+        InformationDetailResponse response = informationService.getInformationDetail(informationId);
+        
+        // then
+        assertThat(response).isEqualTo(expectedResponse);
+    }
+    
+    @DisplayName("정보나눔 피드 목록을 조회한다.")
+    @Test
+    void getInformationList() {
+        // given
+        Long lastId = null;
+        String category = null;
+        Boolean sortByRecent = true;
+        
+        List<InformationResponse> expectedResponses = List.of(
+            createInformationResponse(),
+            createInformationResponse(),
+            createInformationResponse()
+        );
+        given(informationReader.getInformationList(any(), any(), any()))
+            .willReturn(expectedResponses);
+        
+        // when
+        List<InformationResponse> responses = informationService.getInformationList(lastId, category, sortByRecent);
+        
+        // then
+        assertThat(responses).isEqualTo(expectedResponses);
+    }
+    
     private Member createMember() {
         return Member.builder()
             .nickname("nickname")
@@ -136,6 +192,47 @@ class InformationServiceTest extends IntegrationTestSupport {
             .latitude(136.123456)
             .longitude(356.123456)
             .category(Category.HOSPITAL_FACILITIES)
+            .build();
+    }
+    
+    private InformationResponse createInformationResponse() {
+        return InformationResponse.builder()
+            .informationId(1L)
+            .title("title")
+            .category(Category.HOSPITAL_FACILITIES.toString())
+            .address("address")
+            .imageUrl("imageUrl")
+            .build();
+    }
+    
+    private InformationDetailResponse createInformationDetailResponse(Information information) {
+        return InformationDetailResponse.builder()
+            .informationId(information.getId())
+            .title(information.getTitle())
+            .description(information.getDescription())
+            .category(information.getCategory().toString())
+            .address(information.getAddress())
+            .latitude(information.getLatitude())
+            .longitude(information.getLongitude())
+            .createdAt(LocalDate.from(information.getCreatedAt()))
+            .writer(createMemberDetailResponse(information.getMember()))
+            .images(List.of(createImageResponse(), createImageResponse()))
+            .build();
+    }
+    
+    private MemberDetailResponse createMemberDetailResponse(Member member) {
+        return MemberDetailResponse.builder()
+            .memberId(member.getId())
+            .nickname(member.getNickname())
+            .profileImageUrl(member.getProfileImageURL())
+            .role(member.getRole().toString())
+            .build();
+    }
+    
+    private ImageResponse createImageResponse() {
+        return ImageResponse.builder()
+            .imageId(1L)
+            .imageUrl("imageUrl")
             .build();
     }
     
