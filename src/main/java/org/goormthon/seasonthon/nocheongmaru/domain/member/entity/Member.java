@@ -1,5 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.member.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,6 +35,8 @@ public class Member extends BaseTimeEntity {
     
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    private LocalDate lastOpenedDate;
     
     @Builder
     private Member(String email, String nickname, String profileImageURL, Role role) {
@@ -45,5 +49,12 @@ public class Member extends BaseTimeEntity {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
-    
+
+    public boolean alreadyOpenedToday() {
+        return LocalDate.now().equals(this.lastOpenedDate);
+    }
+
+    public void markOpenedToday() {
+        this.lastOpenedDate = LocalDate.now();
+    }
 }
