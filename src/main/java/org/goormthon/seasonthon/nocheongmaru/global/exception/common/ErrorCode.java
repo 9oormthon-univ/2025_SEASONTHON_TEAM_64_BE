@@ -32,7 +32,12 @@ public enum ErrorCode {
 
     // Comment
     COMMENT_NOT_FOURN(404, "댓글을 찾을 수 없습니다."),
-    FORBIDDEN_COMMENT_ACCESS(403, "해당 댓글 권한 금지입니다.")
+    FORBIDDEN_COMMENT_ACCESS(403, "해당 댓글 권한 금지입니다."),
+
+    ADDRESS_NOT_FOUND(404, "주소를 찾을 수 없습니다."),
+    KAKAO_HTTP_CLIENT_ERROR(401, "에러"),
+    INFORMATION_NOT_FOUND(404, "정보를 찾을 수 없습니다"),
+    IS_NOT_INFORMATION_OWNER(401, "?")
     ;
     
     private final int status;
