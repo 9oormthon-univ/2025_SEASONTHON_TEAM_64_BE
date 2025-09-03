@@ -2,7 +2,6 @@ package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository;
 
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
@@ -10,14 +9,11 @@ import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MissionNotF
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @RequiredArgsConstructor
 @Repository
 public class MissionRepository {
 
-    private final JPAQueryFactory query;
-    private final EntityManager em;
     private final MissionJpaRepository missionJpaRepository;
 
     public Mission save(Mission mission) {
@@ -42,22 +38,17 @@ public class MissionRepository {
     }
 
     public List<Mission> findAllForAssignment() {
-        return query.selectFrom(mission)
-            .orderBy(mission.id.desc())
-            .fetch();
+        return missionJpaRepository.findAllByOrderByIdDesc(Pageable.unpaged());
     }
 
     public List<Mission> findAllForAssignment(Long cursorId, Pageable pageable) {
-        return query.selectFrom(mission)
-            .where(cursorId == null ? null : mission.id.lt(cursorId))
-            .orderBy(mission.id.desc())
-            .limit(pageable.getPageSize())
-            .fetch();
+        if (cursorId == null) {
+            return missionJpaRepository.findAllByOrderByIdDesc(pageable);
+        }
+        return missionJpaRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
     }
 
     public long deleteAll() {
-        long deleted = query.delete(mission).execute();
-        em.clear();
-        return deleted;
+        return missionJpaRepository.deleteAllInBulk();
     }
 }

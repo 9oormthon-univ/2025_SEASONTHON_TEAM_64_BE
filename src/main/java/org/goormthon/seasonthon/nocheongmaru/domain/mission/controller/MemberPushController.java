@@ -1,36 +1,46 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.mission.controller;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
-import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
-import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.service.MemberService;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.docs.MemberPushControllerDocs;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.MissionAssignmentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
-public class MemberPushController {
+public class MemberPushController implements MemberPushControllerDocs {
 
-	private final MemberRepository memberRepository;
+	private final MissionAssignmentService missionAssignmentService;
+	private final MemberService memberService;
 
-	public record FcmTokenRequest(@NotBlank String token) {}
+	@PostMapping("/assign-today")
+	// @PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Map<String, Object>> assignTodayAndNotifyNow() {
+		missionAssignmentService.assignDailyAndNotify();
 
-	@PostMapping("/me/fcm-token")
-	public ResponseEntity<Map<String,String>> registerFcmToken(
-		@RequestBody @Valid FcmTokenRequest request,
-		@AuthMemberId Long memberId
-	) {
-		Member member = memberRepository.findById(memberId);
-		member.updateFcmToken(request.token());
-		return ResponseEntity.ok(Map.of("message", "FCM 토큰 등록 완료"));
+		return ResponseEntity.ok(
+			Map.of(
+				"message", "오늘 날짜 기준 미션 배정 및 FCM 발송 트리거 완료",
+				"triggeredAt", ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toString()
+			)
+		);
+	}
+
+	@PostMapping("/{memberId}/fcm-token")
+	public ResponseEntity<Void> registerFcmToken(@PathVariable Long memberId,
+		@RequestBody Map<String, String> req) {
+		memberService.updateFcmToken(memberId, req.get("token"));
+		return ResponseEntity.noContent().build();
 	}
 }
