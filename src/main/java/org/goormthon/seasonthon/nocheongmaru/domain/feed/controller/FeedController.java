@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.controller;
 
 import java.util.Map;
 
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.docs.FeedControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedPutRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.CursorPageResponse;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/feeds")
-public class FeedController {
+public class FeedController implements FeedControllerDocs {
 
 	private final FeedService feedService;
 

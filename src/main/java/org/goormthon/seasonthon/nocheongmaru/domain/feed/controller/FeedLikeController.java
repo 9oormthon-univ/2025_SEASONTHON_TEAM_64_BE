@@ -1,5 +1,6 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.controller;
 
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.docs.FeedLikeControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedLikeResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/feed-likes")
-public class FeedLikeController {
+public class FeedLikeController implements FeedLikeControllerDocs {
 
 	private final FeedLikeService feedLikeService;
 
