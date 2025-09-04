@@ -6,7 +6,10 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.springframework.stereotype.Service;
 
-import com.nimbusds.oauth2.sdk.Message;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.Message;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +36,7 @@ public class FcmService {
 				.setTitle(title)
 				.setBody(body)
 				.build())
-			.putData("missionId", mission.getId().toString()) // 추가 데이터
+			.putData("missionId", mission.getId().toString())
 			.putData("date", forDate.toString())
 			.build();
 
@@ -42,7 +45,6 @@ public class FcmService {
 			log.info("FCM 발송 성공: memberId={}, response={}", member.getId(), response);
 		} catch (FirebaseMessagingException e) {
 			log.error("FCM 발송 실패: memberId={}, error={}", member.getId(), e.getMessage(), e);
-			// 👉 필요하다면 여기서 member.getFcmToken() 제거 처리 가능
 		}
 	}
 }
