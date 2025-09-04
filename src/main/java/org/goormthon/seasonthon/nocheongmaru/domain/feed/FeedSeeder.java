@@ -2,8 +2,8 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedJpaRepository;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Member;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.model.entity.Role;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberJpaRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MissionJpaRepository;
