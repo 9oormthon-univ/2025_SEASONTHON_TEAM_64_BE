@@ -35,9 +35,14 @@ public enum ErrorCode {
     FORBIDDEN_COMMENT_ACCESS(403, "해당 댓글 권한 금지입니다."),
 
     ADDRESS_NOT_FOUND(404, "주소를 찾을 수 없습니다."),
-    KAKAO_HTTP_CLIENT_ERROR(401, "에러"),
-    INFORMATION_NOT_FOUND(404, "정보를 찾을 수 없습니다"),
-    IS_NOT_INFORMATION_OWNER(401, "?")
+    KAKAO_HTTP_CLIENT_ERROR(500, "카카오 API 요청에 실패했습니다."),
+    INFORMATION_NOT_FOUND(404, "정보나눔 피드를 찾을 수 없습니다."),
+    IS_NOT_INFORMATION_OWNER(403, "정보나눔 피드의 작성자가 아닙니다."),
+
+    // Fortune
+    ALREADY_WRITTEN(500, "오늘은 이미 포춘쿠키를 작성했습니다."),
+    ALREADY_OPEN(500, "오늘 열 수 있는 포춘쿠키가 없습니다."),
+    FORTUNE_NOT_FOUND(404, "포춘쿠키를 찾을 수 없습니다.")
     ;
     
     private final int status;

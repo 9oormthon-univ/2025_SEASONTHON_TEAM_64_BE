@@ -41,18 +41,15 @@ public class FeedRepository {
         return feedJpaRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
     }
 
-    // 단건 + member fetch
     public Optional<Feed> findByIdWithMember(Long feedId) {
         return feedJpaRepository.findOneWithMemberById(feedId);
     }
 
-    // 좋아요 사용자 수 (배치)
     public List<FeedIdCount> countDistinctMemberByFeedIds(List<Long> feedIds) {
         if (feedIds == null || feedIds.isEmpty()) return List.of();
         return feedJpaRepository.countDistinctLikerGroupByFeedIds(feedIds);
     }
 
-    // 좋아요 사용자 수 (단건)
     public long countDistinctMemberByFeedId(Long feedId) {
         return feedJpaRepository.countDistinctLikerByFeedId(feedId);
     }

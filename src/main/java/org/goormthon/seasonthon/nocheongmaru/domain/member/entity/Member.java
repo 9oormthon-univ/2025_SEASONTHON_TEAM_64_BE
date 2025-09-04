@@ -1,5 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.member.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,7 +38,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "fcm_token")
     private String fcmToken;
-    
+
+    private LocalDate lastOpenedDate;
+
     @Builder
     private Member(String email, String nickname, String profileImageURL, Role role) {
         this.email = email;
@@ -50,5 +54,13 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
-    
+
+
+    public boolean alreadyOpenedToday() {
+        return LocalDate.now().equals(this.lastOpenedDate);
+    }
+
+    public void markOpenedToday() {
+        this.lastOpenedDate = LocalDate.now();
+    }
 }

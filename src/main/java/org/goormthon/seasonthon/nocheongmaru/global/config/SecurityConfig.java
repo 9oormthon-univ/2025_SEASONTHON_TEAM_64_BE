@@ -9,6 +9,7 @@ import org.goormthon.seasonthon.nocheongmaru.global.security.jwt.provider.TokenP
 import org.goormthon.seasonthon.nocheongmaru.global.security.oauth.OAuth2KakaoService;
 import org.goormthon.seasonthon.nocheongmaru.global.security.oauth.handler.Oauth2FailureHandler;
 import org.goormthon.seasonthon.nocheongmaru.global.security.oauth.handler.Oauth2SuccessHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,10 +51,9 @@ public class SecurityConfig {
         
         http.authorizeHttpRequests(auth -> {
             auth.requestMatchers(
-                "/oauth2/**", "/login/oauth2/**", "/api/v1/auth/reissue",
-                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/h2-console/**", "/api/v1/feeds/**"
+                "/oauth2/**", "/login/oauth2/**", "/api/v1/auth/reissue", "/api/v1/health",
+                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/h2-console/**"
             ).permitAll();
-            auth.requestMatchers("/api/v1/feedLikes/**").authenticated();
             auth.anyRequest().authenticated();
         });
         
@@ -82,7 +82,7 @@ public class SecurityConfig {
     protected CorsConfigurationSource corsConfig() {
         CorsConfiguration config = new CorsConfiguration();
         
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(List.of("*"));
@@ -94,9 +94,9 @@ public class SecurityConfig {
     }
     
     @Bean
+    @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer configureH2ConsoleEnable() {
-        return web -> web.ignoring()
-            .requestMatchers(PathRequest.toH2Console());
+        return web -> web.ignoring().requestMatchers(PathRequest.toH2Console());
     }
     
 }
