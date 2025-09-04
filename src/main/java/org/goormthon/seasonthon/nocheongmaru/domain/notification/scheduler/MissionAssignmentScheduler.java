@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.mission.service;
+package org.goormthon.seasonthon.nocheongmaru.domain.notification.scheduler;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -10,6 +10,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.NotificationType;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.NotificationService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +21,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MissionAssignmentService {
+public class MissionAssignmentScheduler {
 
 	private final MissionRepository missionRepo;
 	private final MemberRepository memberRepo;
 	private final MemberMissionRepository memberMissionRepo;
-	private final FcmService fcmService;
+	private final NotificationService notificationService;
 
 	@Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
 	public void assignDailyAndNotify() {
@@ -45,7 +47,7 @@ public class MissionAssignmentService {
 				.build();
 			memberMissionRepo.save(mm);
 
-			fcmService.sendTodayMission(member, assigned, today);
+			notificationService.createMissionAssignedNotification(member, assigned, today, NotificationType.MISSION);
 		}
 	}
 
