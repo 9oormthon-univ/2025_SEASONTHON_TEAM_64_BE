@@ -7,6 +7,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRep
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike.FeedLikeRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.NotificationType;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.NotificationService;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.auth.UnauthorizedException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,6 +26,7 @@ public class FeedLikeService {
 	private final FeedRepository feedRepository;
 	private final FeedLikeRepository feedLikeRepository;
 	private final MemberRepository memberRepository;
+	private final NotificationService notificationService;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -53,9 +56,20 @@ public class FeedLikeService {
 						.build()
 				);
 				liked = true;
+
+				Member liker = memberRepository.findById(memberId);
+				Member feedOwner = feed.getMember();
+				if (!feedOwner.getId().equals(liker.getId())) {
+					notificationService.createNotification(
+						feedOwner,
+						"좋아요 알림",
+						liker.getNickname() + "님이 회원님의 게시물을 좋아합니다.",
+						NotificationType.LIKE
+					);
 				}
-			catch (DataIntegrityViolationException dup) {
-			    if (feedLikeRepository.existsByFeed_IdAndMember_Id(feedId, memberId)) {
+
+			} catch (DataIntegrityViolationException dup) {
+				if (feedLikeRepository.existsByFeed_IdAndMember_Id(feedId, memberId)) {
 					liked = true;
 				} else {
 					throw dup;
@@ -67,6 +81,4 @@ public class FeedLikeService {
 		long likeCount = feedLikeRepository.countByFeed_Id(feedId);
 		return FeedLikeResponse.of(feedId, liked, likeCount);
 	}
-
-
 }

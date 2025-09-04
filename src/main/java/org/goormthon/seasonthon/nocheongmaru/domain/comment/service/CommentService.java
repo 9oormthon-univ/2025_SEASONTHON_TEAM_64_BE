@@ -12,6 +12,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRep
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.CursorPageResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.NotificationType;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.NotificationService;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.CommentNotFoundException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.ForbiddenCommentAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -28,10 +30,10 @@ public class CommentService {
 	private final CommentRepository commentRepository;
 	private final FeedRepository feedRepository;
 	private final MemberRepository memberRepository;
+	private final NotificationService notificationService;
 
 	@Transactional(readOnly = true)
 	public CursorPageResponse<CommentResponse> getComments(Long feedId, Long cursorId, int size) {
-		// size+1로 다음 페이지 존재 여부 확인
 		Pageable pageable = PageRequest.of(0, size + 1);
 		List<Comment> comments = commentRepository.findCommentsByCursorWithMember(feedId, cursorId, pageable);
 
@@ -69,6 +71,17 @@ public class CommentService {
 				.build()
 		);
 
+		// 댓글 저장 후 알림 발송
+		Member feedOwner = feed.getMember(); // Feed 엔티티에 작성자 Member 필드 있다고 가정
+		if (!feedOwner.getId().equals(member.getId())) { // 본인이 자기 글에 단 댓글은 제외
+			notificationService.createNotification(
+				feedOwner,
+				"새 댓글이 달렸습니다",
+				member.getNickname() + "님이 댓글을 남겼습니다: " + request.description(),
+				NotificationType.COMMENT
+			);
+		}
+
 		return new CommentResponse(
 			saved.getId(),
 			feed.getId(),
@@ -77,6 +90,7 @@ public class CommentService {
 			saved.getCreatedAt()
 		);
 	}
+
 
 	@Transactional
 	public void delete(Long commentId, Long memberId) {
