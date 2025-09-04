@@ -26,22 +26,28 @@ public class FeedService {
 	private final CommentRepository commentRepository;
 
 	@Transactional(readOnly = true)
-	public CursorPageResponse<FeedResponse> getFeeds(Long cursorId, int size) {
-		Pageable pageable = PageRequest.of(0, size);
+    public CursorPageResponse<FeedResponse> getFeeds(Long cursorId, int size) {
+		int pageSize = Math.min(size, 100);
+		if (pageSize <= 0) {
+		    throw new IllegalArgumentException("size must be positive");
+		}
+		Pageable pageable = PageRequest.of(0, pageSize + 1);
 		List<Feed> feeds = feedRepository.findFeedsByCursorWithMember(cursorId, pageable);
+		boolean hasNext = feeds.size() > pageSize;
+		List<Feed> pageFeeds = hasNext ? feeds.subList(0, pageSize) : feeds;
 
-		if (feeds.isEmpty()) {
+		if (pageFeeds.isEmpty()) {
 			return new CursorPageResponse<>(List.of(), null);
 		}
 
-		List<Long> feedIds = feeds.stream().map(Feed::getId).toList();
+		List<Long> feedIds = pageFeeds.stream().map(Feed::getId).toList();
 
 		Map<Long, Long> likeMap = feedRepository.countDistinctMemberByFeedIds(feedIds).stream()
 			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
 		Map<Long, Long> commentMap = commentRepository.countByFeedIds(feedIds).stream()
 			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
 
-		List<FeedResponse> content = feeds.stream()
+		List<FeedResponse> content = pageFeeds.stream()
 			.map(f -> FeedResponse.of(
 				f,
 				likeMap.getOrDefault(f.getId(), 0L),
@@ -49,8 +55,8 @@ public class FeedService {
 			))
 			.toList();
 
-		Long lastId = feeds.get(feeds.size() - 1).getId();
-		Long nextCursor = (feeds.size() < size) ? null : lastId;
+		Long lastId = pageFeeds.get(pageFeeds.size() - 1).getId();
+		Long nextCursor = hasNext ? lastId : null;
 
 		return new CursorPageResponse<>(content, nextCursor);
 	}
