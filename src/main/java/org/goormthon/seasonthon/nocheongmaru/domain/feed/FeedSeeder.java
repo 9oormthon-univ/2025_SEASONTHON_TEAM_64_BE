@@ -25,7 +25,7 @@ public class FeedSeeder implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		// Member 데이터 생성
 		Member member = memberJpaRepository.save(Member.builder()
-			.email("testuser@example.com")
+			.email("testuser123@example.com")
 			.nickname("testuser")
 			.profileImageURL("http://example.com/image.jpg")
 			.role(Role.ROLE_USER)
