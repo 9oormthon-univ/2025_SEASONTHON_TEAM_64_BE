@@ -55,11 +55,17 @@ public class FeedLikeService {
 						.build()
 				);
 				liked = true;
-			} catch (DataIntegrityViolationException dup) {
-				liked = true;
+				}
+			catch (DataIntegrityViolationException dup) {
+			    if (feedLikeRepository.existsByFeed_IdAndMember_Id(feedId, memberId)) {
+					liked = true;
+				} else {
+					throw dup;
+				}
 			}
 		}
 
+		em.flush();
 		long likeCount = feedLikeRepository.countByFeed_Id(feedId);
 		return FeedLikeResponse.of(feedId, liked, likeCount);
 	}
