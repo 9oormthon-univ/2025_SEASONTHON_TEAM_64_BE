@@ -20,6 +20,10 @@ public class MissionRepository {
         return missionJpaRepository.save(mission);
     }
 
+    public List<Mission> findAll() {
+        return missionJpaRepository.findAll();
+    }
+
     public Mission findById(Long missionId) {
         return missionJpaRepository.findById(missionId)
             .orElseThrow(MissionNotFoundException::new);
