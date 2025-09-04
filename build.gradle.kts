@@ -61,6 +61,10 @@ dependencies {
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-common:2.7.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
+
+    // firebase-admin
+    implementation("com.google.firebase:firebase-admin:9.2.0")
+
 }
 
 tasks.withType<Test> {
