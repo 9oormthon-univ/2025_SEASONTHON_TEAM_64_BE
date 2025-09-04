@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.mission.service;
+package org.goormthon.seasonthon.nocheongmaru.domain.notification.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -89,24 +89,6 @@ public class FcmService {
 			log.info("멀티 FCM 발송 완료: 성공={} 실패={}", response.getSuccessCount(), response.getFailureCount());
 		} catch (FirebaseMessagingException e) {
 			log.error("멀티 FCM 발송 실패: {}", e.getMessage(), e);
-		}
-	}
-
-	// 토픽 기반 발송
-	public void sendToTopic(String topic, String title, String body) {
-		Message message = Message.builder()
-			.setTopic(topic)
-			.setNotification(Notification.builder()
-				.setTitle(title)
-				.setBody(body)
-				.build())
-			.build();
-
-		try {
-			String response = firebaseMessaging.send(message);
-			log.info("토픽({}) 발송 성공: {}", topic, response);
-		} catch (FirebaseMessagingException e) {
-			log.error("토픽({}) 발송 실패: {}", topic, e.getMessage(), e);
 		}
 	}
 
