@@ -13,7 +13,7 @@ import org.goormthon.seasonthon.nocheongmaru.global.common.BaseTimeEntity;
 @Table(
     name = "fortunes",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"sender_id", "created_date"})
+        @UniqueConstraint(columnNames = {"sender_id", "created_at"})
     }
 )
 @Entity
@@ -41,5 +41,6 @@ public class Fortune extends BaseTimeEntity {
         this.description = description;
         this.sender = sender;
     }
-    
+
+
 }
