@@ -34,9 +34,13 @@ public class MemberRepository {
     public void deleteAllInBatch() {
         memberJpaRepository.deleteAllInBatch();
     }
-    
+
+    public boolean existsById(Long memberId) {
+        return memberJpaRepository.existsById(memberId);
+    }
+
     public void saveAll(List<Member> members) {
         memberJpaRepository.saveAll(members);
     }
-    
+
 }
