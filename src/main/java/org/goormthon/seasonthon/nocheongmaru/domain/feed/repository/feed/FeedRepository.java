@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed;
 
 import static org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.QFeed.*;
 import static org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.QFeedLike.*;
+import static org.goormthon.seasonthon.nocheongmaru.domain.member.entity.QMember.*;
 
 import java.util.List;
 import java.util.Optional;
