@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface FortuneJpaRepository extends JpaRepository<Fortune, Long> {
 
-	boolean existsBySenderAndCreatedDate(Member sender, LocalDate createdDate);
+	boolean existsBySenderAndCreatedAt(Member sender, LocalDate createdDate);
 
 	@Query("SELECT f FROM Fortune f WHERE f.sender <> :sender AND DATE(f.createdAt) = :today ORDER BY function('RAND')")
 	List<Fortune> findRandomByTodayExcludingSender(@Param("sender") Member sender, @Param("today") LocalDate today);
