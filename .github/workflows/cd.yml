@@ -1,0 +1,28 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: [ "CI" ]
+    types:
+      - completed
+
+jobs:
+  run-docker-image-on-ec2:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+
+    steps:
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nocheongmaru
+
+      - name: docker stop container
+        run: |
+          if [ $(sudo docker ps -a -q -f name=nocheongmaru) ]; then
+            sudo docker stop nocheongmaru
+          fi
+
+      - name: delete old docker image
+        run: sudo docker system prune -f
+
+      - name: docker run new container
+        run: sudo docker run --rm -it -d -p 8080:8080 --name nocheongmaru ${{ secrets.DOCKERHUB_USERNAME }}/nocheongmaru

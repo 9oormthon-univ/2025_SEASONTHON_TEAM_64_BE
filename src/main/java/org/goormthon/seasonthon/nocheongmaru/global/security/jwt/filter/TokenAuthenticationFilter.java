@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -66,6 +67,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         
+        response.setCharacterEncoding(UTF_8.name());
         response.setStatus(SC_UNAUTHORIZED);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.getWriter().write(jsonResponse);

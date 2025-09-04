@@ -21,7 +21,14 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(404, "회원을 찾을 수 없습니다."),
 
     // Feed
-    FEED_NOT_FOUND(404, "게시물을 찾을 수 없습니다.")
+    FEED_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
+
+    // Information
+    ADDRESS_NOT_FOUND(404, "주소를 찾을 수 없습니다."),
+    KAKAO_HTTP_CLIENT_ERROR(500, "카카오 API 요청에 실패했습니다."),
+    INFORMATION_NOT_FOUND(404, "정보나눔 피드를 찾을 수 없습니다."),
+    IS_NOT_INFORMATION_OWNER(403, "정보나눔 피드의 작성자가 아닙니다."),
+    
     ;
     
     private final int status;

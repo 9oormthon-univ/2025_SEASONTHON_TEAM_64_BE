@@ -14,9 +14,9 @@ public class OpenApiConfigurer {
     
     private static final String AUTH_NAME = "Json Web Token";
     private static final String LOCAL_SERVER_URL = "http://localhost:8080";
-    private static final String API_TITLE = "DeerForYou API Document";
+    private static final String API_TITLE = "노청마루 API Document";
     private static final String API_VERSION = "v0.0.1";
-    private static final String API_DESCRIPTION = "DeerForYou API 문서";
+    private static final String API_DESCRIPTION = "노청마루 API 문서";
     private static final String BEARER_TOKEN_DESCRIPTION = "Access Token 토큰을 입력해주세요.(Bearer X)";
     
     private final String baseUrl;

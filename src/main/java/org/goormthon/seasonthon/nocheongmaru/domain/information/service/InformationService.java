@@ -1,0 +1,66 @@
+package org.goormthon.seasonthon.nocheongmaru.domain.information.service;
+
+import lombok.RequiredArgsConstructor;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationCreateServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.request.InformationModifyServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationDetailResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.dto.response.InformationResponse;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+public class InformationService {
+    
+    private final MemberRepository memberRepository;
+    private final InformationGenerator informationGenerator;
+    private final InformationEditor informationEditor;
+    private final InformationReader informationReader;
+    
+    public Long generateInformation(InformationCreateServiceRequest request) {
+        Member member = memberRepository.findById(request.memberId());
+        
+        return informationGenerator.generate(
+            member,
+            request.title(),
+            request.description(),
+            request.address(),
+            request.category(),
+            request.images()
+        );
+    }
+    
+    public Long modifyInformation(InformationModifyServiceRequest request) {
+        Member member = memberRepository.findById(request.memberId());
+        
+        return informationEditor.modify(
+            member.getId(),
+            request.informationId(),
+            request.title(),
+            request.description(),
+            request.address(),
+            request.images()
+        );
+    }
+    
+    public void deleteInformation(Long memberId, Long informationId) {
+        Member member = memberRepository.findById(memberId);
+        
+        informationEditor.delete(
+            member.getId(),
+            informationId
+        );
+    }
+    
+    public InformationDetailResponse getInformationDetail(Long informationId) {
+        return informationReader.getInformationDetail(informationId);
+    }
+    
+    public List<InformationResponse> getInformationList(Long lastId, String category, Boolean sortByRecent) {
+        return informationReader.getInformationList(lastId, category, sortByRecent);
+    }
+    
+}

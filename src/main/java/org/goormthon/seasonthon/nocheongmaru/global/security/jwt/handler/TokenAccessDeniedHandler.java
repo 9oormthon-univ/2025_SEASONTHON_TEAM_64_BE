@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -40,6 +41,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
         
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         
+        response.setCharacterEncoding(UTF_8.name());
         response.setStatus(SC_FORBIDDEN);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.getWriter().write(jsonResponse);

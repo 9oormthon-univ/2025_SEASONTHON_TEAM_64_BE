@@ -3,6 +3,8 @@ package org.goormthon.seasonthon.nocheongmaru;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.controller.AuthController;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.service.AuthService;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.InformationController;
+import org.goormthon.seasonthon.nocheongmaru.domain.information.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -12,7 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(
     controllers = {
-        AuthController.class
+        AuthController.class,
+        InformationController.class
     }
 )
 @Import(TestSecurityConfig.class)
@@ -27,5 +30,8 @@ public abstract class ControllerTestSupport {
     
     @MockitoBean
     protected AuthService authService;
+    
+    @MockitoBean
+    protected InformationService informationService;
     
 }
