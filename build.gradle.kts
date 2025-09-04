@@ -64,6 +64,7 @@ dependencies {
 
     // firebase-admin
     implementation("com.google.firebase:firebase-admin:9.2.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
 }
 
