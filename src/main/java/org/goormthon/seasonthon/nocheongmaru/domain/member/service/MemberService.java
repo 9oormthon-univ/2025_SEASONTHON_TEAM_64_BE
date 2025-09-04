@@ -37,4 +37,9 @@ public class MemberService {
 		tokenRepository.deleteByToken(token);
 	}
 
+	@Transactional(readOnly = true)
+	public Member getById(Long memberId) {
+		return memberRepository.findById(memberId);
+	}
+
 }
