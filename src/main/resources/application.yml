@@ -16,3 +16,6 @@ logging:
   level:
     root: INFO
     org.springframework: INFO
+
+firebase:
+  config-path: src/main/resources/firebase-service-key.json
