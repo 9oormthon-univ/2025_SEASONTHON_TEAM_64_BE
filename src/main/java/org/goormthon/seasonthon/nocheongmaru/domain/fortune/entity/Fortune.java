@@ -10,7 +10,12 @@ import org.goormthon.seasonthon.nocheongmaru.global.common.BaseTimeEntity;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "fortunes")
+@Table(
+    name = "fortunes",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"sender_id", "created_date"})
+    }
+)
 @Entity
 public class Fortune extends BaseTimeEntity {
     
