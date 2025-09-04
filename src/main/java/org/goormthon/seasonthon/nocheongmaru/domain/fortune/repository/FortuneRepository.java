@@ -16,8 +16,8 @@ public class FortuneRepository {
 
     private final FortuneJpaRepository fortuneJpaRepository;
 
-    public boolean existsBySenderAndCreatedDate(Member sender, LocalDate createdDate) {
-        return fortuneJpaRepository.existsBySenderAndCreatedDate(sender, createdDate);
+    public boolean existsBySenderAndCreatedAt(Member sender, LocalDate createdDate) {
+        return fortuneJpaRepository.existsBySenderAndCreatedAt(sender, createdDate);
     }
 
     public List<Fortune> findRandomByTodayExcludingSender(Member sender, LocalDate today) {

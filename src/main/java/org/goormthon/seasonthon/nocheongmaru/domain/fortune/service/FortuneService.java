@@ -27,7 +27,7 @@ public class FortuneService {
 	public Fortune sendFortune(Member sender, String description) {
 		LocalDate today = LocalDate.now(KST);
 
-		if (fortuneRepo.existsBySenderAndCreatedDate(sender, today)) {
+		if (fortuneRepo.existsBySenderAndCreatedAt(sender, today)) {
 			throw new AlreadyWrittenException();
 		}
 
