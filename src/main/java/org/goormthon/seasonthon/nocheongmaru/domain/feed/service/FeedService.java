@@ -94,19 +94,15 @@ public class FeedService {
 
 	@Transactional
 	public FeedResponse createFeed(Long memberId, FeedRequest req) {
-		// 0) 인증자 선검증
 		if (memberId == null) throw new MemberNotFoundException();
 
-		// 1) 오늘 미션 조회 (KST)
 		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
 		MemberMission mm = memberMissionRepo.findByMemberIdAndForDate(memberId, today);
 
-		// 2) (선택) 프론트가 missionId를 보냈다면 '일치 여부'만 검사
 		if (req.missionId() != null && !req.missionId().equals(mm.getMission().getId())) {
 			throw new TodayMissionAccessDeniedException();
 		}
 
-		// 3) 주체 엔티티 조회
 		Member member = memberRepository.findById(memberId);
 		Mission mission = mm.getMission();
 
@@ -114,7 +110,6 @@ public class FeedService {
 			throw new AlreadyUploadedTodayException();
 		}
 
-		// 5) 저장
 		Feed saved = feedRepository.save(
 			Feed.builder()
 				.description(req.description())
@@ -146,10 +141,8 @@ public class FeedService {
 
 	@Transactional
 	public FeedResponse replaceFeed(Long memberId, Long feedId, FeedPutRequest req) {
-		// 1) 대상 피드 조회
 		Feed feed = feedRepository.findById(feedId);
 
-		// 2) 소유자 검증
 		if (!feed.getMember().getId().equals(memberId)) {
 			throw new ForbiddenFeedAccessException();
 		}

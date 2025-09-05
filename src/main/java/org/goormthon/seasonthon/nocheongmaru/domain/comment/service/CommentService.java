@@ -71,9 +71,8 @@ public class CommentService {
 				.build()
 		);
 
-		// 댓글 저장 후 알림 발송
-		Member feedOwner = feed.getMember(); // Feed 엔티티에 작성자 Member 필드 있다고 가정
-		if (!feedOwner.getId().equals(member.getId())) { // 본인이 자기 글에 단 댓글은 제외
+		Member feedOwner = feed.getMember();
+		if (!feedOwner.getId().equals(member.getId())) {
 			notificationService.createNotification(
 				feedOwner,
 				"새 댓글이 달렸습니다",
