@@ -77,7 +77,7 @@ public class FeedController implements FeedControllerDocs {
 	@PutMapping("/{feedId}/put")
 	public ResponseEntity<FeedResponse> putFeed(
 		@PathVariable Long feedId,
-		@RequestBody @Valid FeedPutRequest request, // 모든 필드 필수
+		@RequestBody @Valid FeedPutRequest request,
 		@AuthMemberId Long memberId
 	) {
 		if (memberId == null) throw new MemberNotFoundException();
