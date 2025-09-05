@@ -163,3 +163,5 @@ gradle-app.setting
 generated/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij+all,gradle,redis
+
+firebase-service-key.json
