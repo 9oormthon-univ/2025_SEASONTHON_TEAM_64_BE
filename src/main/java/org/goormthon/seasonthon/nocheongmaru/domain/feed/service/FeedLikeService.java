@@ -1,7 +1,10 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.service;
 
+import java.util.List;
+
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.FeedLike;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedLikeMemberResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedLikeResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike.FeedLikeRepository;
@@ -80,5 +83,15 @@ public class FeedLikeService {
 		em.flush();
 		long likeCount = feedLikeRepository.countByFeed_Id(feedId);
 		return FeedLikeResponse.of(feedId, liked, likeCount);
+	}
+
+	public List<FeedLikeMemberResponse> getLikesByFeed(Long feedId) {
+		return feedLikeRepository.findAllByFeed_Id(feedId).stream()
+			.map(like -> new FeedLikeMemberResponse(
+				like.getMember().getId(),
+				like.getMember().getNickname(),
+				like.getMember().getProfileImageURL()
+			))
+			.toList();
 	}
 }

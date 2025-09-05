@@ -1,6 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,10 @@ public class FeedLikeRepository {
 
     public long deleteAllByFeedId(Long feedId) {
         return feedLikeJpaRepository.deleteAllByFeedIdInBulk(feedId);
+    }
+
+    public List<FeedLike> findAllByFeed_Id(Long feedId) {
+        return feedLikeJpaRepository.findAllByFeed_Id(feedId);
     }
     
 }
