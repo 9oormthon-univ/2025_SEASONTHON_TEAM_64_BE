@@ -18,8 +18,8 @@ public class MemberRepository {
             .orElseThrow(MemberNotFoundException::new);
     }
     
-    public void save(Member newMember) {
-        memberJpaRepository.save(newMember);
+    public Member save(Member newMember) {
+        return memberJpaRepository.save(newMember);
     }
     
     public Member findById(Long memberId) {
