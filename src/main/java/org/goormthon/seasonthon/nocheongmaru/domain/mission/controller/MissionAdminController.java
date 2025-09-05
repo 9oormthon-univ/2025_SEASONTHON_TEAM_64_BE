@@ -23,7 +23,7 @@ public class MissionAdminController {
 
 	private final MissionRepository missionRepo;
 
-	@PostMapping
+	@PostMapping("/upload")
 	public ResponseEntity<Mission> createMission(@RequestBody Map<String, String> req) {
 		String title = req.get("title");
 		Mission mission = Mission.builder()
