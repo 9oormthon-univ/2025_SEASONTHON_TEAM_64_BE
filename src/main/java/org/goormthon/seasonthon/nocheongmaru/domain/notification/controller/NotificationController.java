@@ -8,6 +8,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepo
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.Notification;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.FcmService;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.NotificationService;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.dto.NotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,7 +26,7 @@ public class NotificationController {
 	private final NotificationService notificationService;
 
 	@GetMapping("/{memberId}")
-	public ResponseEntity<List<Notification>> list(@PathVariable Long memberId) {
+	public ResponseEntity<List<NotificationResponse>> list(@PathVariable Long memberId) {
 		return ResponseEntity.ok(notificationService.getNotifications(memberId));
 	}
 

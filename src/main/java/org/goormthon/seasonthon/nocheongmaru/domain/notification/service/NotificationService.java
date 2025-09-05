@@ -9,6 +9,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.Notification;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.NotificationType;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.repository.NotificationRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.dto.NotificationResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,6 @@ public class NotificationService {
 	public void createMissionAssignedNotification(Member member, Mission mission, LocalDate date, NotificationType type) {
 		String message = "[" + date + "] 오늘의 미션: " + mission.getTitle();
 
-		// DB 저장
 		Notification notification = Notification.builder()
 			.member(member)
 			.message(message)
@@ -35,13 +35,11 @@ public class NotificationService {
 			.build();
 		notificationRepo.save(notification);
 
-		// FCM 발송
 		fcmService.sendNotification(member, "오늘의 미션", message);
 	}
 
 	@Transactional
 	public void createNotification(Member receiver, String title, String message, NotificationType type) {
-		// 1. DB 저장
 		Notification notification = Notification.builder()
 			.member(receiver)
 			.message(message)
@@ -52,14 +50,21 @@ public class NotificationService {
 
 		notificationRepo.save(notification);
 
-		// 2. FCM 발송
 		fcmService.sendNotification(receiver, title, message);
 	}
 
-
 	@Transactional(readOnly = true)
-	public List<Notification> getNotifications(Long memberId) {
-		return notificationRepo.findByMemberIdOrderByCreatedAtDesc(memberId);
+	public List<NotificationResponse> getNotifications(Long memberId) {
+		return notificationRepo.findByMemberIdOrderByCreatedAtDesc(memberId).stream()
+			.map(n -> new NotificationResponse(
+				n.getId(),
+				n.getMessage(),
+				n.getType(),
+				n.isRead(),
+				n.getCreatedAt(),
+				n.getMember().getNickname() // 트랜잭션 안이라 Lazy 로딩 가능
+			))
+			.toList();
 	}
 
 	@Transactional
