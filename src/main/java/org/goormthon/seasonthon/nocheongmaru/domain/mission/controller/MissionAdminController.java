@@ -3,6 +3,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.mission.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.docs.MissionAdminControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MissionRepository;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/missions")
 @RequiredArgsConstructor
-public class MissionAdminController {
+public class MissionAdminController implements MissionAdminControllerDocs {
 
 	private final MissionRepository missionRepo;
 

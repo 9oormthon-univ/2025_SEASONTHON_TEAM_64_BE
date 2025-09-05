@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.member.controller;
 
 import java.util.Map;
 
+import org.goormthon.seasonthon.nocheongmaru.domain.member.controller.docs.MemberControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
-public class MemberController {
+public class MemberController implements MemberControllerDocs {
 
 	private final MemberService memberService;
 
