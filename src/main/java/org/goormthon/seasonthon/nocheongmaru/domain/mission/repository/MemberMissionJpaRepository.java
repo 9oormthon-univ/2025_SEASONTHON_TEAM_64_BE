@@ -10,11 +10,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface MemberMissionJpaRepository extends JpaRepository<MemberMission, Long> {
-	boolean existsByMember_IdAndForDate(Long memberId, LocalDate forDate);
+	boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate);
 
-	boolean existsByMember_IdAndMission_Id(Long memberId, Long missionId);
-
-	Optional<MemberMission> findByMember_IdAndForDate(Long memberId, LocalDate forDate);
+	boolean existsByMemberIdAndMissionId(Long memberId, Long missionId);
+ 
+	Optional<MemberMission> findByMemberIdAndForDate(Long memberId, LocalDate forDate);
 
 	@Query("""
 	       select mm

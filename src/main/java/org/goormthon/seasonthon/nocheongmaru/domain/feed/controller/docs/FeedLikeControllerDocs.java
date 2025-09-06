@@ -13,7 +13,9 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "feedLike", description = "피드 좋아요 리스트와 좋아요 여부 값 API")
 public interface FeedLikeControllerDocs {
 
 	@Operation(

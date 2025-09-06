@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.global.s3.controller;
 
 
 import org.goormthon.seasonthon.nocheongmaru.global.s3.S3StorageUtil;
+import org.goormthon.seasonthon.nocheongmaru.global.s3.controller.docs.S3ControllerDocs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/images")
 @RequiredArgsConstructor
-public class S3Controller {
+public class S3Controller implements S3ControllerDocs {
 
 	private final S3StorageUtil s3StorageUtil;
 
