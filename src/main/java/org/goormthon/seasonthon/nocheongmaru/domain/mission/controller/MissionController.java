@@ -7,6 +7,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.docs.Miss
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.response.AssignmentListResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.response.MemberTodayMissionResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.MissionService;
+import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,12 +38,13 @@ public class MissionController implements MissionControllerDocs {
 		return ResponseEntity.ok(resp);
 	}
 
-	@GetMapping("/members/{memberId}/missions/today")
+	@GetMapping("/members/missions/today")
 	public ResponseEntity<MemberTodayMissionResponse> getMemberTodayMission(
-		@PathVariable Long memberId
+		@AuthMemberId Long memberId
 	) {
 		LocalDate today = LocalDate.now(KST);
 		MemberTodayMissionResponse resp = missionService.getMemberTodayMission(memberId, today);
 		return ResponseEntity.ok(resp);
 	}
+ 
 }
