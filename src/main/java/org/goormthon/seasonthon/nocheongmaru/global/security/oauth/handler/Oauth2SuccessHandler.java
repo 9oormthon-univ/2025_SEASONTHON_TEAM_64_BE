@@ -43,7 +43,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
     
     private String buildRedirectUrl(TokenResponse tokenResponse) {
-        return UriComponentsBuilder.fromUriString("http://localhost:5173")
+        return UriComponentsBuilder.fromUriString("http://localhost:3000")
             .queryParam("accessToken", tokenResponse.accessToken())
             .queryParam("refreshToken", tokenResponse.refreshToken())
             .build()
