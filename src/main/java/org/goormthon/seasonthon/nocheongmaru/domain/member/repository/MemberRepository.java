@@ -1,11 +1,11 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.member.repository;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MemberNotFoundException;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -18,8 +18,8 @@ public class MemberRepository {
             .orElseThrow(MemberNotFoundException::new);
     }
     
-    public void save(Member newMember) {
-        memberJpaRepository.save(newMember);
+    public Member save(Member newMember) {
+        return memberJpaRepository.save(newMember);
     }
     
     public Member findById(Long memberId) {
@@ -39,8 +39,11 @@ public class MemberRepository {
         return memberJpaRepository.existsById(memberId);
     }
 
-    public void saveAll(List<Member> members) {
-        memberJpaRepository.saveAll(members);
+    public List<Member> findAll() {
+        return memberJpaRepository.findAll();
     }
 
+    public Member getReferenceById(Long memberId) {
+        return memberJpaRepository.getReferenceById(memberId);
+    }
 }

@@ -43,5 +43,11 @@ public class Feed extends BaseTimeEntity {
         this.member = member;
         this.mission = mission;
     }
+
+    public void replace(String description, String imageUrl, Mission mission) {
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.mission = mission;
+    }
     
 }

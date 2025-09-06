@@ -22,8 +22,18 @@ public enum ErrorCode {
 
     // Feed
     FEED_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
+    FORBIDDEN_FEED_ACCESS(403, "해당 개시물 권한 금지입니다."),
 
-    // Information
+    // Mission
+    MISSION_NOT_FOUND(404, "미션을 찾을 수 없습니다."),
+    TODAY_MISSION_NOT_FOUND(404, "오늘의 미션이 없습니다. 08:00 이후 확인해주세요."),
+    TODAY_MISSION_NOT_EQUAL(403, "오늘 할당된 미션과 일치하지 않습니다."),
+    ALREADY_UPLOADED_TODAY(409, "오늘 미션으로 이미 게시물을 업로드했습니다."),
+
+    // Comment
+    COMMENT_NOT_FOURN(404, "댓글을 찾을 수 없습니다."),
+    FORBIDDEN_COMMENT_ACCESS(403, "해당 댓글 권한 금지입니다."),
+
     ADDRESS_NOT_FOUND(404, "주소를 찾을 수 없습니다."),
     KAKAO_HTTP_CLIENT_ERROR(500, "카카오 API 요청에 실패했습니다."),
     INFORMATION_NOT_FOUND(404, "정보나눔 피드를 찾을 수 없습니다."),

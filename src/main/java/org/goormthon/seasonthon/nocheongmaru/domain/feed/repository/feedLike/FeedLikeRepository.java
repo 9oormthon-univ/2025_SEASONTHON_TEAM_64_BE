@@ -1,5 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike;
 
+
+import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -7,17 +9,24 @@ import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.FeedLike;
 import org.springframework.stereotype.Repository;
 
+
 @RequiredArgsConstructor
 @Repository
 public class FeedLikeRepository {
-    
+
     private final FeedLikeJpaRepository feedLikeJpaRepository;
 
-    public FeedLike save(FeedLike entity) { return feedLikeJpaRepository.save(entity); }
+    public FeedLike save(FeedLike entity) {
+        return feedLikeJpaRepository.save(entity);
+    }
 
-    public Optional<FeedLike> findById(Long id) { return feedLikeJpaRepository.findById(id); }
+    public Optional<FeedLike> findById(Long id) {
+        return feedLikeJpaRepository.findById(id);
+    }
 
-    public void deleteById(Long id) { feedLikeJpaRepository.deleteById(id); }
+    public void deleteById(Long id) {
+        feedLikeJpaRepository.deleteById(id);
+    }
 
     public boolean existsByFeed_IdAndMember_Id(Long feedId, Long memberId) {
         return feedLikeJpaRepository.existsByFeed_IdAndMember_Id(feedId, memberId);
@@ -29,6 +38,14 @@ public class FeedLikeRepository {
 
     public long countByFeed_Id(Long feedId) {
         return feedLikeJpaRepository.countByFeed_Id(feedId);
+    }
+
+    public long deleteAllByFeedId(Long feedId) {
+        return feedLikeJpaRepository.deleteAllByFeedIdInBulk(feedId);
+    }
+
+    public List<FeedLike> findAllByFeed_Id(Long feedId) {
+        return feedLikeJpaRepository.findAllByFeed_Id(feedId);
     }
     
 }

@@ -1,6 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.fortune.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.fortune.entity.Fortune;
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.FortuneRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.service.dto.FortuneResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.NotificationType;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.NotificationService;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.AlreadyOpenException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.AlreadyWrittenException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.FortuneNotFoundException;
@@ -21,13 +24,16 @@ import lombok.RequiredArgsConstructor;
 public class FortuneService {
 
 	private final FortuneRepository fortuneRepo;
+	private final NotificationService notificationService;
 	private static final ZoneId KST = ZoneId.of("Asia/Seoul");
 
 	@Transactional
 	public Fortune sendFortune(Member sender, String description) {
 		LocalDate today = LocalDate.now(KST);
+		LocalDateTime start = today.atStartOfDay();
+		LocalDateTime end = today.plusDays(1).atStartOfDay().minusNanos(1);
 
-		if (fortuneRepo.existsBySenderAndCreatedAt(sender, today)) {
+		if (fortuneRepo.existsBySenderAndCreatedAtBetween(sender, start, end)) {
 			throw new AlreadyWrittenException();
 		}
 
@@ -36,7 +42,17 @@ public class FortuneService {
 			.sender(sender)
 			.build();
 
-		return fortuneRepo.save(fortune);
+		Fortune saved = fortuneRepo.save(fortune);
+
+		// ✅ 알림: 오늘의 포춘쿠키 작성 완료
+		notificationService.createNotification(
+			sender,
+			"포춘쿠키 작성 완료 🍪",
+			"오늘의 포춘쿠키를 작성했습니다!",
+			NotificationType.FORTUNE
+		);
+
+		return saved;
 	}
 
 	@Transactional
@@ -47,7 +63,18 @@ public class FortuneService {
 		if (fortunes.isEmpty()) {
 			throw new AlreadyOpenException();
 		}
-		return fortunes.get(0);
+
+		Fortune opened = fortunes.get(0);
+
+		// ✅ 알림: 오늘의 포춘쿠키 열람 완료
+		notificationService.createNotification(
+			receiver,
+			"포춘쿠키가 도착했습니다 🎁",
+			"오늘의 포춘쿠키를 확인했습니다!",
+			NotificationType.FORTUNE
+		);
+
+		return opened;
 	}
 
 	@Transactional(readOnly = true)
