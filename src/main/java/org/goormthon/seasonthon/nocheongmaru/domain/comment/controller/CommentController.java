@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.comment.controller;
 
 import java.util.Map;
 
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.controller.docs.CommentControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.comment.controller.dto.request.CommentPutRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.comment.controller.dto.request.CommentRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.CommentService;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class CommentController {
+public class CommentController implements CommentControllerDocs {
 
 	private final CommentService commentService;
 
