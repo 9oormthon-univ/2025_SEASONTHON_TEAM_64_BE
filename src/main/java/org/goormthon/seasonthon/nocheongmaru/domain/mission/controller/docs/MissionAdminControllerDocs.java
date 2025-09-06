@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.MissionResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -75,5 +76,5 @@ public interface MissionAdminControllerDocs {
 			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				schema = @Schema(implementation = Mission.class)))
 	})
-	ResponseEntity<List<Mission>> listMissions();
+	ResponseEntity<List<MissionResponse>> listMissions();
 }

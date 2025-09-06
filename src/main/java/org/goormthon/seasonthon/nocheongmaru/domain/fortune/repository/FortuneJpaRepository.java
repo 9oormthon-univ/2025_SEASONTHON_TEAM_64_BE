@@ -1,6 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.entity.Fortune;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface FortuneJpaRepository extends JpaRepository<Fortune, Long> {
+
+	boolean existsBySenderAndCreatedAtBetween(Member sender, LocalDateTime start, LocalDateTime end);
 
 	boolean existsBySenderAndCreatedAt(Member sender, LocalDate createdDate);
 

@@ -1,6 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +17,8 @@ public class FortuneRepository {
 
     private final FortuneJpaRepository fortuneJpaRepository;
 
-    public boolean existsBySenderAndCreatedAt(Member sender, LocalDate createdDate) {
-        return fortuneJpaRepository.existsBySenderAndCreatedAt(sender, createdDate);
+    public boolean existsBySenderAndCreatedAtBetween(Member sender, LocalDateTime start, LocalDateTime end) {
+        return fortuneJpaRepository.existsBySenderAndCreatedAtBetween(sender, start, end);
     }
 
     public List<Fortune> findRandomByTodayExcludingSender(Member sender, LocalDate today) {

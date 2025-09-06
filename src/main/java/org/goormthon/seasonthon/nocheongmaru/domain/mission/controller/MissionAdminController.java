@@ -2,10 +2,12 @@ package org.goormthon.seasonthon.nocheongmaru.domain.mission.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.docs.MissionAdminControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.MissionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +43,12 @@ public class MissionAdminController implements MissionAdminControllerDocs {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Mission>> listMissions() {
-		return ResponseEntity.ok(missionRepo.findAll());
+	public ResponseEntity<List<MissionResponse>> listMissions() {
+		List<MissionResponse> responses = missionRepo.findAll().stream()
+			.map(MissionResponse::from)
+			.collect(Collectors.toList()); // JDK 11 호환
+
+		return ResponseEntity.ok(responses);
 	}
+
 }

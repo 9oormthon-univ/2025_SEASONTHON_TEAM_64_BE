@@ -1,6 +1,7 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.fortune.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -29,8 +30,10 @@ public class FortuneService {
 	@Transactional
 	public Fortune sendFortune(Member sender, String description) {
 		LocalDate today = LocalDate.now(KST);
+		LocalDateTime start = today.atStartOfDay();
+		LocalDateTime end = today.plusDays(1).atStartOfDay().minusNanos(1);
 
-		if (fortuneRepo.existsBySenderAndCreatedAt(sender, today)) {
+		if (fortuneRepo.existsBySenderAndCreatedAtBetween(sender, start, end)) {
 			throw new AlreadyWrittenException();
 		}
 
