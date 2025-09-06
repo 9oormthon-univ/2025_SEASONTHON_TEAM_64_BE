@@ -103,7 +103,7 @@ public interface MissionControllerDocs {
 		@ApiResponse(responseCode = "404", description = "해당 회원/미션 데이터 없음")
 	})
 	ResponseEntity<MemberTodayMissionResponse> getMemberTodayMission(
-		@Parameter(description = "대상 회원 ID", example = "1", required = true, in = ParameterIn.PATH)
+		@Parameter(hidden = true)
 		Long memberId
 	);
 }
