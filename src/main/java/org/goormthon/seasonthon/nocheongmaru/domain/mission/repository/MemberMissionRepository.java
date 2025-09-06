@@ -25,7 +25,7 @@ public class MemberMissionRepository {
 	}
 
 	public MemberMission findByMemberIdAndForDate(Long memberId, LocalDate forDate) {
-		return memberMissionJpaRepository.findByMember_IdAndForDate(memberId, forDate)
+		return memberMissionJpaRepository.findByMemberIdAndForDate(memberId, forDate)
 			.orElseThrow(TodayMissionNotFoundException::new);
 	}
 

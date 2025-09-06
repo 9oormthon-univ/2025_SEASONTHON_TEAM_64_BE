@@ -13,8 +13,8 @@ public interface MemberMissionJpaRepository extends JpaRepository<MemberMission,
 	boolean existsByMember_IdAndForDate(Long memberId, LocalDate forDate);
 
 	boolean existsByMember_IdAndMission_Id(Long memberId, Long missionId);
-
-	Optional<MemberMission> findByMember_IdAndForDate(Long memberId, LocalDate forDate);
+ 
+	Optional<MemberMission> findByMemberIdAndForDate(Long memberId, LocalDate forDate);
 
 	@Query("""
 	       select mm
