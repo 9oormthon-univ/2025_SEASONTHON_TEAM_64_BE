@@ -20,7 +20,7 @@ public class MissionListRepositoryImpl implements MissionListRepository {
     public List<MissionResponse> getMissionsByMember(Long memberId) {
         return queryFactory.select(constructor(MissionResponse.class,
                 mission.id,
-                mission.title
+                mission.description
             ))
             .from(mission)
             .where(mission.member.id.eq(memberId))

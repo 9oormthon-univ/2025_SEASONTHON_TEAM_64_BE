@@ -16,7 +16,7 @@ public class MissionGenerator {
     @Transactional
     public Long generate(String missionDescription, Member member) {
         Mission mission = Mission.builder()
-            .title(missionDescription)
+            .description(missionDescription)
             .member(member)
             .build();
         missionRepository.save(mission);

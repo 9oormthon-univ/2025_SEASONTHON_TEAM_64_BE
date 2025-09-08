@@ -24,7 +24,7 @@ public class NotificationService {
 
 	@Transactional
 	public void createMissionAssignedNotification(Member member, Mission mission, LocalDate date, NotificationType type) {
-		String message = "[" + date + "] 오늘의 미션: " + mission.getTitle();
+		String message = "[" + date + "] 오늘의 미션: " + mission.getDescription();
 
 		Notification notification = Notification.builder()
 			.member(member)

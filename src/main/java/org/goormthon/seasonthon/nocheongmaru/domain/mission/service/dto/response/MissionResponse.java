@@ -7,14 +7,14 @@ import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 public record MissionResponse(
     
     Long id,
-    String title
+    String description
 
 ) {
     
     public static MissionResponse from(Mission mission) {
         return MissionResponse.builder()
             .id(mission.getId())
-            .title(mission.getTitle())
+            .description(mission.getDescription())
             .build();
     }
     

@@ -31,7 +31,7 @@ public class FcmService {
 		}
 
 		String title = "오늘의 미션이 도착했어요!";
-		String body = "[" + forDate + "] " + mission.getTitle();
+		String body = "[" + forDate + "] " + mission.getDescription();
 
 		Message message = Message.builder()
 			.setToken(member.getFcmToken())
