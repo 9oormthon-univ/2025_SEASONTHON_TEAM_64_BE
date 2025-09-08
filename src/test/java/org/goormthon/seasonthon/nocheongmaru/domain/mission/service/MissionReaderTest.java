@@ -73,7 +73,7 @@ class MissionReaderTest extends IntegrationTestSupport {
     
     private Mission createMission(Member member, String missionDescription) {
         return Mission.builder()
-            .title(missionDescription)
+            .description(missionDescription)
             .member(member)
             .build();
     }

@@ -16,4 +16,6 @@ public interface MissionJpaRepository extends
     
     List<Mission> findAllByOrderByIdDesc(Pageable pageable);
     
+    boolean existsByIdAndMemberId(Long missionId, Long memberId);
+    
 }

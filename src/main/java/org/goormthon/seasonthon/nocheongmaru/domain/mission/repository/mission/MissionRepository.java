@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.response.MissionResponse;
-import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MissionNotFoundException;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.mission.MissionNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -44,6 +44,10 @@ public class MissionRepository {
     
     public void saveAll(List<Mission> mission) {
         missionJpaRepository.saveAll(mission);
+    }
+    
+    public boolean existsByIdAndMemberId(Long missionId, Long memberId) {
+        return missionJpaRepository.existsByIdAndMemberId(missionId, memberId);
     }
     
 }
