@@ -43,7 +43,8 @@ public class MemberRepository {
         return memberJpaRepository.findAll();
     }
 
-    public Member getReferenceById(Long memberId) {
-        return memberJpaRepository.getReferenceById(memberId);
+    public void saveAll(List<Member> members) {
+        memberJpaRepository.saveAll(members);
     }
+    
 }
