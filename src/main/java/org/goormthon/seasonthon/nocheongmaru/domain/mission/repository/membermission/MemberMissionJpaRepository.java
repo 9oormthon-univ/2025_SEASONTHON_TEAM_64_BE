@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository;
+package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission;
 
 import java.time.LocalDate;
 import java.util.List;

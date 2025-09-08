@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository;
+package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission;
 
 
 import java.util.List;

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.docs.MissionAdminControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.MissionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

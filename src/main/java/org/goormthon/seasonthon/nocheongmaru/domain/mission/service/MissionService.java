@@ -10,7 +10,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.respo
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.response.MemberTodayMissionResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.MemberMissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

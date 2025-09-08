@@ -1,11 +1,10 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository;
+package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.member.TodayMissionNotFoundException;
-import org.goormthon.seasonthon.nocheongmaru.global.exception.member.MissionNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;

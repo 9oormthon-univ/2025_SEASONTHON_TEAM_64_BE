@@ -23,36 +23,41 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "member_mission",
-	uniqueConstraints = @UniqueConstraint(name="uk_member_for_date", columnNames = {"member_id","for_date"}))
+@Table(name = "member_missions",
+    uniqueConstraints = @UniqueConstraint(name = "uk_member_for_date", columnNames = {"member_id", "for_date"}))
 @Entity
 public class MemberMission {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "member_mission_id")
-	private Long id;
-
-	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="member_id", nullable=false)
-	private Member member;
-
-	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="mission_id", nullable=false)
-	private Mission mission;
-
-	@Column(name = "for_date", nullable = false)
-	private LocalDate forDate;
-
-	@Enumerated(EnumType.STRING) @Column(nullable = false)
-	private Status status; // ASSIGNED, COMPLETED
-
-	public enum Status { ASSIGNED, COMPLETED }
-
-	@Builder
-	private MemberMission(Member member, Mission mission, LocalDate forDate, Status status) {
-		this.member = member;
-		this.mission = mission;
-		this.forDate = forDate;
-		this.status = status;
-	}
-	public void markCompleted() { this.status = Status.COMPLETED; }
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_mission_id")
+    private Long id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mission_id", nullable = false)
+    private Mission mission;
+    
+    @Column(name = "for_date", nullable = false)
+    private LocalDate forDate;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+    
+    @Builder
+    private MemberMission(Member member, Mission mission, LocalDate forDate, Status status) {
+        this.member = member;
+        this.mission = mission;
+        this.forDate = forDate;
+        this.status = status;
+    }
+    
+    public void markCompleted() {
+        this.status = Status.COMPLETED;
+    }
+    
 }
