@@ -17,15 +17,15 @@ public class MemberMissionRepository {
 	private final MemberMissionJpaRepository memberMissionJpaRepository;
 
 	public boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate) {
-		return memberMissionJpaRepository.existsByMember_IdAndForDate(memberId, forDate);
+		return memberMissionJpaRepository.existsByMemberIdAndForDate(memberId, forDate);
 	}
 
 	public boolean existsByMemberIdAndMissionId(Long memberId, Long missionId) {
-		return memberMissionJpaRepository.existsByMember_IdAndMission_Id(memberId, missionId);
+		return memberMissionJpaRepository.existsByMemberIdAndMissionId(memberId, missionId);
 	}
 
 	public MemberMission findByMemberIdAndForDate(Long memberId, LocalDate forDate) {
-		return memberMissionJpaRepository.findByMember_IdAndForDate(memberId, forDate)
+		return memberMissionJpaRepository.findByMemberIdAndForDate(memberId, forDate)
 			.orElseThrow(TodayMissionNotFoundException::new);
 	}
 

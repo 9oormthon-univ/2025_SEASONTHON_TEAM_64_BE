@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.controller.docs.NotificationControllerDocs;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.entity.Notification;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.FcmService;
 import org.goormthon.seasonthon.nocheongmaru.domain.notification.service.NotificationService;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor
-public class NotificationController {
+public class NotificationController implements NotificationControllerDocs {
 
 	private final NotificationService notificationService;
 
