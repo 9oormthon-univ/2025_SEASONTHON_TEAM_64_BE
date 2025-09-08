@@ -62,6 +62,25 @@ class MissionReaderTest extends IntegrationTestSupport {
             );
     }
     
+    @DisplayName("관리자의 미션 목록을 상세 조회한다.")
+    @Test
+    void getMissionByMember() {
+        // given
+        Member member = createMember();
+        memberRepository.save(member);
+        
+        Mission mission = createMission(member, "mission1");
+        missionRepository.save(mission);
+        
+        // when
+        MissionResponse missionResponse = missionReader.getMissionByMember(mission.getId());
+        
+        // then
+        assertThat(missionResponse)
+            .extracting("id", "description")
+            .containsExactly(mission.getId(), "mission1");
+    }
+    
     private Member createMember() {
         return Member.builder()
             .email("email")

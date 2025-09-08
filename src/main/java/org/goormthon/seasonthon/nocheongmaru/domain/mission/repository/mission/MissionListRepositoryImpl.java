@@ -27,4 +27,15 @@ public class MissionListRepositoryImpl implements MissionListRepository {
             .fetch();
     }
     
+    @Override
+    public MissionResponse getMissionByMember(Long missionId) {
+        return queryFactory.select(constructor(MissionResponse.class,
+                mission.id,
+                mission.description
+            ))
+            .from(mission)
+            .where(mission.id.eq(missionId))
+            .fetchOne();
+    }
+    
 }

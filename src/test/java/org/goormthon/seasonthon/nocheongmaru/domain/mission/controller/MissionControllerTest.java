@@ -89,6 +89,24 @@ class MissionControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$[1].id").value(2L))
             .andExpect(jsonPath("$[1].description").value("desc2"));
     }
+    
+    @TestMember(roles = { "ADMIN" })
+    @DisplayName("관리자가 자신의 미션을 상세 조회한다.")
+    @Test
+    void getMissionByMember() throws Exception {
+        // given
+        Long missionId = 5L;
+        var response = createMissionResponse(missionId, "detailed description");
+        given(missionService.getMissionByMember(missionId))
+            .willReturn(response);
+
+        // expected
+        mockMvc.perform(get(ADMIN_BASE_URL + "/" + missionId))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(missionId))
+            .andExpect(jsonPath("$.description").value("detailed description"));
+    }
 
     @TestMember(roles = { "ADMIN" })
     @DisplayName("관리자가 미션을 수정한다.")

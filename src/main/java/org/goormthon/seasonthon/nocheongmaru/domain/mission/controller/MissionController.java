@@ -36,6 +36,14 @@ public class MissionController {
         return ResponseEntity.ok(missions);
     }
     
+    @GetMapping("/admin/{missionId}")
+    public ResponseEntity<MissionResponse> getMissionByMember(
+        @PathVariable Long missionId
+    ) {
+        MissionResponse mission = missionService.getMissionByMember(missionId);
+        return ResponseEntity.ok(mission);
+    }
+    
     @DeleteMapping("/admin/{missionId}")
     public ResponseEntity<Void> deleteMission(
         @AuthMemberId Long memberId,

@@ -8,4 +8,6 @@ public interface MissionListRepository {
     
     List<MissionResponse> getMissionsByMember(Long memberId);
     
+    MissionResponse getMissionByMember(Long missionId);
+    
 }

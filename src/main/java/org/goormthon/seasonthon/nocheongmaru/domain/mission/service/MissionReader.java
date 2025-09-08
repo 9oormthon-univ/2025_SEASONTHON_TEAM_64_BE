@@ -19,4 +19,9 @@ public class MissionReader {
         return missionRepository.getMissionsByMember(memberId);
     }
     
+    @Transactional(readOnly = true)
+    public MissionResponse getMissionByMember(Long missionId) {
+        return missionRepository.getMissionByMember(missionId);
+    }
+    
 }

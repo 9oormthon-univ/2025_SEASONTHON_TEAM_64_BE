@@ -149,6 +149,28 @@ class MissionServiceTest extends IntegrationTestSupport {
             );
     }
     
+    @DisplayName("관리자의 미션 상세를 조회한다.")
+    @Test
+    void getMissionByMember() {
+        // given
+        Member member = createMember();
+        memberRepository.save(member);
+        
+        Mission mission = createMission(member, "mission1");
+        missionRepository.save(mission);
+        
+        given(missionReader.getMissionByMember(any()))
+            .willReturn(createMissionResponse(mission));
+        
+        // when
+        MissionResponse missionResponse = missionService.getMissionByMember(mission.getId());
+        
+        // then
+        assertThat(missionResponse)
+            .extracting("id", "description")
+            .containsExactly(mission.getId(), "mission1");
+    }
+    
     private Member createMember() {
         return Member.builder()
             .email("email")

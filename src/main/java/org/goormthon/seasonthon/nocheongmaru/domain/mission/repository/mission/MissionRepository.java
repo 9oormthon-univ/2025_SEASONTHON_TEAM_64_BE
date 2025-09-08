@@ -50,4 +50,8 @@ public class MissionRepository {
         return missionJpaRepository.existsByIdAndMemberId(missionId, memberId);
     }
     
+    public MissionResponse getMissionByMember(Long missionId) {
+        return missionJpaRepository.getMissionByMember(missionId);
+    }
+    
 }

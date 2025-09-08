@@ -40,4 +40,8 @@ public class MissionService {
         return missionReader.getMissionsByMember(member.getId());
     }
     
+    public MissionResponse getMissionByMember(Long missionId) {
+        return missionReader.getMissionByMember(missionId);
+    }
+    
 }
