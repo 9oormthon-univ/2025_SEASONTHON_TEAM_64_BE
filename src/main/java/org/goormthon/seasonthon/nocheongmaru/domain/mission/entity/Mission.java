@@ -32,4 +32,7 @@ public class Mission extends BaseTimeEntity {
         this.member = member;
     }
     
+    public void modifyTitle(String missionDescription) {
+        this.title = missionDescription;
+    }
 }
