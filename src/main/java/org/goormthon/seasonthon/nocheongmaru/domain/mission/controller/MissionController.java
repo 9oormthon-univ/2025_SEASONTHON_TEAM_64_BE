@@ -28,6 +28,14 @@ public class MissionController {
         return ResponseEntity.ok(missionId);
     }
     
+    @GetMapping
+    public ResponseEntity<MissionResponse> getAllocatedMission(
+        @AuthMemberId Long memberId
+    ) {
+        MissionResponse mission = missionService.getAllocatedMission(memberId);
+        return ResponseEntity.ok(mission);
+    }
+    
     @GetMapping("/admin")
     public ResponseEntity<List<MissionResponse>> getMissionsByMember(
         @AuthMemberId Long memberId

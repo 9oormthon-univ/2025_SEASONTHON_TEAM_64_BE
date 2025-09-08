@@ -12,32 +12,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Repository
 public class MemberMissionRepository {
-
-	private final MemberMissionJpaRepository memberMissionJpaRepository;
-
-	public boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate) {
-		return memberMissionJpaRepository.existsByMemberIdAndForDate(memberId, forDate);
-	}
-
-	public boolean existsByMemberIdAndMissionId(Long memberId, Long missionId) {
-		return memberMissionJpaRepository.existsByMemberIdAndMissionId(memberId, missionId);
-	}
-
-	public MemberMission findByMemberIdAndForDate(Long memberId, LocalDate forDate) {
-		return memberMissionJpaRepository.findByMemberIdAndForDate(memberId, forDate)
-			.orElseThrow(TodayMissionNotFoundException::new);
-	}
-
-	public MemberMission save(MemberMission mm) {
-		return memberMissionJpaRepository.save(mm);
-	}
-
-	public MemberMission findByMemberIdAndForDateWithFetch(Long memberId, LocalDate forDate) {
-		return memberMissionJpaRepository.findByMemberIdAndForDateWithFetch(memberId, forDate)
-			.orElseThrow(TodayMissionNotFoundException::new);
-	}
-
-	public List<MemberMission> findAllByForDateWithFetch(LocalDate forDate) {
-		return memberMissionJpaRepository.findAllByForDateWithFetch(forDate);
-	}
+    
+    private final MemberMissionJpaRepository memberMissionJpaRepository;
+    
+    public boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate) {
+        return memberMissionJpaRepository.existsByMemberIdAndForDate(memberId, forDate);
+    }
+    
+    public boolean existsByMemberIdAndMissionId(Long memberId, Long missionId) {
+        return memberMissionJpaRepository.existsByMemberIdAndMissionId(memberId, missionId);
+    }
+    
+    public MemberMission findByMemberIdAndForDate(Long memberId, LocalDate forDate) {
+        return memberMissionJpaRepository.findByMemberIdAndForDate(memberId, forDate)
+            .orElseThrow(TodayMissionNotFoundException::new);
+    }
+    
+    public MemberMission save(MemberMission memberMission) {
+        return memberMissionJpaRepository.save(memberMission);
+    }
+    
+    public void deleteAllInBatch() {
+        memberMissionJpaRepository.deleteAllInBatch();
+    }
+    
 }

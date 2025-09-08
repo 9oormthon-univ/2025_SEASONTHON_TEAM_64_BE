@@ -44,4 +44,9 @@ public class MissionService {
         return missionReader.getMissionByMember(missionId);
     }
     
+    public MissionResponse getAllocatedMission(Long memberId) {
+        Member member = memberRepository.findById(memberId);
+        return missionReader.getAllocatedMission(member.getId());
+    }
+    
 }

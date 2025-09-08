@@ -4,7 +4,10 @@ import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Status;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.request.MissionCreateServiceRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.request.MissionModifyServiceRequest;
@@ -36,6 +39,9 @@ class MissionServiceTest extends IntegrationTestSupport {
     @Autowired
     private MissionRepository missionRepository;
     
+    @Autowired
+    private MemberMissionRepository memberMissionRepository;
+    
     @MockitoBean
     private MissionReader missionReader;
     
@@ -47,6 +53,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     
     @AfterEach
     void tearDown() {
+        memberMissionRepository.deleteAllInBatch();
         missionRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
     }
@@ -171,6 +178,31 @@ class MissionServiceTest extends IntegrationTestSupport {
             .containsExactly(mission.getId(), "mission1");
     }
     
+    @DisplayName("회원에게 할당된 미션을 조회한다.")
+    @Test
+    void getAllocatedMission() {
+        // given
+        Member member = createMember();
+        memberRepository.save(member);
+        
+        Mission mission = createMission(member, "mission1");
+        missionRepository.save(mission);
+        
+        MemberMission memberMission = createMemberMission(member, mission);
+        memberMissionRepository.save(memberMission);
+        
+        given(missionReader.getAllocatedMission(any()))
+            .willReturn(createMissionResponse(mission));
+        
+        // when
+        MissionResponse missionResponse = missionService.getAllocatedMission(member.getId());
+        
+        // then
+        assertThat(missionResponse)
+            .extracting("id", "description")
+            .containsExactly(mission.getId(), "mission1");
+    }
+    
     private Member createMember() {
         return Member.builder()
             .email("email")
@@ -191,6 +223,15 @@ class MissionServiceTest extends IntegrationTestSupport {
         return MissionResponse.builder()
             .id(mission.getId())
             .description(mission.getDescription())
+            .build();
+    }
+    
+    private MemberMission createMemberMission(Member member, Mission mission) {
+        return MemberMission.builder()
+            .member(member)
+            .mission(mission)
+            .forDate(java.time.LocalDate.now())
+            .status(Status.ASSIGNED)
             .build();
     }
     
