@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-public class MissionModifier {
+public class MissionEditor {
     
     private final MissionRepository missionRepository;
     

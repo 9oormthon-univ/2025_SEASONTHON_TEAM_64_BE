@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MissionModifierTest extends IntegrationTestSupport {
     
     @Autowired
-    private MissionModifier missionModifier;
+    private MissionEditor missionEditor;
     
     @Autowired
     private MissionRepository missionRepository;
@@ -49,7 +49,7 @@ class MissionModifierTest extends IntegrationTestSupport {
         Long missionId = mission.getId();
         
         // when
-        missionModifier.modifyMission(member.getId(), mission.getId(), updatedMissionDescription);
+        missionEditor.modifyMission(member.getId(), mission.getId(), updatedMissionDescription);
         
         // then
         Mission updatedMission = missionRepository.findById(missionId);
@@ -69,7 +69,7 @@ class MissionModifierTest extends IntegrationTestSupport {
         missionRepository.save(mission);
         
         // expected
-        assertThatThrownBy(() -> missionModifier.modifyMission(member.getId() + 1, mission.getId(), "updatedMissionDescription"))
+        assertThatThrownBy(() -> missionEditor.modifyMission(member.getId() + 1, mission.getId(), "updatedMissionDescription"))
             .isInstanceOf(IsNotMissionOwnerException.class)
             .hasMessage("미션의 작성자가 아닙니다.");
     }
@@ -89,7 +89,7 @@ class MissionModifierTest extends IntegrationTestSupport {
         Long missionId = mission.getId();
         
         // when
-        missionModifier.deleteMission(member.getId(), missionId);
+        missionEditor.deleteMission(member.getId(), missionId);
         
         // then
         assertThatThrownBy(() -> missionRepository.findById(missionId))
@@ -109,10 +109,8 @@ class MissionModifierTest extends IntegrationTestSupport {
         Mission mission = createMission(member, missionDescription);
         missionRepository.save(mission);
         
-        Long missionId = mission.getId();
-        
         // expected
-        assertThatThrownBy(() -> missionModifier.deleteMission(member.getId() + 1, mission.getId()))
+        assertThatThrownBy(() -> missionEditor.deleteMission(member.getId() + 1, mission.getId()))
             .isInstanceOf(IsNotMissionOwnerException.class)
             .hasMessage("미션의 작성자가 아닙니다.");
     }

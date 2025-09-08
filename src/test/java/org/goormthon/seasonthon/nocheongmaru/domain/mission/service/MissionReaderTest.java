@@ -54,7 +54,7 @@ class MissionReaderTest extends IntegrationTestSupport {
         // then
         assertThat(missions).hasSize(3);
         assertThat(missions)
-            .extracting("id", "title")
+            .extracting("id", "description")
             .containsExactlyInAnyOrder(
                 tuple(missions.get(0).id(), "mission1"),
                 tuple(missions.get(1).id(), "mission2"),
