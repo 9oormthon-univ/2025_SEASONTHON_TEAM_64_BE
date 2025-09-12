@@ -1,13 +1,13 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public interface MemberMissionJpaRepository extends JpaRepository<MemberMission, Long> {
     
@@ -25,4 +25,7 @@ public interface MemberMissionJpaRepository extends JpaRepository<MemberMission,
     
     @Query("select distinct mm.mission.id from MemberMission mm where mm.member.id = :memberId")
     List<Long> findAllMissionIdsByMemberId(@Param("memberId") Long memberId);
+    
+    boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate);
+    
 }

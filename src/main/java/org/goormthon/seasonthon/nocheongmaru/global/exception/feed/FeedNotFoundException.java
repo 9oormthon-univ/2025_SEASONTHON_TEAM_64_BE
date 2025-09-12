@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.global.exception.member;
+package org.goormthon.seasonthon.nocheongmaru.global.exception.feed;
 
 import org.goormthon.seasonthon.nocheongmaru.global.exception.common.BaseException;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.common.ErrorCode;

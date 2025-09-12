@@ -1,13 +1,12 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission;
 
-import java.time.LocalDate;
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
-import org.goormthon.seasonthon.nocheongmaru.global.exception.member.TodayMissionNotFoundException;
+import org.goormthon.seasonthon.nocheongmaru.global.exception.feed.TodayMissionNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -24,10 +23,6 @@ public class MemberMissionRepository {
         return memberMissionJpaRepository.save(memberMission);
     }
     
-    public void saveAll(List<MemberMission> memberMissions) {
-        memberMissionJpaRepository.saveAll(memberMissions);
-    }
-    
     public void deleteAllInBatch() {
         memberMissionJpaRepository.deleteAllInBatch();
     }
@@ -39,4 +34,10 @@ public class MemberMissionRepository {
     public List<Long> findAllMissionIdsByMemberId(Long memberId) {
         return memberMissionJpaRepository.findAllMissionIdsByMemberId(memberId);
     }
+    
+    public boolean existsByMemberIdAndForDate(Long memberId) {
+        LocalDate forDate = LocalDate.now();
+        return memberMissionJpaRepository.existsByMemberIdAndForDate(memberId, forDate);
+    }
+    
 }

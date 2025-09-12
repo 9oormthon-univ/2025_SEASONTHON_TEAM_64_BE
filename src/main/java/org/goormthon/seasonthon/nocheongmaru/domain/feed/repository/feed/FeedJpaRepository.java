@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
+    
+    boolean existsByMemberIdAndMissionId(Long memberId, Long missionId);
+    
 }
