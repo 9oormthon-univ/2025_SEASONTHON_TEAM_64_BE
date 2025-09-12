@@ -36,123 +36,122 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class FeedService {
-
-	private final FeedRepository feedRepository;
-	private final FeedLikeRepository feedLikeRepository;
-	private final CommentRepository commentRepository;
-	private final MemberRepository memberRepository;
-	private final MissionRepository missionRepository;
-	private final MemberMissionRepository memberMissionRepo;
-
-	@Transactional(readOnly = true)
+    
+    private final FeedRepository feedRepository;
+    private final FeedLikeRepository feedLikeRepository;
+    private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
+    private final MissionRepository missionRepository;
+    private final MemberMissionRepository memberMissionRepo;
+    
+    @Transactional(readOnly = true)
     public CursorPageResponse<FeedResponse> getFeeds(Long cursorId, int size) {
-		int pageSize = Math.min(size, 100);
-		if (pageSize <= 0) {
-		    throw new IllegalArgumentException("size must be positive");
-		}
-		Pageable pageable = PageRequest.of(0, pageSize + 1);
-		List<Feed> feeds = feedRepository.findFeedsByCursorWithMember(cursorId, pageable);
-		boolean hasNext = feeds.size() > pageSize;
-		List<Feed> pageFeeds = hasNext ? feeds.subList(0, pageSize) : feeds;
-
-		if (pageFeeds.isEmpty()) {
-			return new CursorPageResponse<>(List.of(), null);
-		}
-
-		List<Long> feedIds = pageFeeds.stream().map(Feed::getId).toList();
-
-		Map<Long, Long> likeMap = feedRepository.countDistinctMemberByFeedIds(feedIds).stream()
-			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
-		Map<Long, Long> commentMap = commentRepository.countByFeedIds(feedIds).stream()
-			.collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
-
-		List<FeedResponse> content = pageFeeds.stream()
-			.map(f -> FeedResponse.of(
-				f,
-				likeMap.getOrDefault(f.getId(), 0L),
-				commentMap.getOrDefault(f.getId(), 0L)
-			))
-			.toList();
-
-		Long lastId = pageFeeds.get(pageFeeds.size() - 1).getId();
-		Long nextCursor = hasNext ? lastId : null;
-
-		return new CursorPageResponse<>(content, nextCursor);
-	}
-
-	@Transactional(readOnly = true)
-	public FeedResponse getFeedById(Long feedId) {
-		Feed feed = feedRepository.findByIdWithMember(feedId)
-			.orElseThrow(FeedNotFoundException::new);
-
-		long likeCount = feedRepository.countDistinctMemberByFeedId(feedId);
-		long commentCount = commentRepository.countByFeedId(feedId);
-
-		return FeedResponse.of(feed, likeCount, commentCount);
-	}
-
-	@Transactional
-	public FeedResponse createFeed(Long memberId, FeedRequest req) {
-		if (memberId == null) throw new MemberNotFoundException();
-
-		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
-		MemberMission mm = memberMissionRepo.findByMemberIdAndForDate(memberId, today);
-
-		if (req.missionId() != null && !req.missionId().equals(mm.getMission().getId())) {
-			throw new TodayMissionAccessDeniedException();
-		}
-
-		Member member = memberRepository.findById(memberId);
-		Mission mission = mm.getMission();
-
-		if (feedRepository.existsByMember_IdAndMission_Id(memberId, mission.getId())) {
-			throw new AlreadyUploadedTodayException();
-		}
-
-		Feed saved = feedRepository.save(
-			Feed.builder()
-				.description(req.description())
-				.imageUrl(req.imageUrl())
-				.member(member)
-				.mission(mission)
-				.build()
-		);
-
-		mm.markCompleted();
-
-		return FeedResponse.of(saved, 0L, 0L);
-	}
-
-
-	@Transactional
-	public void deleteFeed(Long memberId, Long feedId) {
-		Feed feed = feedRepository.findById(feedId);
-
-		if (!feed.getMember().getId().equals(memberId)) {
-			throw new ForbiddenFeedAccessException();
-		}
-
-		commentRepository.deleteAllByFeedId(feedId);
-		feedLikeRepository.deleteAllByFeedId(feedId);
-
-		feedRepository.delete(feed);
-	}
-
-	@Transactional
-	public FeedResponse replaceFeed(Long memberId, Long feedId, FeedPutRequest req) {
-		Feed feed = feedRepository.findById(feedId);
-
-		if (!feed.getMember().getId().equals(memberId)) {
-			throw new ForbiddenFeedAccessException();
-		}
-
-		Mission mission = missionRepository.findById(req.missionId());
-
-		feed.replace(req.description(), req.imageUrl(), mission);
-
-		long likeCount = (feedLikeRepository != null) ? feedLikeRepository.countByFeed_Id(feedId) : 0L;
-		long commentCount = (commentRepository != null) ? commentRepository.countByFeedId(feedId) : 0L;
-
-		return FeedResponse.of(feed, likeCount, commentCount);
-	}
+        int pageSize = Math.min(size, 100);
+        if (pageSize <= 0) {
+            throw new IllegalArgumentException("size must be positive");
+        }
+        Pageable pageable = PageRequest.of(0, pageSize + 1);
+        List<Feed> feeds = feedRepository.findFeedsByCursorWithMember(cursorId, pageable);
+        boolean hasNext = feeds.size() > pageSize;
+        List<Feed> pageFeeds = hasNext ? feeds.subList(0, pageSize) : feeds;
+        
+        if (pageFeeds.isEmpty()) {
+            return new CursorPageResponse<>(List.of(), null);
+        }
+        
+        List<Long> feedIds = pageFeeds.stream().map(Feed::getId).toList();
+        
+        Map<Long, Long> likeMap = feedRepository.countDistinctMemberByFeedIds(feedIds).stream()
+            .collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
+        Map<Long, Long> commentMap = commentRepository.countByFeedIds(feedIds).stream()
+            .collect(Collectors.toMap(FeedIdCount::getFeedId, FeedIdCount::getCount));
+        
+        List<FeedResponse> content = pageFeeds.stream()
+            .map(f -> FeedResponse.of(
+                f,
+                likeMap.getOrDefault(f.getId(), 0L),
+                commentMap.getOrDefault(f.getId(), 0L)
+            ))
+            .toList();
+        
+        Long lastId = pageFeeds.get(pageFeeds.size() - 1).getId();
+        Long nextCursor = hasNext ? lastId : null;
+        
+        return new CursorPageResponse<>(content, nextCursor);
+    }
+    
+    @Transactional(readOnly = true)
+    public FeedResponse getFeedById(Long feedId) {
+        Feed feed = feedRepository.findByIdWithMember(feedId)
+            .orElseThrow(FeedNotFoundException::new);
+        
+        long likeCount = feedRepository.countDistinctMemberByFeedId(feedId);
+        long commentCount = commentRepository.countByFeedId(feedId);
+        
+        return FeedResponse.of(feed, likeCount, commentCount);
+    }
+    
+    @Transactional
+    public FeedResponse createFeed(Long memberId, FeedRequest req) {
+        if (memberId == null) throw new MemberNotFoundException();
+        
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        MemberMission mm = memberMissionRepo.findByMemberIdAndForDate(memberId, today);
+        
+        if (req.missionId() != null && !req.missionId().equals(mm.getMission().getId())) {
+            throw new TodayMissionAccessDeniedException();
+        }
+        
+        Member member = memberRepository.findById(memberId);
+        Mission mission = mm.getMission();
+        
+        if (feedRepository.existsByMember_IdAndMission_Id(memberId, mission.getId())) {
+            throw new AlreadyUploadedTodayException();
+        }
+        
+        Feed saved = feedRepository.save(
+            Feed.builder()
+                .description(req.description())
+                .imageUrl(req.imageUrl())
+                .member(member)
+                .mission(mission)
+                .build()
+        );
+        
+        
+        return FeedResponse.of(saved, 0L, 0L);
+    }
+    
+    
+    @Transactional
+    public void deleteFeed(Long memberId, Long feedId) {
+        Feed feed = feedRepository.findById(feedId);
+        
+        if (!feed.getMember().getId().equals(memberId)) {
+            throw new ForbiddenFeedAccessException();
+        }
+        
+        commentRepository.deleteAllByFeedId(feedId);
+        feedLikeRepository.deleteAllByFeedId(feedId);
+        
+        feedRepository.delete(feed);
+    }
+    
+    @Transactional
+    public FeedResponse replaceFeed(Long memberId, Long feedId, FeedPutRequest req) {
+        Feed feed = feedRepository.findById(feedId);
+        
+        if (!feed.getMember().getId().equals(memberId)) {
+            throw new ForbiddenFeedAccessException();
+        }
+        
+        Mission mission = missionRepository.findById(req.missionId());
+        
+        feed.replace(req.description(), req.imageUrl(), mission);
+        
+        long likeCount = (feedLikeRepository != null) ? feedLikeRepository.countByFeed_Id(feedId) : 0L;
+        long commentCount = (commentRepository != null) ? commentRepository.countByFeedId(feedId) : 0L;
+        
+        return FeedResponse.of(feed, likeCount, commentCount);
+    }
 }

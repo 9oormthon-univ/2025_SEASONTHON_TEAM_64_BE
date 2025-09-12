@@ -6,7 +6,6 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Status;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.response.MissionResponse;
@@ -20,7 +19,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MissionReaderTest extends IntegrationTestSupport {
     
@@ -103,7 +101,6 @@ class MissionReaderTest extends IntegrationTestSupport {
             .member(member)
             .mission(mission)
             .forDate(LocalDate.now())
-            .status(Status.ASSIGNED)
             .build();
         memberMissionRepository.save(memberMission);
         

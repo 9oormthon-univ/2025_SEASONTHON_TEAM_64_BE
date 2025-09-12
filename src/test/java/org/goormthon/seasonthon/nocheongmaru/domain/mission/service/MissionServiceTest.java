@@ -6,7 +6,6 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Status;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.request.MissionCreateServiceRequest;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -231,7 +229,6 @@ class MissionServiceTest extends IntegrationTestSupport {
             .member(member)
             .mission(mission)
             .forDate(java.time.LocalDate.now())
-            .status(Status.ASSIGNED)
             .build();
     }
     

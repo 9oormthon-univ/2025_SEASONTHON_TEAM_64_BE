@@ -44,20 +44,11 @@ public class MemberMission {
     @Column(name = "for_date", nullable = false)
     private LocalDate forDate;
     
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-    
     @Builder
-    private MemberMission(Member member, Mission mission, LocalDate forDate, Status status) {
+    private MemberMission(Member member, Mission mission, LocalDate forDate) {
         this.member = member;
         this.mission = mission;
         this.forDate = forDate;
-        this.status = status;
-    }
-    
-    public void markCompleted() {
-        this.status = Status.COMPLETED;
     }
     
 }
