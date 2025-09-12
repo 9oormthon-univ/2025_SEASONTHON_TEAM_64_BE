@@ -27,6 +27,10 @@ public class MemberRepository {
             .orElseThrow(MemberNotFoundException::new);
     }
     
+    public boolean existsByDeviceToken(String deviceToken) {
+        return memberJpaRepository.existsByDeviceToken(deviceToken);
+    }
+    
     public boolean existsByIdAndRefreshToken(Long memberId, String refreshToken) {
         return memberJpaRepository.existsByIdAndRefreshToken(memberId, refreshToken);
     }

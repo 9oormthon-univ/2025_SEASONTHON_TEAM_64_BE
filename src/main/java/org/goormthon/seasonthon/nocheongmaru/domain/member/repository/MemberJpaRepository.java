@@ -11,4 +11,6 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long> {
     
     boolean existsByIdAndRefreshToken(Long id, String refreshToken);
     
+    boolean existsByDeviceToken(String deviceToken);
+    
 }
