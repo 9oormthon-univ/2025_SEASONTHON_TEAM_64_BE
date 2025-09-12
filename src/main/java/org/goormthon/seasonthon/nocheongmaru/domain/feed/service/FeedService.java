@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.service;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.request.FeedCreateServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.request.FeedModifyServiceRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
@@ -15,7 +16,9 @@ public class FeedService {
     private final MissionValidator missionValidator;
     private final MemberRepository memberRepository;
     private final MissionRepository missionRepository;
+    
     private final FeedGenerator feedGenerator;
+    private final FeedEditor feedEditor;
     
     public Long generateFeed(FeedCreateServiceRequest request) {
         Member member = memberRepository.findById(request.memberId());
@@ -31,5 +34,22 @@ public class FeedService {
             request.imageFile()
         );
     }
+    
+    public void modifyFeed(FeedModifyServiceRequest request) {
+        Member member = memberRepository.findById(request.memberId());
+        feedEditor.modifyFeed(
+            member,
+            request.feedId(),
+            request.description(),
+            request.imageFile()
+        );
+    }
+    
+    public void deleteFeed(Long memberId, Long feedId) {
+        Member member = memberRepository.findById(memberId);
+        feedEditor.deleteFeed(member, feedId);
+    }
+    
+    
     
 }

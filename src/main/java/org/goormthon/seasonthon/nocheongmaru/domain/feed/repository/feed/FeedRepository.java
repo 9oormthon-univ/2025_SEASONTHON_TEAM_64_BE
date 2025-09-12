@@ -24,4 +24,13 @@ public class FeedRepository {
         return feedJpaRepository.findById(feedId)
             .orElseThrow(FeedNotFoundException::new);
     }
+    
+    public boolean existsByMemberIdAndId(Long memberId, Long feedId) {
+        return feedJpaRepository.existsByMemberIdAndId(memberId, feedId);
+    }
+    
+    public void delete(Feed feed) {
+        feedJpaRepository.delete(feed);
+    }
+    
 }

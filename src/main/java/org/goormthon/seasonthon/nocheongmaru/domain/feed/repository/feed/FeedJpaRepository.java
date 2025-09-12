@@ -8,4 +8,6 @@ public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
     
     boolean existsByMemberIdAndMissionId(Long memberId, Long missionId);
     
+    boolean existsByMemberIdAndId(Long memberId, Long feedId);
+    
 }

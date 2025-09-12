@@ -2,14 +2,18 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.controller;
 
 import org.goormthon.seasonthon.nocheongmaru.ControllerTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedCreateRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedModifyRequest;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.TestMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -87,6 +91,71 @@ class FeedControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.validationErrors.description").value("피드 설명은 필수입니다."));
     }
     
+    @TestMember
+    @DisplayName("오늘의 시선 피드를 수정한다.")
+    @Test
+    void modifyFeed() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long feedId = 10L;
+        MockMultipartFile imageFile = createMockMultipartFile();
+        var request = FeedModifyRequest.builder()
+            .description("새 설명")
+            .build();
+        
+        // 컨트롤러는 request.toServiceRequest(memberId, feedId, imageFile)를 호출하므로 동일하게 스텁
+        willDoNothing().given(feedService).modifyFeed(request.toServiceRequest(memberId, feedId, imageFile));
+        
+        // expected
+        mockMvc.perform(
+                multipart(HttpMethod.PUT, BASE_URL + "/" + feedId)
+                    .file(imageFile)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+            )
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+    
+    @TestMember
+    @DisplayName("오늘의 시선 피드 수정 시, 설명은 필수이다.")
+    @Test
+    void modifyFeed_WithNonDescription() throws Exception {
+        // given
+        Long feedId = 10L;
+        var request = FeedModifyRequest.builder()
+            .build();
+        
+        // expected
+        mockMvc.perform(
+                multipart(HttpMethod.PUT, BASE_URL + "/" + feedId)
+                    .file(new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(request)))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+            .andExpect(jsonPath("$.validationErrors.description").value("피드 설명은 필수입니다."));
+    }
+    
+    @TestMember
+    @DisplayName("오늘의 시선 피드를 삭제한다.")
+    @Test
+    void deleteFeed() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long feedId = 99L;
+        willDoNothing().given(feedService).deleteFeed(memberId, feedId);
+        
+        // expected
+        mockMvc.perform(
+                delete(BASE_URL + "/" + feedId)
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+    
     private MockMultipartFile createMockMultipartFile() {
         return new MockMultipartFile(
             "imageFile",
@@ -97,4 +166,3 @@ class FeedControllerTest extends ControllerTestSupport {
     }
     
 }
-
