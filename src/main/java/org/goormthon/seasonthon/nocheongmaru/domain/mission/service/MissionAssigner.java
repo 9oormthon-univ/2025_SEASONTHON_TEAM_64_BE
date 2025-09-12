@@ -7,6 +7,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class MissionAssigner {
     private final MissionRepository missionRepository;
     private final MemberMissionRepository memberMissionRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final ApplicationEventPublisher eventPublisher;
     
     @Transactional
     public void assignDailyMission() {
@@ -51,6 +53,9 @@ public class MissionAssigner {
         }
         
         batchInsertMemberMissions(params);
+        
+        // TODO : 알림 이벤트 발송
+        List<Long> assignedMemberIds = resolveMemberIds(params);
         log.info("[MissionAssign] 총 {}명 중 {}건 배정 완료 (부분 배정 가능)", members.size(), params.size());
     }
     
@@ -59,7 +64,6 @@ public class MissionAssigner {
             .map(mm -> mm.getMember().getId())
             .collect(Collectors.toSet());
     }
-    
     
     private List<Object[]> buildAssignments(List<Member> members, List<Long> allMissionIds, LocalDate forDate) {
         List<Long> sortedMissionIds = new ArrayList<>(allMissionIds);
@@ -98,6 +102,13 @@ public class MissionAssigner {
         jdbcTemplate.batchUpdate(sql, params);
     }
     
+    private List<Long> resolveMemberIds(List<Object[]> params) {
+        return params.stream()
+            .map(p -> (Long) p[0])
+            .distinct()
+            .toList();
+    }
+    
     private List<Member> getAllMembers() {
         return memberRepository.findAll();
     }
@@ -109,4 +120,5 @@ public class MissionAssigner {
     private List<Long> getPreviouslyAssignedMissionIds(Long memberId) {
         return memberMissionRepository.findAllMissionIdsByMemberId(memberId);
     }
+    
 }
