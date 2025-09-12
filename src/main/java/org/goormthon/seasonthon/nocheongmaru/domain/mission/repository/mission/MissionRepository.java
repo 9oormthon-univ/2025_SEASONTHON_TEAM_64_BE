@@ -14,24 +14,20 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Repository
 public class MissionRepository {
-
+    
     private final MissionJpaRepository missionJpaRepository;
-
+    
     public Mission save(Mission mission) {
         return missionJpaRepository.save(mission);
     }
-
+    
     public Mission findById(Long missionId) {
         return missionJpaRepository.findById(missionId)
             .orElseThrow(MissionNotFoundException::new);
     }
-
+    
     public void deleteById(Long missionId) {
         missionJpaRepository.deleteById(missionId);
-    }
-
-    public List<Mission> findAllForAssignment() {
-        return missionJpaRepository.findAllByOrderByIdDesc(Pageable.unpaged());
     }
     
     public void deleteAllInBatch() {
@@ -52,6 +48,10 @@ public class MissionRepository {
     
     public MissionResponse getMissionByMember(Long missionId) {
         return missionJpaRepository.getMissionByMember(missionId);
+    }
+    
+    public List<Long> findAllMissionIds() {
+        return missionJpaRepository.findAllIds();
     }
     
 }

@@ -19,4 +19,6 @@ public interface MissionJpaRepository extends
     
     boolean existsByIdAndMemberId(Long missionId, Long memberId);
     
+    @Query("select m.id from Mission m")
+    List<Long> findAllIds();
 }

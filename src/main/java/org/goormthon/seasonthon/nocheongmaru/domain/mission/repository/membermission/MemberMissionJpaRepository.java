@@ -10,32 +10,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface MemberMissionJpaRepository extends JpaRepository<MemberMission, Long> {
-	boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate);
-
-	boolean existsByMemberIdAndMissionId(Long memberId, Long missionId);
- 
-	Optional<MemberMission> findByMemberIdAndForDate(Long memberId, LocalDate forDate);
-
-	@Query("""
-	       select mm
-	       from MemberMission mm
-	       join fetch mm.member m
-	       join fetch mm.mission ms
-	       where m.id = :memberId and mm.forDate = :forDate
-	       """)
-	Optional<MemberMission> findByMemberIdAndForDateWithFetch(
-		@Param("memberId") Long memberId,
-		@Param("forDate") LocalDate forDate
-	);
-
-	@Query("""
-	       select mm
-	       from MemberMission mm
-	       join fetch mm.member m
-	       join fetch mm.mission ms
-	       where mm.forDate = :forDate
-	       order by m.id asc
-	       """)
-	List<MemberMission> findAllByForDateWithFetch(@Param("forDate") LocalDate forDate);
-
+    
+    Optional<MemberMission> findByMemberIdAndForDate(Long memberId, LocalDate forDate);
+    
+    @Query("""
+        select member_mission
+        from MemberMission member_mission
+        join fetch member_mission.member member
+        join fetch member_mission.mission mission
+        where member_mission.forDate = :forDate
+        order by member.id asc
+        """)
+    List<MemberMission> findAllByForDateWithFetch(@Param("forDate") LocalDate forDate);
+    
+    @Query("select distinct mm.mission.id from MemberMission mm where mm.member.id = :memberId")
+    List<Long> findAllMissionIdsByMemberId(@Param("memberId") Long memberId);
 }

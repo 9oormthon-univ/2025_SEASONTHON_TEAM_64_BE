@@ -15,14 +15,6 @@ public class MemberMissionRepository {
     
     private final MemberMissionJpaRepository memberMissionJpaRepository;
     
-    public boolean existsByMemberIdAndForDate(Long memberId, LocalDate forDate) {
-        return memberMissionJpaRepository.existsByMemberIdAndForDate(memberId, forDate);
-    }
-    
-    public boolean existsByMemberIdAndMissionId(Long memberId, Long missionId) {
-        return memberMissionJpaRepository.existsByMemberIdAndMissionId(memberId, missionId);
-    }
-    
     public MemberMission findByMemberIdAndForDate(Long memberId, LocalDate forDate) {
         return memberMissionJpaRepository.findByMemberIdAndForDate(memberId, forDate)
             .orElseThrow(TodayMissionNotFoundException::new);
@@ -32,8 +24,19 @@ public class MemberMissionRepository {
         return memberMissionJpaRepository.save(memberMission);
     }
     
+    public void saveAll(List<MemberMission> memberMissions) {
+        memberMissionJpaRepository.saveAll(memberMissions);
+    }
+    
     public void deleteAllInBatch() {
         memberMissionJpaRepository.deleteAllInBatch();
     }
     
+    public List<MemberMission> findAllByForDate(LocalDate forDate) {
+        return memberMissionJpaRepository.findAllByForDateWithFetch(forDate);
+    }
+    
+    public List<Long> findAllMissionIdsByMemberId(Long memberId) {
+        return memberMissionJpaRepository.findAllMissionIdsByMemberId(memberId);
+    }
 }
