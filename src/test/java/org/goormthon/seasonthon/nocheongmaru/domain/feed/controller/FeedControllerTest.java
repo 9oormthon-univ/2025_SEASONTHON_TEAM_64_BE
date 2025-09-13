@@ -193,7 +193,7 @@ class FeedControllerTest extends ControllerTestSupport {
     }
     
     @TestMember
-    @DisplayName("lastFeedId가 null일 때, 오늘의 시선 피드 목록을 조회한다.")
+    @DisplayName("오늘의 시선 피드 목록을 조회한다.(lastFeedId 미포함)")
     @Test
     void getFeeds_WithoutLastFeedId() throws Exception {
         // given
@@ -234,7 +234,7 @@ class FeedControllerTest extends ControllerTestSupport {
     }
     
     @TestMember
-    @DisplayName("lastFeedId가 null이 아닐 때, 오늘의 시선 피드 목록을 조회한다.")
+    @DisplayName("오늘의 시선 피드 목록을 조회한다.(lastFeedId 포함)")
     @Test
     void getFeeds_WithLastFeedId() throws Exception {
         // given
@@ -263,6 +263,36 @@ class FeedControllerTest extends ControllerTestSupport {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].feedId").value(99));
+    }
+    
+    @TestMember
+    @DisplayName("피드 좋아요를 등록한다.")
+    @Test
+    void like() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long feedId = 101L;
+        willDoNothing().given(feedLikeService).like(memberId, feedId);
+        
+        // expected
+        mockMvc.perform(post(BASE_URL + "/" + feedId + "/like").contentType(APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+    
+    @TestMember
+    @DisplayName("피드 좋아요를 취소한다.")
+    @Test
+    void unlike() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long feedId = 101L;
+        willDoNothing().given(feedLikeService).unlike(memberId, feedId);
+        
+        // expected
+        mockMvc.perform(delete(BASE_URL + "/" + feedId + "/like").contentType(APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
     
     private MockMultipartFile createMockMultipartFile() {

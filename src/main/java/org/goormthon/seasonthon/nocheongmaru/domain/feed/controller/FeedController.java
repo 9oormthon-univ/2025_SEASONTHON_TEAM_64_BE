@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedCreateRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedModifyRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
@@ -19,6 +20,7 @@ import java.util.List;
 public class FeedController {
     
     private final FeedService feedService;
+    private final FeedLikeService feedLikeService;
     
     @PostMapping
     public ResponseEntity<Long> generateFeed(
@@ -66,6 +68,24 @@ public class FeedController {
     ) {
         List<FeedResponse> responses = feedService.getFeeds(memberId, lastFeedId);
         return ResponseEntity.ok(responses);
+    }
+    
+    @PostMapping("/{feedId}/like")
+    public ResponseEntity<Void> like(
+        @AuthMemberId Long memberId,
+        @PathVariable Long feedId
+    ) {
+        feedLikeService.like(memberId, feedId);
+        return ResponseEntity.ok().build();
+    }
+    
+    @DeleteMapping("/{feedId}/like")
+    public ResponseEntity<Void> unlike(
+        @AuthMemberId Long memberId,
+        @PathVariable Long feedId
+    ) {
+        feedLikeService.unlike(memberId, feedId);
+        return ResponseEntity.ok().build();
     }
     
 }

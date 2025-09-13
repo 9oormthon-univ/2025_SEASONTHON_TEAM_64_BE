@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.controller.AuthController;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.service.AuthService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.FeedController;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.InformationController;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.InformationService;
@@ -45,5 +46,8 @@ public abstract class ControllerTestSupport {
     
     @MockitoBean
     protected FeedService feedService;
+    
+    @MockitoBean
+    protected FeedLikeService feedLikeService;
     
 }

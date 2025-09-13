@@ -18,4 +18,16 @@ public class FeedLikeRepository {
         feedLikeJpaRepository.save(feedLike);
     }
     
+    public boolean existsByFeedIdAndMemberId(Long feedId, Long memberId) {
+        return feedLikeJpaRepository.existsByFeedIdAndMemberId(feedId, memberId);
+    }
+    
+    public void deleteByFeedIdAndMemberId(Long feedId, Long memberId) {
+        feedLikeJpaRepository.deleteByFeedIdAndMemberId(feedId, memberId);
+    }
+    
+    public long countByFeedIdAndMemberId(Long feedId, Long memberId) {
+        return feedLikeJpaRepository.countByFeedIdAndMemberId(feedId, memberId);
+    }
+    
 }
