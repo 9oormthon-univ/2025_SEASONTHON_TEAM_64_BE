@@ -4,9 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.comment.controller.dto.request.CommentCreateRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.CommentService;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.dto.response.CommentResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/v1/feeds/{feedId}/comments")
 @RequiredArgsConstructor
@@ -33,6 +36,16 @@ public class CommentController {
     ) {
         commentService.deleteComment(commentId, memberId, feedId);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<CommentResponse>> getCommentsByFeedId(
+        @AuthMemberId Long memberId,
+        @PathVariable Long feedId,
+        @RequestParam Long lastCommentId
+    ) {
+        List<CommentResponse> comments = commentService.getCommentsByFeedId(feedId, memberId, lastCommentId);
+        return ResponseEntity.ok(comments);
     }
 
 }

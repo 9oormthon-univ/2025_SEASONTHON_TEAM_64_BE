@@ -2,11 +2,14 @@ package org.goormthon.seasonthon.nocheongmaru.domain.comment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.dto.request.CommentCreateServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.dto.response.CommentResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class CommentService {
     
     private final CommentGenerator commentGenerator;
     private final CommentEditor commentEditor;
+    private final CommentReader commentReader;
     
     public Long generateComment(CommentCreateServiceRequest request) {
         Member member = memberRepository.findById(request.memberId());
@@ -32,4 +36,12 @@ public class CommentService {
         
         commentEditor.deleteComment(commentId, member.getId(), feed.getId());
     }
+    
+    public List<CommentResponse> getCommentsByFeedId(Long feedId, Long memberId, Long lastCommentId) {
+        Feed feed = feedRepository.findById(feedId);
+        Member member = memberRepository.findById(memberId);
+        
+        return commentReader.getCommentsByFeedId(feed.getId(), member.getId(), lastCommentId);
+    }
+    
 }
