@@ -1,51 +1,33 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike;
 
-
-import java.util.List;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
-
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.FeedLike;
 import org.springframework.stereotype.Repository;
-
 
 @RequiredArgsConstructor
 @Repository
 public class FeedLikeRepository {
-
+    
     private final FeedLikeJpaRepository feedLikeJpaRepository;
-
-    public FeedLike save(FeedLike entity) {
-        return feedLikeJpaRepository.save(entity);
+    
+    public void deleteAllInBatch() {
+        feedLikeJpaRepository.deleteAllInBatch();
     }
-
-    public Optional<FeedLike> findById(Long id) {
-        return feedLikeJpaRepository.findById(id);
+    
+    public void save(FeedLike feedLike) {
+        feedLikeJpaRepository.save(feedLike);
     }
-
-    public void deleteById(Long id) {
-        feedLikeJpaRepository.deleteById(id);
+    
+    public boolean existsByFeedIdAndMemberId(Long feedId, Long memberId) {
+        return feedLikeJpaRepository.existsByFeedIdAndMemberId(feedId, memberId);
     }
-
-    public boolean existsByFeed_IdAndMember_Id(Long feedId, Long memberId) {
-        return feedLikeJpaRepository.existsByFeed_IdAndMember_Id(feedId, memberId);
+    
+    public void deleteByFeedIdAndMemberId(Long feedId, Long memberId) {
+        feedLikeJpaRepository.deleteByFeedIdAndMemberId(feedId, memberId);
     }
-
-    public long deleteByFeed_IdAndMember_Id(Long feedId, Long memberId) {
-        return feedLikeJpaRepository.deleteByFeed_IdAndMember_Id(feedId, memberId);
-    }
-
-    public long countByFeed_Id(Long feedId) {
-        return feedLikeJpaRepository.countByFeed_Id(feedId);
-    }
-
-    public long deleteAllByFeedId(Long feedId) {
-        return feedLikeJpaRepository.deleteAllByFeedIdInBulk(feedId);
-    }
-
-    public List<FeedLike> findAllByFeed_Id(Long feedId) {
-        return feedLikeJpaRepository.findAllByFeed_Id(feedId);
+    
+    public long countByFeedIdAndMemberId(Long feedId, Long memberId) {
+        return feedLikeJpaRepository.countByFeedIdAndMemberId(feedId, memberId);
     }
     
 }

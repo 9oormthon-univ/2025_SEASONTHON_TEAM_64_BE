@@ -10,7 +10,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "feed_like",
+@Table(name = "feed_likes",
     uniqueConstraints = @UniqueConstraint(name = "uk_feed_member",
         columnNames = {"feed_id","member_id"}))
 @Entity

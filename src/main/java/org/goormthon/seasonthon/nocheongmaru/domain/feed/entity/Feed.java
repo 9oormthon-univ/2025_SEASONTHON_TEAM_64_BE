@@ -50,4 +50,10 @@ public class Feed extends BaseTimeEntity {
         this.mission = mission;
     }
     
+    
+    public void modifyFeed(String description, String newImageUrl) {
+        this.description = description;
+        this.imageUrl = newImageUrl;
+    }
+    
 }

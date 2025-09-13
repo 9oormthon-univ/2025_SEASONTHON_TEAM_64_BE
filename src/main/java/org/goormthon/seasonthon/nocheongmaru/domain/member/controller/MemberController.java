@@ -1,21 +1,18 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.member.controller;
 
-import java.util.Map;
-
-import lombok.Getter;
-import org.goormthon.seasonthon.nocheongmaru.domain.member.controller.docs.MemberControllerDocs;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.controller.dto.request.MemberDeviceTokenRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.service.MemberService;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.service.dto.response.MemberDetailResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
-
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
-public class MemberController implements MemberControllerDocs {
+@RequiredArgsConstructor
+@RestController
+public class MemberController {
     
     private final MemberService memberService;
     
@@ -26,17 +23,12 @@ public class MemberController implements MemberControllerDocs {
         return ResponseEntity.ok(memberService.getMemberDetail(memberId));
     }
     
-    @PostMapping("/{memberId}/fcm-token")
-    public ResponseEntity<Map<String, String>> registerFcmToken(
-        @PathVariable Long memberId,
-        @RequestBody Map<String, String> request
+    @PutMapping("/device-token")
+    public ResponseEntity<Void> updateDeviceToken(
+        @AuthMemberId Long memberId,
+        @RequestBody @Valid MemberDeviceTokenRequest request
     ) {
-        String token = request.get("token");
-        if (token == null || token.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "토큰이 비어 있습니다."));
-        }
-        
-        memberService.updateFcmToken(memberId, token);
-        return ResponseEntity.ok(Map.of("message", "FCM 토큰이 정상적으로 등록되었습니다."));
+        memberService.updateDeviceToken(request.toServiceRequest(memberId));
+        return ResponseEntity.noContent().build();
     }
 }

@@ -10,14 +10,26 @@ public class RestClientConfig {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String restApiKey;
     
+    @Value("${openai.secret-key}")
+    private String secretKey;
+    
     private static final String KAKAO_MAP_BASE_URL = "https://dapi.kakao.com/v2";
     private static final String KAKAO_MAP_HEADER_PREFIX = "KakaoAK ";
+    private static final String OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
     private static final String HEADER_TYPE = "Authorization";
     
     public RestClient kakaoRestClient() {
         return RestClient.builder()
             .baseUrl(KAKAO_MAP_BASE_URL)
             .defaultHeader(HEADER_TYPE, KAKAO_MAP_HEADER_PREFIX + restApiKey)
+            .build();
+    }
+    
+    public RestClient openAiRestClient() {
+        return RestClient.builder()
+            .baseUrl(OPENAI_CHAT_URL)
+            .defaultHeader("Authorization", "Bearer " + secretKey)
+            .defaultHeader("Content-Type", "application/json")
             .build();
     }
     

@@ -1,50 +1,73 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.mission.controller;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.docs.MissionControllerDocs;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.response.AssignmentListResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.response.MemberTodayMissionResponse;
-import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.MissionService;
-import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.request.MissionCreateRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.dto.request.MissionModifyRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.MissionService;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.dto.response.MissionResponse;
+import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/v1")
+import java.util.List;
+
+@RequestMapping("/api/v1/missions")
 @RequiredArgsConstructor
-@Validated
-public class MissionController implements MissionControllerDocs {
-
-	private static final ZoneId KST = ZoneId.of("Asia/Seoul");
-	private final MissionService missionService;
-
-	@GetMapping("/missions/assignments")
-	public ResponseEntity<AssignmentListResponse> getAssignmentsByDate(
-		@RequestParam(required = false)
-		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-	) {
-		LocalDate target = (date != null) ? date : LocalDate.now(KST);
-		AssignmentListResponse resp = missionService.getAssignmentsByDate(target);
-		return ResponseEntity.ok(resp);
-	}
-
-	@GetMapping("/members/missions/today")
-	public ResponseEntity<MemberTodayMissionResponse> getMemberTodayMission(
-		@AuthMemberId Long memberId
-	) {
-		LocalDate today = LocalDate.now(KST);
-		MemberTodayMissionResponse resp = missionService.getMemberTodayMission(memberId, today);
-		return ResponseEntity.ok(resp);
-	}
- 
+@RestController
+public class MissionController {
+    
+    private final MissionService missionService;
+    
+    @PostMapping("/admin")
+    public ResponseEntity<Long> generateMission(
+        @AuthMemberId Long memberId,
+        @RequestBody @Valid MissionCreateRequest request
+    ) {
+        Long missionId = missionService.generate(request.toServiceRequest(memberId));
+        return ResponseEntity.ok(missionId);
+    }
+    
+    @GetMapping
+    public ResponseEntity<MissionResponse> getAllocatedMission(
+        @AuthMemberId Long memberId
+    ) {
+        MissionResponse mission = missionService.getAllocatedMission(memberId);
+        return ResponseEntity.ok(mission);
+    }
+    
+    @GetMapping("/admin")
+    public ResponseEntity<List<MissionResponse>> getMissionsByMember(
+        @AuthMemberId Long memberId
+    ) {
+        List<MissionResponse> missions = missionService.getMissionsByMember(memberId);
+        return ResponseEntity.ok(missions);
+    }
+    
+    @GetMapping("/admin/{missionId}")
+    public ResponseEntity<MissionResponse> getMissionByMember(
+        @PathVariable Long missionId
+    ) {
+        MissionResponse mission = missionService.getMissionByMember(missionId);
+        return ResponseEntity.ok(mission);
+    }
+    
+    @DeleteMapping("/admin/{missionId}")
+    public ResponseEntity<Void> deleteMission(
+        @AuthMemberId Long memberId,
+        @PathVariable Long missionId
+    ) {
+        missionService.delete(memberId, missionId);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @PutMapping("/admin")
+    public ResponseEntity<Void> modifyMission(
+        @AuthMemberId Long memberId,
+        @RequestBody @Valid MissionModifyRequest request
+    ) {
+        missionService.modify(request.toServiceRequest(memberId));
+        return ResponseEntity.noContent().build();
+    }
+    
 }

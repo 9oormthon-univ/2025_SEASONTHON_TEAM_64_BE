@@ -20,16 +20,19 @@ public class Mission extends BaseTimeEntity {
     private Long id;
     
     @Column(nullable = false)
-    private String title;
+    private String description;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
     
     @Builder
-    private Mission(String title, Member member) {
-        this.title = title;
+    private Mission(String description, Member member) {
+        this.description = description;
         this.member = member;
     }
     
+    public void modifyTitle(String missionDescription) {
+        this.description = missionDescription;
+    }
 }

@@ -3,8 +3,15 @@ package org.goormthon.seasonthon.nocheongmaru;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.controller.AuthController;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.service.AuthService;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.controller.CommentController;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.CommentService;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.FeedController;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.InformationController;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.InformationService;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.MissionController;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -15,7 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(
     controllers = {
         AuthController.class,
-        InformationController.class
+        InformationController.class,
+        MissionController.class,
+        FeedController.class,
+        CommentController.class
     }
 )
 @Import(TestSecurityConfig.class)
@@ -33,5 +43,17 @@ public abstract class ControllerTestSupport {
     
     @MockitoBean
     protected InformationService informationService;
+    
+    @MockitoBean
+    protected MissionService missionService;
+    
+    @MockitoBean
+    protected FeedService feedService;
+    
+    @MockitoBean
+    protected FeedLikeService feedLikeService;
+    
+    @MockitoBean
+    protected CommentService commentService;
     
 }

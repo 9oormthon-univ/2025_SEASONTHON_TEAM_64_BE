@@ -1,9 +1,14 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.notification.entity;
 
-public enum NotificationType {
+import lombok.Getter;
 
-	MISSION,
-	COMMENT,
-	LIKE,
-	FORTUNE
+@Getter
+public enum NotificationType {
+    
+    FORTUNE,
+    MISSION,
+    COMMENT,
+    LIKE
+    ;
+    
 }

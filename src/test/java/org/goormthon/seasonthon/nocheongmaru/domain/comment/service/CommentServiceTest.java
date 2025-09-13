@@ -1,0 +1,152 @@
+package org.goormthon.seasonthon.nocheongmaru.domain.comment.service;
+
+import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.entity.Comment;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.repository.CommentRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.dto.request.CommentCreateServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.MemberMission;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class CommentServiceTest extends IntegrationTestSupport {
+    
+    @Autowired
+    private CommentService commentService;
+    
+    @Autowired
+    private MemberRepository memberRepository;
+    
+    @Autowired
+    private MissionRepository missionRepository;
+    
+    @Autowired
+    private MemberMissionRepository memberMissionRepository;
+    
+    @Autowired
+    private FeedRepository feedRepository;
+    
+    @Autowired
+    private CommentRepository commentRepository;
+    
+    @AfterEach
+    void tearDown() {
+        commentRepository.deleteAllInBatch();
+        feedRepository.deleteAllInBatch();
+        memberMissionRepository.deleteAllInBatch();
+        missionRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
+    }
+    
+    @DisplayName("댓글을 생성한다.")
+    @Test
+    void generateComment() {
+        // given
+        Member admin = createMember(Role.ROLE_ADMIN, "admin@test.com");
+        Member user = createMember(Role.ROLE_USER, "user@test.com");
+        memberRepository.saveAll(List.of(admin, user));
+        
+        Mission mission = createMission(admin);
+        missionRepository.save(mission);
+        
+        MemberMission memberMission = createMemberMission(user, mission);
+        memberMissionRepository.save(memberMission);
+        
+        Feed feed = createFeed(user, mission);
+        feedRepository.save(feed);
+        
+        CommentCreateServiceRequest request = CommentCreateServiceRequest.builder()
+            .memberId(user.getId())
+            .feedId(feed.getId())
+            .description("댓글입니다.")
+            .build();
+        
+        // when
+        Long commentId = commentService.generateComment(request);
+        
+        // then
+        Comment saved = commentRepository.findById(commentId);
+        assertThat(saved.getId()).isEqualTo(commentId);
+    }
+    
+    @DisplayName("댓글을 삭제한다.")
+    @Test
+    void deleteComment() {
+        // given
+        Member admin = createMember(Role.ROLE_ADMIN, "admin@test.com");
+        Member user = createMember(Role.ROLE_USER, "user@test.com");
+        memberRepository.saveAll(List.of(admin, user));
+        
+        Mission mission = createMission(admin);
+        missionRepository.save(mission);
+        
+        MemberMission memberMission = createMemberMission(user, mission);
+        memberMissionRepository.save(memberMission);
+        
+        Feed feed = createFeed(user, mission);
+        feedRepository.save(feed);
+        
+        Comment comment = Comment.builder()
+            .member(user)
+            .feed(feed)
+            .description("댓글입니다.")
+            .build();
+        commentRepository.save(comment);
+        
+        // when
+        commentService.deleteComment(comment.getId(), user.getId(), feed.getId());
+        
+        // then
+        boolean exists = commentRepository.existsByIdAndFeedId(comment.getId(), feed.getId());
+        assertThat(exists).isFalse();
+    }
+    
+    private Member createMember(Role role, String email) {
+        return Member.builder()
+            .nickname("nickname")
+            .email(email)
+            .profileImageURL("profileImageUrl")
+            .role(role)
+            .build();
+    }
+    
+    private Mission createMission(Member member) {
+        return Mission.builder()
+            .description("description")
+            .member(member)
+            .build();
+    }
+    
+    private MemberMission createMemberMission(Member member, Mission mission) {
+        LocalDate today = LocalDate.now();
+        return MemberMission.builder()
+            .member(member)
+            .mission(mission)
+            .forDate(today)
+            .build();
+    }
+    
+    private Feed createFeed(Member member, Mission mission) {
+        return Feed.builder()
+            .member(member)
+            .mission(mission)
+            .description("description")
+            .imageUrl("imageUrl")
+            .build();
+    }
+    
+}

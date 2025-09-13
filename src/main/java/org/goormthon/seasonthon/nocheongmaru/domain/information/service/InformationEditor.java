@@ -7,6 +7,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGe
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.dto.GeocodingResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.repository.InformationRepository;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.information.IsNotInformationOwnerException;
+import org.goormthon.seasonthon.nocheongmaru.global.openai.provider.FilteringProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,9 +21,11 @@ public class InformationEditor {
     private final KakaoGeocodingProvider kakaoGeocodingProvider;
     private final InformationRepository informationRepository;
     private final InformationImageManager informationImageManager;
+    private final FilteringProvider filteringProvider;
     
     @Transactional
     public Long modify(Long memberId, Long informationId, String title, String description, String address, List<MultipartFile> images) {
+        filteringProvider.validateViolent(description);
         Information information = informationRepository.findById(informationId);
         validateInformationOwnership(memberId, information.getId());
         

@@ -8,6 +8,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.KakaoGe
 import org.goormthon.seasonthon.nocheongmaru.domain.information.provider.dto.GeocodingResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.repository.InformationRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
+import org.goormthon.seasonthon.nocheongmaru.global.openai.provider.FilteringProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +22,11 @@ public class InformationGenerator {
     private final InformationRepository informationRepository;
     private final InformationImageManager informationImageManager;
     private final KakaoGeocodingProvider kakaoGeocodingProvider;
+    private final FilteringProvider filteringProvider;
     
     @Transactional
     public Long generate(Member member, String title, String description, String address, Category category, List<MultipartFile> images) {
+        filteringProvider.validateViolent(description);
         GeocodingResponse geo = kakaoGeocodingProvider.getGeocodingByAddress(address);
         
         Information information = createInformation(member, title, description, address, category, geo);

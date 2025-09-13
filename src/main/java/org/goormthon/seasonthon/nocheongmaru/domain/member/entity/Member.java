@@ -35,12 +35,12 @@ public class Member extends BaseTimeEntity {
     
     @Column(name = "refresh_token")
     private String refreshToken;
-
-    @Column(name = "fcm_token")
-    private String fcmToken;
-
+    
+    @Column(name = "device_token")
+    private String deviceToken;
+    
     private LocalDate lastOpenedDate;
-
+    
     @Builder
     private Member(String email, String nickname, String profileImageURL, Role role) {
         this.email = email;
@@ -52,15 +52,9 @@ public class Member extends BaseTimeEntity {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
-
-    public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
-
-
-    public boolean alreadyOpenedToday() {
-        return LocalDate.now().equals(this.lastOpenedDate);
+    
+    public void updateDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
-
-    public void markOpenedToday() {
-        this.lastOpenedDate = LocalDate.now();
-    }
+    
 }
