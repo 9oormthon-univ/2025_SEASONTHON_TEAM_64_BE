@@ -29,25 +29,14 @@ public class Fortune extends BaseTimeEntity {
     @JoinColumn(name = "sender_id", nullable = false)
     private Member sender;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private Member receiver;
-    
     @Column(name = "for_date", nullable = false)
     private LocalDate forDate;
-    
-    @Column(name = "assigned_at")
-    private LocalDate assignedAt;
     
     @Builder
     private Fortune(String description, Member sender) {
         this.description = description;
         this.sender = sender;
         this.forDate = LocalDate.now();
-    }
-    
-    public void assignReceiver(Member receiver) {
-        this.receiver = receiver;
     }
     
 }

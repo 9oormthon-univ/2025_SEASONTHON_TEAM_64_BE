@@ -2,7 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.fortune.service;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.entity.Fortune;
-import org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.FortuneRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.fortune.FortuneRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.fortune.AlreadyGenerateFortuneException;
 import org.goormthon.seasonthon.nocheongmaru.global.openai.provider.FilteringProvider;

@@ -1,4 +1,4 @@
-package org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository;
+package org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.fortune;
 
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +8,7 @@ import org.goormthon.seasonthon.nocheongmaru.global.exception.fortune.FortuneNot
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -32,6 +33,15 @@ public class FortuneRepository {
     public Fortune findById(Long fortuneId) {
         return fortuneJpaRepository.findById(fortuneId)
             .orElseThrow(FortuneNotFoundException::new);
+    }
+    
+    public Fortune findRandomUnassigned() {
+        return fortuneJpaRepository.findRandomUnassigned()
+            .orElseThrow(FortuneNotFoundException::new);
+    }
+    
+    public void saveAll(List<Fortune> fortune) {
+        fortuneJpaRepository.saveAll(fortune);
     }
     
 }

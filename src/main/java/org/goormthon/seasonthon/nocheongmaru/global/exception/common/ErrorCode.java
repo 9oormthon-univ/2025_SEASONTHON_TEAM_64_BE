@@ -48,6 +48,7 @@ public enum ErrorCode {
     // Fortune
     ALREADY_GENERATE_FORTUNE(409, "오늘의 포춘쿠키를 이미 생성했습니다."),
     FORTUNE_NOT_FOUND(404, "포춘쿠키를 찾을 수 없습니다."),
+    ALREADY_ASSIGN_FORTUNE(409, "오늘의 포춘쿠키를 이미 배정받았습니다."),
     
     ;
     

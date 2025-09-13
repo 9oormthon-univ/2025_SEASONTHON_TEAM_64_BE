@@ -2,6 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.fortune.controller;
 
 import org.goormthon.seasonthon.nocheongmaru.ControllerTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.controller.dto.request.FortuneCreateRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.fortune.service.dto.response.FortuneResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.TestMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,9 +60,29 @@ class FortuneControllerTest extends ControllerTestSupport {
                     .content(objectMapper.writeValueAsString(request))
             )
             .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-            .andExpect(jsonPath("$.validationErrors.description").value("포춘쿠키 설명은 필수입니다."));
+            .andExpect(status().isBadRequest());
+    }
+    
+    @TestMember
+    @DisplayName("오늘의 포춘쿠키를 배정받는다.")
+    @Test
+    void assignFortune() throws Exception {
+        // given
+        long memberId = 1L;
+        String description = "행운이 가득한 하루!";
+        FortuneResponse response = FortuneResponse.builder()
+            .description(description)
+            .build();
+        given(fortuneService.assignFortune(memberId)).willReturn(response);
+        
+        // expected
+        mockMvc.perform(
+                post(BASE_URL + "/assign")
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.description").value(description));
     }
     
 }

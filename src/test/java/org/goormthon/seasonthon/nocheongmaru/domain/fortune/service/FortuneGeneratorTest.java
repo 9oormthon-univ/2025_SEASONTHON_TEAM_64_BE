@@ -2,7 +2,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.fortune.service;
 
 import org.goormthon.seasonthon.nocheongmaru.IntegrationTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.entity.Fortune;
-import org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.FortuneRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.fortune.FortuneRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class FortuneGeneratorTest extends IntegrationTestSupport {
     
