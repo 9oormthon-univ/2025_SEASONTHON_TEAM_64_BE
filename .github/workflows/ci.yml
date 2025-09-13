@@ -25,6 +25,7 @@ jobs:
           echo "$PROPERTIES_S3" > src/main/resources/application-s3.yml
           echo "$PROPERTIES_SECURITY" > src/main/resources/application-security.yml
           echo "$PROPERTIES_DOCS" > src/main/resources/application-docs.yml
+          echo "$PROPERTIES_OPENAI" > src/main/resources/application-openai.yml
           echo "$PROPERTIES_FIREBASE" | base64 --decode > src/main/resources/firebase-service-key.json
         shell: bash
         env:
@@ -32,6 +33,7 @@ jobs:
           PROPERTIES_S3: ${{ secrets.PROPERTIES_S3 }}
           PROPERTIES_SECURITY: ${{ secrets.PROPERTIES_SECURITY }}
           PROPERTIES_DOCS: ${{ secrets.PROPERTIES_DOCS }}
+          PROPERTIES_OPENAI: ${{ secrets.PROPERTIES_OPENAI }}
           PROPERTIES_FIREBASE: ${{ secrets.PROPERTIES_FIREBASE }}
 
       - name: Setup Gradle
