@@ -8,6 +8,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.CommentServi
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.FeedController;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
+import org.goormthon.seasonthon.nocheongmaru.domain.fortune.controller.FortuneController;
+import org.goormthon.seasonthon.nocheongmaru.domain.fortune.service.FortuneService;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.controller.InformationController;
 import org.goormthon.seasonthon.nocheongmaru.domain.information.service.InformationService;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.controller.MissionController;
@@ -25,7 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
         InformationController.class,
         MissionController.class,
         FeedController.class,
-        CommentController.class
+        CommentController.class,
+        FortuneController.class
     }
 )
 @Import(TestSecurityConfig.class)
@@ -55,5 +58,8 @@ public abstract class ControllerTestSupport {
     
     @MockitoBean
     protected CommentService commentService;
+    
+    @MockitoBean
+    protected FortuneService fortuneService;
     
 }

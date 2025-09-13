@@ -8,14 +8,11 @@ import lombok.NoArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.common.BaseTimeEntity;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(
-    name = "fortunes",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"sender_id", "created_at"})
-    }
-)
+@Table(name = "fortunes")
 @Entity
 public class Fortune extends BaseTimeEntity {
     
@@ -36,11 +33,21 @@ public class Fortune extends BaseTimeEntity {
     @JoinColumn(name = "receiver_id")
     private Member receiver;
     
+    @Column(name = "for_date", nullable = false)
+    private LocalDate forDate;
+    
+    @Column(name = "assigned_at")
+    private LocalDate assignedAt;
+    
     @Builder
     private Fortune(String description, Member sender) {
         this.description = description;
         this.sender = sender;
+        this.forDate = LocalDate.now();
     }
-
-
+    
+    public void assignReceiver(Member receiver) {
+        this.receiver = receiver;
+    }
+    
 }
