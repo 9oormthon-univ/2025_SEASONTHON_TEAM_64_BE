@@ -5,6 +5,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
+import org.goormthon.seasonthon.nocheongmaru.global.openai.provider.FilteringProvider;
 import org.goormthon.seasonthon.nocheongmaru.global.s3.S3StorageUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +17,11 @@ public class FeedGenerator {
     
     private final S3StorageUtil s3StorageUtil;
     private final FeedRepository feedRepository;
+    private final FilteringProvider filteringProvider;
     
     @Transactional
     public Long generateFeed(Member member, Mission mission, String description, MultipartFile imageFile) {
+        filteringProvider.validateViolent(description);
         String imageUrl = s3StorageUtil.uploadFileToS3(imageFile);
         
         Feed feed = Feed.builder()
