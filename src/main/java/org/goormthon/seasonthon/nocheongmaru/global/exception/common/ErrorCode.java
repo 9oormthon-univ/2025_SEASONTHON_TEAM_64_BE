@@ -42,6 +42,8 @@ public enum ErrorCode {
     
     // Comment
     COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
+    IS_NOT_COMMENT_IN_FEED(400, "댓글이 해당 게시물에 속하지 않습니다."),
+    IS_NOT_COMMENT_OWNER(403, "댓글의 작성자가 아닙니다."),
     
     ;
     

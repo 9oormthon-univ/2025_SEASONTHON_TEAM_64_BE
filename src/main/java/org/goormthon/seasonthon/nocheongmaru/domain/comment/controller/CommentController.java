@@ -24,5 +24,15 @@ public class CommentController {
         Long commentId = commentService.generateComment(request.toServiceRequest(memberId, feedId));
         return ResponseEntity.ok(commentId);
     }
+    
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+        @AuthMemberId Long memberId,
+        @PathVariable Long feedId,
+        @PathVariable Long commentId
+    ) {
+        commentService.deleteComment(commentId, memberId, feedId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

@@ -17,6 +17,7 @@ public class CommentService {
     private final FeedRepository feedRepository;
     
     private final CommentGenerator commentGenerator;
+    private final CommentEditor commentEditor;
     
     public Long generateComment(CommentCreateServiceRequest request) {
         Member member = memberRepository.findById(request.memberId());
@@ -25,4 +26,10 @@ public class CommentService {
         return commentGenerator.generateComment(member, feed, request.description());
     }
     
+    public void deleteComment(Long commentId, Long memberId, Long feedId) {
+        Member member = memberRepository.findById(memberId);
+        Feed feed = feedRepository.findById(feedId);
+        
+        commentEditor.deleteComment(commentId, member.getId(), feed.getId());
+    }
 }

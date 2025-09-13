@@ -25,4 +25,16 @@ public class CommentRepository {
             .orElseThrow(CommentNotFoundException::new);
     }
     
+    public boolean existsByIdAndFeedId(Long commentId, Long id) {
+        return commentJpaRepository.existsByIdAndFeedId(commentId, id);
+    }
+    
+    public boolean existsByIdAndMemberId(Long commentId, Long memberId) {
+        return commentJpaRepository.existsByIdAndMemberId(commentId, memberId);
+    }
+    
+    public void deleteById(Long commentId) {
+        commentJpaRepository.deleteById(commentId);
+    }
+    
 }

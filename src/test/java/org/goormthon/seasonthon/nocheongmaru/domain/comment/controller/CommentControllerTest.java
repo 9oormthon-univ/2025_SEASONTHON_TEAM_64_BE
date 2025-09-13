@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,6 +62,24 @@ class CommentControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
             .andExpect(jsonPath("$.validationErrors.description").value("댓글 내용은 필수입니다."));
+    }
+    
+    @TestMember
+    @DisplayName("댓글을 삭제한다.")
+    @Test
+    void deleteComment() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long feedId = 10L;
+        Long commentId = 100L;
+        
+        // expected
+        mockMvc.perform(
+                delete(BASE_URL + "/" + feedId + "/comments/" + commentId)
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isNoContent());
     }
     
 }
