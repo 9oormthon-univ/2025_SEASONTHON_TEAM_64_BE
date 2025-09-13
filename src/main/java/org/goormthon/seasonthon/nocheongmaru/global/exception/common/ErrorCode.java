@@ -35,7 +35,11 @@ public enum ErrorCode {
     KAKAO_HTTP_CLIENT_ERROR(500, "카카오 API 요청에 실패했습니다."),
     INFORMATION_NOT_FOUND(404, "정보나눔 피드를 찾을 수 없습니다."),
     IS_NOT_INFORMATION_OWNER(403, "정보나눔 피드의 작성자가 아닙니다."),
-
+    
+    // OpenAI
+    OPENAI_HTTP_CLIENT_ERROR(500, "OpenAI API 요청에 실패했습니다."),
+    CONTENT_VIOLATION(400, "내용이 부적절합니다."),
+    
     ;
     
     private final int status;
