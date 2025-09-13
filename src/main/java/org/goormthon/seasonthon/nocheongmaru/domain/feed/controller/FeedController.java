@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedCreateRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedModifyRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequestMapping("/api/v1/feeds")
 @RequiredArgsConstructor
@@ -45,6 +48,24 @@ public class FeedController {
     ) {
         feedService.deleteFeed(memberId, feedId);
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/{feedId}")
+    public ResponseEntity<FeedResponse> getFeed(
+        @AuthMemberId Long memberId,
+        @PathVariable Long feedId
+    ) {
+        FeedResponse response = feedService.getFeed(memberId, feedId);
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<FeedResponse>> getFeeds(
+        @AuthMemberId Long memberId,
+        @RequestParam(required = false) Long lastFeedId
+    ) {
+        List<FeedResponse> responses = feedService.getFeeds(memberId, lastFeedId);
+        return ResponseEntity.ok(responses);
     }
     
 }

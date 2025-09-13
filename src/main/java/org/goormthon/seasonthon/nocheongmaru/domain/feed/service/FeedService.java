@@ -3,11 +3,14 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.service;
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.request.FeedCreateServiceRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.request.FeedModifyServiceRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.entity.Mission;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -19,6 +22,7 @@ public class FeedService {
     
     private final FeedGenerator feedGenerator;
     private final FeedEditor feedEditor;
+    private final FeedReader feedReader;
     
     public Long generateFeed(FeedCreateServiceRequest request) {
         Member member = memberRepository.findById(request.memberId());
@@ -50,6 +54,12 @@ public class FeedService {
         feedEditor.deleteFeed(member, feedId);
     }
     
+    public List<FeedResponse> getFeeds(Long memberId, Long lastFeedId) {
+        return feedReader.getFeeds(memberId, lastFeedId);
+    }
     
+    public FeedResponse getFeed(Long memberId, Long feedId) {
+        return feedReader.getFeed(memberId, feedId);
+    }
     
 }

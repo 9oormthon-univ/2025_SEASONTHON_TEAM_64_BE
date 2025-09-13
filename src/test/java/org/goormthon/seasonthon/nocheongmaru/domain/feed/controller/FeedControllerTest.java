@@ -3,12 +3,16 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.controller;
 import org.goormthon.seasonthon.nocheongmaru.ControllerTestSupport;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedCreateRequest;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.dto.request.FeedModifyRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.TestMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -156,6 +160,111 @@ class FeedControllerTest extends ControllerTestSupport {
             .andExpect(status().isOk());
     }
     
+    @TestMember
+    @DisplayName("오늘의 시선 피드를 상세 조회한다.")
+    @Test
+    void getFeed() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long feedId = 123L;
+        FeedResponse response = FeedResponse.builder()
+            .feedId(feedId)
+            .nickname("tester")
+            .profileImageUrl("http://example.com/profile.jpg")
+            .description("상세 설명")
+            .imageUrl("http://example.com/image.png")
+            .isMine(true)
+            .isLiked(true)
+            .createdAt(LocalDateTime.now())
+            .build();
+        given(feedService.getFeed(memberId, feedId)).willReturn(response);
+        
+        // expected
+        mockMvc.perform(
+                get(BASE_URL + "/" + feedId)
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.feedId").value(feedId))
+            .andExpect(jsonPath("$.nickname").value("tester"))
+            .andExpect(jsonPath("$.isMine").value(true))
+            .andExpect(jsonPath("$.isLiked").value(true));
+    }
+    
+    @TestMember
+    @DisplayName("lastFeedId가 null일 때, 오늘의 시선 피드 목록을 조회한다.")
+    @Test
+    void getFeeds_WithoutLastFeedId() throws Exception {
+        // given
+        Long memberId = 1L;
+        List<FeedResponse> responses = List.of(
+            FeedResponse.builder()
+                .feedId(10L)
+                .nickname("user1")
+                .profileImageUrl("http://example.com/p1.jpg")
+                .description("desc1")
+                .imageUrl("http://example.com/i1.png")
+                .isMine(false)
+                .isLiked(false)
+                .createdAt(LocalDateTime.now())
+                .build(),
+            FeedResponse.builder()
+                .feedId(9L)
+                .nickname("user2")
+                .profileImageUrl("http://example.com/p2.jpg")
+                .description("desc2")
+                .imageUrl("http://example.com/i2.png")
+                .isMine(true)
+                .isLiked(true)
+                .createdAt(LocalDateTime.now())
+                .build()
+        );
+        given(feedService.getFeeds(memberId, null)).willReturn(responses);
+        
+        // expected
+        mockMvc.perform(
+                get(BASE_URL)
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].feedId").value(10))
+            .andExpect(jsonPath("$[1].isLiked").value(true));
+    }
+    
+    @TestMember
+    @DisplayName("lastFeedId가 null이 아닐 때, 오늘의 시선 피드 목록을 조회한다.")
+    @Test
+    void getFeeds_WithLastFeedId() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long lastFeedId = 100L;
+        List<FeedResponse> responses = List.of(
+            FeedResponse.builder()
+                .feedId(99L)
+                .nickname("user1")
+                .profileImageUrl("http://example.com/p1.jpg")
+                .description("desc1")
+                .imageUrl("http://example.com/i1.png")
+                .isMine(false)
+                .isLiked(false)
+                .createdAt(LocalDateTime.now())
+                .build()
+        );
+        given(feedService.getFeeds(memberId, lastFeedId)).willReturn(responses);
+        
+        // expected
+        mockMvc.perform(
+                get(BASE_URL)
+                    .param("lastFeedId", String.valueOf(lastFeedId))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].feedId").value(99));
+    }
+    
     private MockMultipartFile createMockMultipartFile() {
         return new MockMultipartFile(
             "imageFile",
@@ -164,5 +273,4 @@ class FeedControllerTest extends ControllerTestSupport {
             "test image content".getBytes()
         );
     }
-    
 }

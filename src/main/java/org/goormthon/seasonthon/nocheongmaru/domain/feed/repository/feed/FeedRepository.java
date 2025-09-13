@@ -2,8 +2,11 @@ package org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed;
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.dto.response.FeedResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.feed.FeedNotFoundException;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -33,4 +36,15 @@ public class FeedRepository {
         feedJpaRepository.delete(feed);
     }
     
+    public List<FeedResponse> getFeeds(Long memberId, Long lastFeedId) {
+        return feedJpaRepository.getFeeds(memberId, lastFeedId);
+    }
+    
+    public FeedResponse getFeed(Long memberId, Long feedId) {
+        return feedJpaRepository.getFeed(memberId, feedId);
+    }
+    
+    public void deleteAllInBatch() {
+        feedJpaRepository.deleteAllInBatch();
+    }
 }

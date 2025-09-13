@@ -4,7 +4,9 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.entity.Feed;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
+public interface FeedJpaRepository extends
+    JpaRepository<Feed, Long>,
+    FeedCustomRepository {
     
     boolean existsByMemberIdAndMissionId(Long memberId, Long missionId);
     
