@@ -40,6 +40,9 @@ public enum ErrorCode {
     OPENAI_HTTP_CLIENT_ERROR(500, "OpenAI API 요청에 실패했습니다."),
     CONTENT_VIOLATION(400, "내용이 부적절합니다."),
     
+    // Comment
+    COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
+    
     ;
     
     private final int status;

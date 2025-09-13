@@ -3,6 +3,8 @@ package org.goormthon.seasonthon.nocheongmaru;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.controller.AuthController;
 import org.goormthon.seasonthon.nocheongmaru.domain.auth.service.AuthService;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.controller.CommentController;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.service.CommentService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.controller.FeedController;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedLikeService;
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.service.FeedService;
@@ -22,7 +24,8 @@ import org.springframework.test.web.servlet.MockMvc;
         AuthController.class,
         InformationController.class,
         MissionController.class,
-        FeedController.class
+        FeedController.class,
+        CommentController.class
     }
 )
 @Import(TestSecurityConfig.class)
@@ -49,5 +52,8 @@ public abstract class ControllerTestSupport {
     
     @MockitoBean
     protected FeedLikeService feedLikeService;
+    
+    @MockitoBean
+    protected CommentService commentService;
     
 }
