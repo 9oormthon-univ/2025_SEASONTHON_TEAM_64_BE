@@ -6,12 +6,11 @@ import org.goormthon.seasonthon.nocheongmaru.domain.fortune.service.FortuneServi
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.service.dto.response.FortuneResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequestMapping("/api/v1/fortunes")
 @RequiredArgsConstructor
@@ -34,6 +33,13 @@ public class FortuneController {
         @AuthMemberId Long memberId
     ) {
         return ResponseEntity.ok(fortuneService.assignFortune(memberId));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<FortuneResponse>> getMyFortunes(
+        @AuthMemberId Long memberId
+    ) {
+        return ResponseEntity.ok(fortuneService.getMyFortunes(memberId));
     }
 
 }
