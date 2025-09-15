@@ -25,7 +25,7 @@ public class MemberService {
             .email(member.getEmail())
             .profileImageUrl(member.getProfileImageURL())
             .role(member.getRole().name())
-            .mode(member.getMode().name())
+            .mode(member.getMode() != null ? member.getMode().name() : null)
             .build();
     }
     
