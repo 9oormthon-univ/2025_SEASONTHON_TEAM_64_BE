@@ -8,9 +8,12 @@ import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feed.FeedRep
 import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike.FeedLikeRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.event.FeedLikedEvent;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class FeedLikeService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final MemberRepository memberRepository;
+    private final ApplicationEventPublisher eventPublisher;
     
     @Transactional
     public void like(Long memberId, Long feedId) {
@@ -37,6 +41,16 @@ public class FeedLikeService {
                     .member(member)
                     .build()
             );
+            
+            if (!feed.getMember().getId().equals(member.getId())) {
+                eventPublisher.publishEvent(
+                    FeedLikedEvent.builder()
+                        .recipientId(feed.getMember().getId())
+                        .likerNickname(member.getNickname())
+                        .feedId(feed.getId())
+                        .build()
+                );
+            }
         } catch (DataIntegrityViolationException e) {
             log.warn("이미 좋아요가 존재합니다. feedId={}, memberId={}", feedId, memberId);
         }

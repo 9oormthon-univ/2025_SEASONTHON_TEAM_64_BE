@@ -48,4 +48,8 @@ public class MemberRepository {
         return memberJpaRepository.findAllById(memberIds);
     }
     
+    public List<Member> findAllWithDeviceToken() {
+        return memberJpaRepository.findAllByDeviceTokenIsNotNull();
+    }
+    
 }
