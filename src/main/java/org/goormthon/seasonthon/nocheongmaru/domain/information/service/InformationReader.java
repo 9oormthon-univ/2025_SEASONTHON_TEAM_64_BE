@@ -46,12 +46,19 @@ public class InformationReader {
         return informationRepository.getInformationList(lastId, category, sortByRecent);
     }
     
+    @Transactional(readOnly = true)
+    public List<InformationResponse> getMyInformationList(Long memberId, Long lastId) {
+        return informationRepository.getMyInformationList(memberId, lastId);
+    }
+    
     private MemberDetailResponse toMemberDetailResponse(Information information) {
         return MemberDetailResponse.builder()
             .memberId(information.getMember().getId())
             .nickname(information.getMember().getNickname())
+            .email(information.getMember().getEmail())
             .profileImageUrl(information.getMember().getProfileImageURL())
             .role(information.getMember().getRole().toString())
+            .mode(information.getMember().getMode().toString())
             .build();
     }
     

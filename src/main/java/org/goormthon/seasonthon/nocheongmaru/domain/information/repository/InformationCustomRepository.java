@@ -8,4 +8,6 @@ public interface InformationCustomRepository {
     
     List<InformationResponse> getInformationList(Long lastId, String category, Boolean sortByRecent);
     
+    List<InformationResponse> getMyInformationList(Long memberId, Long lastId);
+    
 }

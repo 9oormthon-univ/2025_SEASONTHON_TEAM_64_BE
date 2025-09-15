@@ -31,6 +31,14 @@ public class InformationController implements InformationControllerDocs {
         return ResponseEntity.ok(informationService.getInformationList(lastId, category, sortByRecent));
     }
     
+    @GetMapping("/me")
+    public ResponseEntity<List<InformationResponse>> getMyInformationList(
+        @AuthMemberId Long memberId,
+        @RequestParam(required = false) Long lastId
+    ) {
+        return ResponseEntity.ok(informationService.getMyInformationList(memberId, lastId));
+    }
+    
     @PostMapping
     public ResponseEntity<Long> createInformation(
         @AuthMemberId Long memberId,

@@ -43,4 +43,8 @@ public class InformationRepository {
         return informationJpaRepository.getInformationList(lastId, category, sortByRecent);
     }
     
+    public List<InformationResponse> getMyInformationList(Long memberId, Long lastId) {
+        return informationJpaRepository.getMyInformationList(memberId, lastId);
+    }
+    
 }

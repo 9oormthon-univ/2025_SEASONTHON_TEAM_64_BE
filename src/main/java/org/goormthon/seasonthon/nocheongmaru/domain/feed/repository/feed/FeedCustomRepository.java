@@ -10,4 +10,6 @@ public interface FeedCustomRepository {
     
     FeedResponse getFeed(Long memberId, Long feedId);
     
+    List<FeedResponse> getMyFeeds(Long memberId, Long lastFeedId);
+    
 }

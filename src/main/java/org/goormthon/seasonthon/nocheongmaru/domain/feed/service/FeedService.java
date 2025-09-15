@@ -62,4 +62,8 @@ public class FeedService {
         return feedReader.getFeed(memberId, feedId);
     }
     
+    public List<FeedResponse> getMyFeeds(Long memberId, Long lastFeedId) {
+        return feedReader.getMyFeeds(memberId, lastFeedId);
+    }
+    
 }

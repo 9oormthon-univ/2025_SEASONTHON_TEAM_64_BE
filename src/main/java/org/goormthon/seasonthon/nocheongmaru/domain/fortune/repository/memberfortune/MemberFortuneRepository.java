@@ -2,10 +2,12 @@ package org.goormthon.seasonthon.nocheongmaru.domain.fortune.repository.memberfo
 
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.fortune.entity.MemberFortune;
+import org.goormthon.seasonthon.nocheongmaru.domain.fortune.service.dto.response.FortuneResponse;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -27,6 +29,10 @@ public class MemberFortuneRepository {
     
     public Long count() {
         return memberFortuneJpaRepository.count();
+    }
+    
+    public List<FortuneResponse> getMyFortunes(Long memberId) {
+        return memberFortuneJpaRepository.getMyFortunes(memberId);
     }
     
 }

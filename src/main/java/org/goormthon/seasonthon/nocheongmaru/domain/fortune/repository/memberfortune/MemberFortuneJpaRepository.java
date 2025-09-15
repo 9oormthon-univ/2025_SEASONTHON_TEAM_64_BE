@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 
-public interface MemberFortuneJpaRepository extends JpaRepository<MemberFortune, Long> {
+public interface MemberFortuneJpaRepository extends
+    JpaRepository<MemberFortune, Long>,
+    MemberFortuneCustomRepository {
     
     boolean existsByMemberAndAssignedAt(Member member, LocalDate assignedAt);
-
+    
 }

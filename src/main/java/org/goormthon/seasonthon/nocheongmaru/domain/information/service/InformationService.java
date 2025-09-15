@@ -63,4 +63,9 @@ public class InformationService {
         return informationReader.getInformationList(lastId, category, sortByRecent);
     }
     
+    public List<InformationResponse> getMyInformationList(Long memberId, Long lastId) {
+        Member member = memberRepository.findById(memberId);
+        return informationReader.getMyInformationList(member.getId(), lastId);
+    }
+    
 }
