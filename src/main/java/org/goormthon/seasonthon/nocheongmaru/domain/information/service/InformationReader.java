@@ -46,6 +46,11 @@ public class InformationReader {
         return informationRepository.getInformationList(lastId, category, sortByRecent);
     }
     
+    @Transactional(readOnly = true)
+    public List<InformationResponse> getMyInformationList(Long memberId, Long lastId) {
+        return informationRepository.getMyInformationList(memberId, lastId);
+    }
+    
     private MemberDetailResponse toMemberDetailResponse(Information information) {
         return MemberDetailResponse.builder()
             .memberId(information.getMember().getId())

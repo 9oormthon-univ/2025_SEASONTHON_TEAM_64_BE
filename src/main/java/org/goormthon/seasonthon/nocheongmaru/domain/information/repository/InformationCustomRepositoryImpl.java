@@ -47,6 +47,29 @@ public class InformationCustomRepositoryImpl implements InformationCustomReposit
             .fetch();
     }
     
+    @Override
+    public List<InformationResponse> getMyInformationList(Long memberId, Long lastId) {
+        return queryFactory
+            .select(constructor(InformationResponse.class,
+                information.id,
+                information.title,
+                information.category.stringValue(),
+                information.address,
+                JPAExpressions.select(image.imageUrl)
+                    .from(image)
+                    .where(image.information.id.eq(information.id))
+                    .limit(1)
+            ))
+            .from(information)
+            .where(
+                cursor(lastId, true),
+                information.member.id.eq(memberId)
+            )
+            .orderBy(orderById(true))
+            .limit(PAGE_SIZE)
+            .fetch();
+    }
+    
     private BooleanExpression categoryEq(String category) {
         if (category == null || category.isBlank()) return null;
         Category enumCategory = Category.toCategory(category);
