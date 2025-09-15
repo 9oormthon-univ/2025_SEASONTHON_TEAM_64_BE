@@ -61,6 +61,22 @@ public class NotificationSenderService {
         persist(recipient, NotificationType.COMMENT, body);
     }
     
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void sendLikeNotification(Long recipientId, String likerNickname, Long feedId) {
+        Member recipient = memberRepository.findById(recipientId);
+        String token = recipient.getDeviceToken();
+        if (token == null || token.isBlank()) return;
+        
+        String title = "공감";
+        String body = likerNickname + " 님이 내 피드에 공감했어요.";
+        Map<String, String> data = new HashMap<>();
+        data.put("type", NotificationType.LIKE.name());
+        data.put("feedId", String.valueOf(feedId));
+        
+        pushSender.sendTo(token, title, body, data);
+        persist(recipient, NotificationType.LIKE, body);
+    }
+    
     private void persist(Member member, NotificationType type, String message) {
         Notification notification = Notification.builder()
             .member(member)
