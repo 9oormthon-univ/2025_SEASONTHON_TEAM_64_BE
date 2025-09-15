@@ -77,6 +77,23 @@ public class NotificationSenderService {
         persist(recipient, NotificationType.LIKE, body);
     }
     
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void sendFortuneToAll() {
+        List<Member> recipients = memberRepository.findAllWithDeviceToken();
+        List<String> tokens = recipients.stream()
+            .map(Member::getDeviceToken)
+            .filter(t -> t != null && !t.isBlank())
+            .toList();
+        if (tokens.isEmpty()) return;
+        
+        String title = "포춘쿠키 도착";
+        String body = "오늘의 포춘쿠키를 열어보세요.";
+        Map<String, String> data = Map.of("type", NotificationType.FORTUNE.name());
+        
+        pushSender.sendMulticast(tokens, title, body, data);
+        recipients.forEach(m -> persist(m, NotificationType.FORTUNE, body));
+    }
+    
     private void persist(Member member, NotificationType type, String message) {
         Notification notification = Notification.builder()
             .member(member)
