@@ -58,7 +58,7 @@ public class InformationReader {
             .email(information.getMember().getEmail())
             .profileImageUrl(information.getMember().getProfileImageURL())
             .role(information.getMember().getRole().toString())
-            .mode(information.getMember().getMode().toString())
+            .mode(information.getMember().getMode() != null ? information.getMember().getMode().toString() : null)
             .build();
     }
     
