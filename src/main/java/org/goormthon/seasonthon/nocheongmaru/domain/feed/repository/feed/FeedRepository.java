@@ -47,4 +47,9 @@ public class FeedRepository {
     public void deleteAllInBatch() {
         feedJpaRepository.deleteAllInBatch();
     }
+    
+    public List<FeedResponse> getMyFeeds(Long memberId, Long lastFeedId) {
+        return feedJpaRepository.getMyFeeds(memberId, lastFeedId);
+    }
+    
 }

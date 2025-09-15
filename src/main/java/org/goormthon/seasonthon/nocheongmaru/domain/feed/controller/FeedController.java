@@ -61,6 +61,15 @@ public class FeedController {
         return ResponseEntity.ok(response);
     }
     
+    @GetMapping("/me")
+    public ResponseEntity<List<FeedResponse>> getMyFeeds(
+        @AuthMemberId Long memberId,
+        @RequestParam(required = false) Long lastFeedId
+    ) {
+        List<FeedResponse> responses = feedService.getMyFeeds(memberId, lastFeedId);
+        return ResponseEntity.ok(responses);
+    }
+    
     @GetMapping
     public ResponseEntity<List<FeedResponse>> getFeeds(
         @AuthMemberId Long memberId,

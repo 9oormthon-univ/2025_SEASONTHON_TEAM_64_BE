@@ -24,4 +24,9 @@ public class FeedReader {
         return feedRepository.getFeed(memberId, feedId);
     }
     
+    @Transactional(readOnly = true)
+    public List<FeedResponse> getMyFeeds(Long memberId, Long lastFeedId) {
+        return feedRepository.getMyFeeds(memberId, lastFeedId);
+    }
+    
 }

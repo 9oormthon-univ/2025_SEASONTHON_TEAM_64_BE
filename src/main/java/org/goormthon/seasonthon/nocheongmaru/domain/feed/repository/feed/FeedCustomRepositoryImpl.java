@@ -66,6 +66,29 @@ public class FeedCustomRepositoryImpl implements FeedCustomRepository {
         return feedResponse;
     }
     
+    @Override
+    public List<FeedResponse> getMyFeeds(Long memberId, Long lastFeedId) {
+        return queryFactory.select(constructor(FeedResponse.class,
+                feed.id,
+                feed.member.nickname,
+                feed.member.profileImageURL,
+                feed.description,
+                feed.imageUrl,
+                feed.member.id.eq(memberId).as("isMine"),
+                feedLike.member.id.eq(memberId).as("isLiked"),
+                feed.createdAt
+            )).from(feed)
+            .leftJoin(feedLike)
+            .on(feedLike.feed.id.eq(feed.id).and(feedLike.member.id.eq(memberId)))
+            .where(
+                cursor(lastFeedId),
+                feed.member.id.eq(memberId)
+            )
+            .orderBy(feed.id.desc())
+            .limit(PAGE_SIZE)
+            .fetch();
+    }
+    
     private BooleanExpression cursor(Long lastId) {
         return lastId == null ? null : feed.id.lt(lastId);
     }
