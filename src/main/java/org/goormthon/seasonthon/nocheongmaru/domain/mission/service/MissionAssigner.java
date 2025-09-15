@@ -7,6 +7,7 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Role;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.repository.MemberRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.membermission.MemberMissionRepository;
 import org.goormthon.seasonthon.nocheongmaru.domain.mission.repository.mission.MissionRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.notification.event.MissionAssignedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class MissionAssigner {
         Set<Long> alreadyAssignedToday = getAlreadyAssignedMemberIds(today);
         List<Member> members = getAllMembers().stream()
             .filter(m -> !alreadyAssignedToday.contains(m.getId()))
-            .filter(m -> m.getRole() != Role.ROLE_ADMIN) // 관리자 제외
+            .filter(m -> m.getRole() != Role.ROLE_ADMIN)
             .toList();
         if (members.isEmpty()) {
             log.info("[MissionAssign] 오늘 배정 대상 회원이 없습니다.");
@@ -54,8 +55,8 @@ public class MissionAssigner {
         
         batchInsertMemberMissions(params);
         
-        // TODO : 알림 이벤트 발송
         List<Long> assignedMemberIds = resolveMemberIds(params);
+        eventPublisher.publishEvent(new MissionAssignedEvent(assignedMemberIds));
         log.info("[MissionAssign] 총 {}명 중 {}건 배정 완료 (부분 배정 가능)", members.size(), params.size());
     }
     
