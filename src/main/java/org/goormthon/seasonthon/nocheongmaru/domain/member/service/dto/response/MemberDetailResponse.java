@@ -6,9 +6,16 @@ import lombok.Builder;
 public record MemberDetailResponse(
     
     Long memberId,
+    
     String nickname,
+    
+    String email,
+    
     String profileImageUrl,
-    String role
+    
+    String role,
+    
+    String mode
     
 ) {
 }

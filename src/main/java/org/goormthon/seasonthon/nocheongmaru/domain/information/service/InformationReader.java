@@ -50,8 +50,10 @@ public class InformationReader {
         return MemberDetailResponse.builder()
             .memberId(information.getMember().getId())
             .nickname(information.getMember().getNickname())
+            .email(information.getMember().getEmail())
             .profileImageUrl(information.getMember().getProfileImageURL())
             .role(information.getMember().getRole().toString())
+            .mode(information.getMember().getMode().toString())
             .build();
     }
     

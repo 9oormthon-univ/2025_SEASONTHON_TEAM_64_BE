@@ -1,7 +1,5 @@
 package org.goormthon.seasonthon.nocheongmaru.domain.member.entity;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,7 +37,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "device_token")
     private String deviceToken;
     
-    private LocalDate lastOpenedDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "member_mode")
+    private Mode mode;
     
     @Builder
     private Member(String email, String nickname, String profileImageURL, Role role) {
@@ -55,6 +55,10 @@ public class Member extends BaseTimeEntity {
     
     public void updateDeviceToken(String deviceToken) {
         this.deviceToken = deviceToken;
+    }
+    
+    public void updateMode(Mode mode) {
+        this.mode = mode;
     }
     
 }

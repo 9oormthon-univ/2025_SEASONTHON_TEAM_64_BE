@@ -3,6 +3,7 @@ package org.goormthon.seasonthon.nocheongmaru.domain.member.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.controller.dto.request.MemberDeviceTokenRequest;
+import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Mode;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.service.MemberService;
 import org.goormthon.seasonthon.nocheongmaru.domain.member.service.dto.response.MemberDetailResponse;
 import org.goormthon.seasonthon.nocheongmaru.global.annotation.AuthMemberId;
@@ -31,4 +32,14 @@ public class MemberController {
         memberService.updateDeviceToken(request.toServiceRequest(memberId));
         return ResponseEntity.noContent().build();
     }
+    
+    @PutMapping
+    public ResponseEntity<Void> updateMemberMode(
+        @AuthMemberId Long memberId,
+        @RequestParam Mode mode
+    ) {
+        memberService.updateMemberMode(memberId, mode);
+        return ResponseEntity.noContent().build();
+    }
+    
 }
