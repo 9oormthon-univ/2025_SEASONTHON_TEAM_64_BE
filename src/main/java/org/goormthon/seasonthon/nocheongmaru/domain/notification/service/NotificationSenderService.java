@@ -45,6 +45,22 @@ public class NotificationSenderService {
         recipients.forEach(m -> persist(m, NotificationType.MISSION, body));
     }
     
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void sendCommentNotification(Long recipientId, String commenterNickname, Long feedId) {
+        Member recipient = memberRepository.findById(recipientId);
+        String token = recipient.getDeviceToken();
+        if (token == null || token.isBlank()) return;
+        
+        String title = "댓글";
+        String body = commenterNickname + " 님이 내 피드에 댓글을 달았어요.";
+        Map<String, String> data = new HashMap<>();
+        data.put("type", NotificationType.COMMENT.name());
+        data.put("feedId", String.valueOf(feedId));
+        
+        pushSender.sendTo(token, title, body, data);
+        persist(recipient, NotificationType.COMMENT, body);
+    }
+    
     private void persist(Member member, NotificationType type, String message) {
         Notification notification = Notification.builder()
             .member(member)
