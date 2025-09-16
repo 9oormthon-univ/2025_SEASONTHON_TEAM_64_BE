@@ -12,4 +12,6 @@ public interface CommentJpaRepository extends
     
     boolean existsByIdAndMemberId(Long commentId, Long memberId);
     
+    void deleteByFeedId(Long feedId);
+    
 }

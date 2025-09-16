@@ -30,4 +30,8 @@ public class FeedLikeRepository {
         return feedLikeJpaRepository.countByFeedIdAndMemberId(feedId, memberId);
     }
     
+    public void deleteByFeedId(Long feedId) {
+        feedLikeJpaRepository.deleteByFeedId(feedId);
+    }
+    
 }

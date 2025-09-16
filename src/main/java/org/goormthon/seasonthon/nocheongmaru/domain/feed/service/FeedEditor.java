@@ -7,6 +7,8 @@ import org.goormthon.seasonthon.nocheongmaru.domain.member.entity.Member;
 import org.goormthon.seasonthon.nocheongmaru.global.exception.feed.IsNotFeedOwnerException;
 import org.goormthon.seasonthon.nocheongmaru.global.openai.provider.FilteringProvider;
 import org.goormthon.seasonthon.nocheongmaru.global.s3.S3StorageUtil;
+import org.goormthon.seasonthon.nocheongmaru.domain.comment.repository.CommentRepository;
+import org.goormthon.seasonthon.nocheongmaru.domain.feed.repository.feedLike.FeedLikeRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,8 @@ public class FeedEditor {
     private final S3StorageUtil s3StorageUtil;
     private final FeedRepository feedRepository;
     private final FilteringProvider filteringProvider;
+    private final CommentRepository commentRepository;
+    private final FeedLikeRepository feedLikeRepository;
     
     @Transactional
     public void modifyFeed(Member member, Long feedId, String description, MultipartFile imageFile) {
@@ -36,6 +40,9 @@ public class FeedEditor {
     public void deleteFeed(Member member, Long feedId) {
         validateFeedOwnership(member.getId(), feedId);
         Feed feed = feedRepository.findById(feedId);
+        
+        commentRepository.deleteByFeedId(feedId);
+        feedLikeRepository.deleteByFeedId(feedId);
         
         String imageUrl = feed.getImageUrl();
         s3StorageUtil.deleteFileFromS3(imageUrl);
