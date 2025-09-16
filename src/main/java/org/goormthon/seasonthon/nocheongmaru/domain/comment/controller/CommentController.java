@@ -42,7 +42,7 @@ public class CommentController {
     public ResponseEntity<List<CommentResponse>> getCommentsByFeedId(
         @AuthMemberId Long memberId,
         @PathVariable Long feedId,
-        @RequestParam Long lastCommentId
+        @RequestParam(required = false) Long lastCommentId
     ) {
         List<CommentResponse> comments = commentService.getCommentsByFeedId(feedId, memberId, lastCommentId);
         return ResponseEntity.ok(comments);
