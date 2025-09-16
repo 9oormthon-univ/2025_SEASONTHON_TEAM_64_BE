@@ -11,4 +11,6 @@ public interface FeedLikeJpaRepository extends JpaRepository<FeedLike, Long> {
     
     void deleteByFeedIdAndMemberId(Long feedId, Long memberId);
     
+    void deleteByFeedId(Long feedId);
+    
 }

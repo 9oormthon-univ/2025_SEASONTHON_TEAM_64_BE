@@ -44,4 +44,8 @@ public class CommentRepository {
         return commentJpaRepository.getCommentsByFeedId(feedId, memberId, lastCommentId);
     }
     
+    public void deleteByFeedId(Long feedId) {
+        commentJpaRepository.deleteByFeedId(feedId);
+    }
+    
 }
