@@ -35,7 +35,8 @@ public class InformationCustomRepositoryImpl implements InformationCustomReposit
                 JPAExpressions.select(image.imageUrl)
                     .from(image)
                     .where(image.information.id.eq(information.id))
-                    .limit(1)
+                    .limit(1),
+                information.description
             ))
             .from(information)
             .where(
@@ -58,7 +59,8 @@ public class InformationCustomRepositoryImpl implements InformationCustomReposit
                 JPAExpressions.select(image.imageUrl)
                     .from(image)
                     .where(image.information.id.eq(information.id))
-                    .limit(1)
+                    .limit(1),
+                information.description
             ))
             .from(information)
             .where(

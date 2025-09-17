@@ -36,7 +36,9 @@ public record InformationResponse(
         description = "대표 이미지 URL",
         example = "https://example.com/images/hospital.jpg"
     )
-    String imageUrl
+    String imageUrl,
+    
+    String description
     
 ) {
 }
