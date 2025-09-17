@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record NotificationResponse(
+    Long id,
     
     NotificationType type,
     
