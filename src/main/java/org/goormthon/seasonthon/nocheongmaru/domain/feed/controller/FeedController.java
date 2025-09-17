@@ -39,7 +39,7 @@ public class FeedController {
         @RequestPart @Valid FeedModifyRequest request,
         @RequestPart MultipartFile imageFile
     ) {
-        feedService.modifyFeed(request.toServiceRequest(memberId, feedId, imageFile));
+        feedService.modifyFeed(request.toServiceRequest(feedId, memberId, imageFile));
         return ResponseEntity.ok().build();
     }
     
