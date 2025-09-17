@@ -21,6 +21,7 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
     @Override
     public List<NotificationResponse> getNotifications(Long memberId, Long lastNotificationId) {
         return queryFactory.select(constructor(NotificationResponse.class,
+                notification.id,
                 notification.type,
                 notification.message,
                 notification.isRead,
