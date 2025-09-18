@@ -43,9 +43,9 @@ public class InformationController implements InformationControllerDocs {
     public ResponseEntity<Long> createInformation(
         @AuthMemberId Long memberId,
         @RequestPart @Valid InformationCreateRequest request,
-        @RequestPart(required = false) List<MultipartFile> images
+        @RequestPart(required = false) List<MultipartFile> imageFiles
     ) {
-        Long informationId = informationService.generateInformation(request.toServiceRequest(memberId, images));
+        Long informationId = informationService.generateInformation(request.toServiceRequest(memberId, imageFiles));
         return ResponseEntity.ok(informationId);
     }
     
@@ -62,9 +62,9 @@ public class InformationController implements InformationControllerDocs {
         @AuthMemberId Long memberId,
         @PathVariable Long informationId,
         @RequestPart @Valid InformationModifyRequest request,
-        @RequestPart(required = false) List<MultipartFile> images
+        @RequestPart(required = false) List<MultipartFile> imageFiles
     ) {
-        Long modifyInformationId = informationService.modifyInformation(request.toServiceRequest(memberId, informationId, images));
+        Long modifyInformationId = informationService.modifyInformation(request.toServiceRequest(memberId, informationId, imageFiles));
         return ResponseEntity.ok(modifyInformationId);
     }
     
